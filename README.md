@@ -49,5 +49,7 @@ TBD
 
 ## References
 
-* https://github.com/mottibec/otelcol-mcp
-* https://github.com/shiftyp/otel-mcp-server - requires OpenSearch
+* https://github.com/mottibec/otelcol-mcp - collector config
+* https://github.com/shiftyp/otel-mcp-server - data profiling, requires OpenSearch
+* https://github.com/austinlparker/otel-mcp - config, data profiling
+* https://github.com/liatrio-labs/otel-instrumentation-mcp - instrumentation
