@@ -1,9 +1,10 @@
-module otel-mcp2
+module github.com/pavolloffay/opentelemetry-mcp-server
 
 go 1.25.1
 
 require (
 	github.com/mark3labs/mcp-go v0.42.0
+	github.com/pavolloffay/opentelemetry-collector-config-schema v0.0.0-20251028093042-1e5eea71cde4
 	github.com/spf13/cobra v1.8.0
 )
 
@@ -14,7 +15,6 @@ require (
 	github.com/inconshreveable/mousetrap v1.1.0 // indirect
 	github.com/invopop/jsonschema v0.13.0 // indirect
 	github.com/mailru/easyjson v0.7.7 // indirect
-	github.com/pavolloffay/opentelemetry-collector-config-schema v0.0.0-20251028093042-1e5eea71cde4 // indirect
 	github.com/spf13/cast v1.7.1 // indirect
 	github.com/spf13/pflag v1.0.5 // indirect
 	github.com/wk8/go-ordered-map/v2 v2.1.8 // indirect
