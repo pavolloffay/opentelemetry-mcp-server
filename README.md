@@ -4,6 +4,15 @@ The OpenTelemetry MCP server enables LLM to efficiently use OpenTelemetry stack.
 
 The MCP uses [opentelemetry-collector-config-schema](https://github.com/pavolloffay/opentelemetry-collector-config-schema/tree/main) for the collector config validation.
 
+## Install & Run
+
+```bash
+go install github.com/pavolloffay/opentelemetry-mcp-server@latest
+opentelemetry-mcp-server --protocol http --addr 0.0.0.0:8080
+
+claude mcp add --transport=http otel http://localhost:8080/mcp --scope user
+```
+
 ## Functionality
 
 This MCP server helps with the following use-cases:
