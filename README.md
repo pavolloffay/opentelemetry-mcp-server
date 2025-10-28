@@ -27,6 +27,7 @@ This MCP server helps with the following use-cases:
 * Enable LLM to validate collector configuration.
 * Enable LLM to find and fix deprecated configuration.
 * Enable LLM to understand deprecated configuration between versions.
+* Enable LLM to understand configuration differences between collector versions.
 
 ### Instrumentation
 
@@ -39,7 +40,8 @@ TBD
   * It can help LLM to write PII (filtering) rules, specific for an organization.
 * Enable LLM to understand which workloads are sending telemetry data.
 * Enable LLM to understand how much data each workload is sending.
-
+* Enable LLM to tweak sampling configuration based on the collected data.
+* Enable LLM to size storage based on the collected data volumes.
 
 ## References
 
