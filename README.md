@@ -10,6 +10,8 @@ The MCP uses [opentelemetry-collector-config-schema](https://github.com/pavollof
 go install github.com/pavolloffay/opentelemetry-mcp-server@latest
 opentelemetry-mcp-server --protocol http --addr 0.0.0.0:8080
 
+# or docker run --rm -it -p 8080:8080 ghcr.io/pavolloffay/opentelemetry-mcp-server:latest --protocol http --addr 0.0.0.0:8080 
+
 claude mcp add --transport=http otel http://localhost:8080/mcp --scope user
 ```
 
