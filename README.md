@@ -2,6 +2,7 @@
 
 The OpenTelemetry MCP server enables LLM to efficiently use OpenTelemetry stack.
 
+The MCP uses [opentelemetry-collector-config-schema](https://github.com/pavolloffay/opentelemetry-collector-config-schema/tree/main) for the collector config validation.
 
 ## Functionality
 
@@ -10,6 +11,7 @@ This MCP server helps with the following use-cases:
 ### Collector
 
 * Enable LLM to understand OpenTelemetry collector use-cases for each collector component.
+* Enable LLM to understand which collector components are included in each version.
 * Enable LLM to construct a valid collector configuration.
 * Enable LLM to validate collector configuration.
 * Enable LLM to find and fix deprecated configuration.
@@ -26,3 +28,9 @@ TBD
   * It can help LLM to write PII (filtering) rules, specific for an organization.
 * Enable LLM to understand which workloads are sending telemetry data.
 * Enable LLM to understand how much data each workload is sending.
+
+
+## References
+
+* https://github.com/mottibec/otelcol-mcp
+* https://github.com/shiftyp/otel-mcp-server - requires OpenSearch
