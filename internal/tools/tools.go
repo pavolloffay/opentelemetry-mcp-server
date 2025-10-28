@@ -28,6 +28,7 @@ func GetAllTools() ([]Tool, error) {
 		getCollectorReadmeTool(schemaManager, latestCollectorVersion),
 		getCollectorSchemaGetTool(schemaManager, latestCollectorVersion),
 		getCollectorSchemaValidationTool(schemaManager, latestCollectorVersion),
+		getCollectorComponentDeprecatedTool(schemaManager, latestCollectorVersion),
 	}
 
 	return tools, nil
@@ -63,7 +64,7 @@ func getCollectorComponentsTool(schemaManager *collectorschema.SchemaManager, la
 		),
 		mcp.WithString("type",
 			mcp.Required(),
-			mcp.Description("Collector component type. It can be receiver, exporter, extension, processor, connector."),
+			mcp.Description("Collector component type. It can be receiver, exporter, processor, connector and extension."),
 		),
 	)
 
@@ -95,7 +96,7 @@ func getCollectorReadmeTool(schemaManager *collectorschema.SchemaManager, latest
 		),
 		mcp.WithString("type",
 			mcp.Required(),
-			mcp.Description("Collector component type. It can be receiver, exporter, extension."),
+			mcp.Description("Collector component type. It can be receiver, exporter, processor, connector and extension."),
 		),
 		mcp.WithString("name",
 			mcp.Required(),
@@ -127,7 +128,7 @@ func getCollectorReadmeTool(schemaManager *collectorschema.SchemaManager, latest
 // getCollectorSchemaGetTool returns the collector schema get tool
 func getCollectorSchemaGetTool(schemaManager *collectorschema.SchemaManager, latestCollectorVersion string) Tool {
 	tool := mcp.NewTool("opentelemetry-collector-component-schema",
-		mcp.WithDescription("Explain OpenTelemetry collector processor, receiver, exporter, extension, connector configuration schema"),
+		mcp.WithDescription("Explain OpenTelemetry collector receiver, exporter, processor, connector and extension configuration schema"),
 		mcp.WithDestructiveHintAnnotation(false),
 		mcp.WithOpenWorldHintAnnotation(false),
 		mcp.WithString("version",
@@ -135,7 +136,7 @@ func getCollectorSchemaGetTool(schemaManager *collectorschema.SchemaManager, lat
 		),
 		mcp.WithString("type",
 			mcp.Required(),
-			mcp.Description("Collector component type. It can be receiver, exporter, extension."),
+			mcp.Description("Collector component type. It can be receiver, exporter, processor, connector and extension."),
 		),
 		mcp.WithString("name",
 			mcp.Required(),
@@ -175,7 +176,7 @@ func getCollectorSchemaValidationTool(schemaManager *collectorschema.SchemaManag
 		),
 		mcp.WithString("type",
 			mcp.Required(),
-			mcp.Description("Collector component type. It can be receiver, exporter, extension."),
+			mcp.Description("Collector component type. It can be receiver, exporter, processor, connector and extension."),
 		),
 		mcp.WithString("name",
 			mcp.Required(),
@@ -210,4 +211,60 @@ func getCollectorSchemaValidationTool(schemaManager *collectorschema.SchemaManag
 	}
 
 	return Tool{Tool: tool, Handler: handler}
+}
+
+// getCollectorComponentDeprecatedTool returns the collector schema validation tool
+func getCollectorComponentDeprecatedTool(schemaManager *collectorschema.SchemaManager, latestCollectorVersion string) Tool {
+	tool := mcp.NewTool("opentelemetry-collector-component-deprecated-fields",
+		mcp.WithDescription("Return deprecated OpenTelemetry collector receiver, exporter, processor, connector and extension configuration fields"),
+		mcp.WithDestructiveHintAnnotation(false),
+		mcp.WithOpenWorldHintAnnotation(false),
+		mcp.WithString("version",
+			mcp.Description("The OpenTelemetry Collector version e.g. 0.138.0"),
+		),
+		mcp.WithString("type",
+			mcp.Required(),
+			mcp.Description("Collector component type. It can be receiver, exporter, extension."),
+		),
+		mcp.WithArray("names",
+			mcp.WithStringItems(),
+			mcp.Required(),
+			mcp.Description("Collector component names e.g. [\"otlp\", \"jaeger\"]"),
+		),
+	)
+
+	handler := func(ctx context.Context, request mcp.CallToolRequest) (*mcp.CallToolResult, error) {
+		componentType, err := request.RequireString("type")
+		if err != nil {
+			return mcp.NewToolResultError(fmt.Sprintf("type argument is required: %v", err)), nil
+		}
+		componentNames, err := request.RequireStringSlice("names")
+		if err != nil {
+			return mcp.NewToolResultError(fmt.Sprintf("name argument is required: %v", err)), nil
+		}
+		version := request.GetString("version", latestCollectorVersion)
+
+		var deprecations []DeprecatedComponentFields
+		for _, componentName := range componentNames {
+			deprecatedFields, err := schemaManager.GetDeprecatedFields(collectorschema.ComponentType(componentType), componentName, version)
+			if err != nil {
+				return mcp.NewToolResultError(fmt.Sprintf("failed to validate json for %s/%s@%s: %v", componentType, componentName, version, err)), nil
+			}
+			deprecations = append(deprecations, DeprecatedComponentFields{
+				ComponentName:    componentName,
+				DeprecatedFields: deprecatedFields,
+			})
+		}
+		if len(deprecations) > 0 {
+			return mcp.NewToolResultText(fmt.Sprintf("deprecated fields: %+v", deprecations)), nil
+		}
+		return mcp.NewToolResultText("no deprecated fields found"), nil
+	}
+
+	return Tool{Tool: tool, Handler: handler}
+}
+
+type DeprecatedComponentFields struct {
+	ComponentName    string                            `json:"componentName"`
+	DeprecatedFields []collectorschema.DeprecatedField `json:"deprecatedFields"`
 }
