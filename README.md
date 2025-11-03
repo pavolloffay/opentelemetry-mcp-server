@@ -33,9 +33,13 @@ This MCP server helps with the following use-cases:
 * Enable LLM to understand deprecated configuration between versions.
 * Enable LLM to understand configuration differences between collector versions.
 
-### Instrumentation
+### Instrumentation - Future work
 
-TBD
+* Enable LLM to correctly instrument code.
+  * Enable LLM identify uninstrumented code (e.g. RPC frameworks that should be instrumented).
+* Enable LLM to identify high cardinality attributes explicitly added.
+* Enable LLM to identify PII attributes explicitly added.
+* Enable LLM to fix issues in the codebase based on the telemetry data.
 
 ## Future work / Roadmap
 
