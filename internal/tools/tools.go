@@ -29,6 +29,7 @@ func GetAllTools() ([]Tool, error) {
 		getCollectorSchemaGetTool(schemaManager, latestCollectorVersion),
 		getCollectorSchemaValidationTool(schemaManager, latestCollectorVersion),
 		getCollectorComponentDeprecatedTool(schemaManager, latestCollectorVersion),
+		getCollectorChangelogTool(schemaManager, latestCollectorVersion),
 	}
 
 	return tools, nil
@@ -118,6 +119,30 @@ func getCollectorReadmeTool(schemaManager *collectorschema.SchemaManager, latest
 		readme, err := schemaManager.GetComponentReadme(collectorschema.ComponentType(componentType), componentName, version)
 		if err != nil {
 			return mcp.NewToolResultError(fmt.Sprintf("failed to get readme for %s %s: %v", componentType, componentName, err)), nil
+		}
+		return mcp.NewToolResultText(readme), nil
+	}
+
+	return Tool{Tool: tool, Handler: handler}
+}
+
+// getCollectorChangelogTool returns the collector changelog tool
+func getCollectorChangelogTool(schemaManager *collectorschema.SchemaManager, latestCollectorVersion string) Tool {
+	tool := mcp.NewTool("opentelemetry-collector-changelog",
+		mcp.WithDescription("Returns OpenTelemetry collector changelog"),
+		mcp.WithDestructiveHintAnnotation(false),
+		mcp.WithOpenWorldHintAnnotation(false),
+		mcp.WithString("version",
+			mcp.Description("The OpenTelemetry Collector version e.g. 0.138.0"),
+		),
+	)
+
+	handler := func(ctx context.Context, request mcp.CallToolRequest) (*mcp.CallToolResult, error) {
+		version := request.GetString("version", latestCollectorVersion)
+
+		readme, err := schemaManager.GetChangelog(version)
+		if err != nil {
+			return mcp.NewToolResultError(fmt.Sprintf("failed to get changelog for %s: %v", version, err)), nil
 		}
 		return mcp.NewToolResultText(readme), nil
 	}

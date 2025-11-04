@@ -33,6 +33,8 @@ github.com/pavolloffay/opentelemetry-collector-config-schema v0.0.0-202510281132
 github.com/pavolloffay/opentelemetry-collector-config-schema v0.0.0-20251028113247-15b6efbaf70a/go.mod h1:g/1UffN+QHujnnC+Ck1GEupJW6Oc78OOB3ckuF8zJLQ=
 github.com/pavolloffay/opentelemetry-collector-config-schema v0.0.0-20251028123432-2a7ab8d423ab h1:j0fq3XUVm3o/Fo6ApBr5NXstNn7xwREOAcVle2C6IFU=
 github.com/pavolloffay/opentelemetry-collector-config-schema v0.0.0-20251028123432-2a7ab8d423ab/go.mod h1:g/1UffN+QHujnnC+Ck1GEupJW6Oc78OOB3ckuF8zJLQ=
+github.com/pavolloffay/opentelemetry-collector-config-schema v0.0.0-20251104093956-c9b46513b3d4 h1:h1kEoL8Ovv75iCt6sQM+gADyxoFYL9i8cphWuAi4aMo=
+github.com/pavolloffay/opentelemetry-collector-config-schema v0.0.0-20251104093956-c9b46513b3d4/go.mod h1:g/1UffN+QHujnnC+Ck1GEupJW6Oc78OOB3ckuF8zJLQ=
 github.com/pmezard/go-difflib v1.0.0 h1:4DBwDE0NGyQoBHbLQYPwSUPoCMWR5BEzIk/f1lZbAQM=
 github.com/pmezard/go-difflib v1.0.0/go.mod h1:iKH77koFhYxTK1pcRnkKkqfTogsbg7gZNVY4sRDYZ/4=
 github.com/rogpeppe/go-internal v1.9.0 h1:73kH8U+JUqXU8lRuOHeVHaa/SZPifC7BkcraZVejAe8=

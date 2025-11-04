@@ -4,7 +4,7 @@ go 1.25.1
 
 require (
 	github.com/mark3labs/mcp-go v0.42.0
-	github.com/pavolloffay/opentelemetry-collector-config-schema v0.0.0-20251028123432-2a7ab8d423ab
+	github.com/pavolloffay/opentelemetry-collector-config-schema v0.0.0-20251104093956-c9b46513b3d4
 	github.com/spf13/cobra v1.8.0
 )
 
