@@ -50,6 +50,7 @@ This MCP server helps with the following use-cases:
 * Enable LLM to understand how much data each workload is sending.
 * Enable LLM to tweak sampling configuration based on the collected data.
 * Enable LLM to size storage based on the collected data volumes.
+* Enable LLM to validate OpenTelemetry transformation language.
 
 ## References
 
