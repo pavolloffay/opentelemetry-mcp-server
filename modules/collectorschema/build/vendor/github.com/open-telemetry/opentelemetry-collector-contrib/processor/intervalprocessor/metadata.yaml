@@ -1,0 +1,13 @@
+type: interval
+
+status:
+  class: processor
+  stability:
+    alpha: [metrics]
+  distributions: [contrib, k8s]
+  warnings: [Statefulness]
+  codeowners:
+    active: [RichieSams]
+    emeritus: [tombrk]
+tests:
+  config:

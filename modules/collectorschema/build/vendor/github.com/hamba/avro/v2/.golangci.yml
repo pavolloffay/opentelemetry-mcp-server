@@ -1,0 +1,57 @@
+version: "2"
+run:
+  tests: false
+
+formatters:
+  enable:
+    - gci
+    - gofmt
+    - gofumpt
+    - goimports
+  settings:
+    gofumpt:
+      extra-rules: true
+  exclusions:
+    generated: lax
+
+linters:
+  default: all
+  disable:
+    - cyclop    # duplicate of gocyclo
+    - depguard
+    - err113
+    - exhaustive
+    - exhaustruct
+    - forcetypeassert
+    - funlen
+    - funcorder
+    - gochecknoglobals
+    - gochecknoinits
+    - gocognit
+    - goconst
+    - gocyclo
+    - gosmopolitan
+    - inamedparam
+    - interfacebloat
+    - ireturn
+    - mnd
+    - nestif
+    - nlreturn
+    - nonamedreturns
+    - tagliatelle
+    - varnamelen
+    - wrapcheck
+    - wsl
+  settings:
+    gosec:
+      excludes:
+        - G115
+        - G103
+  exclusions:
+    generated: lax
+    rules:
+      - linters:
+          - gosec
+        path: (schema|protocol)\.go
+      - path: (.+)\.go$
+        text: 'package-comments: should have a package comment'

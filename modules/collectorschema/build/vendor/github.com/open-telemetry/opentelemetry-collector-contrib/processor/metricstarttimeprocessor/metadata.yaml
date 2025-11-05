@@ -1,0 +1,12 @@
+type: metricstarttime
+
+status:
+  class: processor
+  stability:
+    beta: [metrics]
+  distributions: [contrib]
+  codeowners:
+    active: [dashpole, ridwanmsharif]
+
+tests:
+  config:

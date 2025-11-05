@@ -1,0 +1,13 @@
+type: otlp_encoding
+
+status:
+  disable_codecov_badge: true
+  class: extension
+  stability:
+    beta: [ extension ]
+  distributions: [contrib]
+  codeowners:
+    active: [ dao-jun, VihasMakwana ]
+
+tests:
+  config:

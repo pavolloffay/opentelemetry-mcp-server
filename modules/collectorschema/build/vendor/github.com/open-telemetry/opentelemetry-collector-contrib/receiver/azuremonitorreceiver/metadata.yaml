@@ -1,0 +1,28 @@
+type: azuremonitor
+
+status:
+  class: receiver
+  stability:
+    alpha: [metrics]
+  distributions: [contrib]
+  codeowners:
+    active: [nslaughter, celian-garcia, ishleenk17]
+
+resource_attributes:
+  azuremonitor.subscription:
+    description: Azure subscription name
+    type: string
+    enabled: false
+  azuremonitor.subscription_id:
+    description: Azure subscription ID
+    type: string
+    enabled: false
+  azuremonitor.tenant_id:
+    description: Azure tenant ID
+    type: string
+    enabled: false
+
+tests:
+  config:
+    client_secret: "secret"
+    tenant_id: "id"
