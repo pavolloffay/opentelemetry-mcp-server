@@ -2,7 +2,7 @@
 
 The OpenTelemetry MCP server enables LLM to efficiently use OpenTelemetry stack.
 
-The MCP uses [opentelemetry-collector-config-schema](https://github.com/pavolloffay/opentelemetry-collector-config-schema/tree/main) for the collector config validation.
+The MCP uses [opentelemetry-collector-config-schema](./modules/collectorschema) for the collector config validation.
 
 
 https://github.com/user-attachments/assets/af56cda4-9ab0-4c93-969e-a2ee7b9f0480
