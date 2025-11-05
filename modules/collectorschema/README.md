@@ -14,7 +14,7 @@ Alongside the JSON schema there is also a readme file for each component.
 
 ```go
 
-collectorschema "github.com/pavolloffay/opentelemetry-collector-config-schema"
+import "github.com/pavolloffay/opentelemetry-mcp-server/modules/collectorschema"
 
 schemaManager := collectorschema.NewSchemaManager()
 

@@ -52,9 +52,65 @@ This MCP server helps with the following use-cases:
 * Enable LLM to size storage based on the collected data volumes.
 * Enable LLM to validate OpenTelemetry transformation language.
 
-## References
+## Other OpenTelemetry MCP servers
 
 * https://github.com/mottibec/otelcol-mcp - collector config
 * https://github.com/shiftyp/otel-mcp-server - data profiling, requires OpenSearch
 * https://github.com/austinlparker/otel-mcp - config, data profiling
 * https://github.com/liatrio-labs/otel-instrumentation-mcp - instrumentation
+
+### https://github.com/austinlparker/otel-mcp
+
+```bash
+docker run --rm -it -v $(pwd)/collector.yaml:/tmp/collector.yaml:Z pavolloffay/otelcol-with-mcp:0.1 --config
+claude mcp add --transport=http otelcol http://localhost:9999/mcp --scope user
+```
+
+This MCP server is implemented as collector extension and connector which provides live view on the data.
+
+There are tool to get the collector config, schema for each component which is build into the collector and perform validation.
+
+The returned schema is incomplete, does not contain field explanation and type.
+
+```bash
+● OTLP Receiver Schema
+
+  Component Type: otlpKind: receiverConfig Type: *otlpreceiver.Config
+
+  Schema Structure
+
+  {
+    "protocols": {
+      "grpc": null,
+      "http": null
+    }
+  }
+
+  Current Configuration (with defaults)
+
+  {
+    "protocols": {
+      "grpc": {
+        "endpoint": "0.0.0.0:4317",
+        "keepalive": {
+          "enforcement_policy": {},
+          "server_parameters": {}
+        },
+        "read_buffer_size": 524288,
+        "transport": "tcp"
+      },
+      "http": {
+        "cors": null,
+        "endpoint": "0.0.0.0:4318",
+        "idle_timeout": 0,
+        "keep_alives_enabled": true,
+        "logs_url_path": "/v1/logs",
+        "metrics_url_path": "/v1/metrics",
+        "read_header_timeout": 0,
+        "tls": null,
+        "traces_url_path": "/v1/traces",
+        "write_timeout": 0
+      }
+    }
+  }
+```

@@ -45,6 +45,8 @@ extensions:
   - gomod: github.com/open-telemetry/opentelemetry-collector-contrib/extension/storage/redisstorageextension v0.139.0
   - gomod: github.com/open-telemetry/opentelemetry-collector-contrib/extension/sumologicextension v0.139.0
   - gomod: github.com/open-telemetry/opentelemetry-collector-contrib/extension/k8sleaderelector v0.139.0
+#  - gomod: github.com/pavolloffay/otel-mcp v0.0.0-20251105114117-f4334a2d096e
+#    import: github.com/pavolloffay/otel-mcp/extension/mcpextension
 
 exporters:
   - gomod: go.opentelemetry.io/collector/exporter/debugexporter v0.139.0
@@ -247,6 +249,8 @@ connectors:
   - gomod: github.com/open-telemetry/opentelemetry-collector-contrib/connector/spanmetricsconnector v0.139.0
   - gomod: github.com/open-telemetry/opentelemetry-collector-contrib/connector/sumconnector v0.139.0
   - gomod: github.com/open-telemetry/opentelemetry-collector-contrib/connector/signaltometricsconnector v0.139.0
+#  - gomod: github.com/pavolloffay/otel-mcp v0.0.0-20251105114117-f4334a2d096e
+#    import: github.com/pavolloffay/otel-mcp/connector/mcpconnector
 
 providers:
   - gomod: go.opentelemetry.io/collector/confmap/provider/envprovider v1.45.0
