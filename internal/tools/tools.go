@@ -5,7 +5,7 @@ import (
 	"fmt"
 
 	"github.com/mark3labs/mcp-go/mcp"
-	collectorschema "github.com/pavolloffay/opentelemetry-collector-config-schema"
+	"github.com/pavolloffay/opentelemetry-mcp-server/modules/collectorschema"
 )
 
 // Tool represents an MCP tool with its handler

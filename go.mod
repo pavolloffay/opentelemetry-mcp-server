@@ -4,9 +4,11 @@ go 1.25.1
 
 require (
 	github.com/mark3labs/mcp-go v0.42.0
-	github.com/pavolloffay/opentelemetry-collector-config-schema v0.0.0-20251104093956-c9b46513b3d4
+	github.com/pavolloffay/opentelemetry-mcp-server/modules/collectorschema v0.0.0-20251105110907-92f2520b5f32
 	github.com/spf13/cobra v1.8.0
 )
+
+replace github.com/pavolloffay/opentelemetry-mcp-server/modules/collectorschema => ./modules/collectorschema
 
 require (
 	github.com/bahlo/generic-list-go v0.2.0 // indirect
