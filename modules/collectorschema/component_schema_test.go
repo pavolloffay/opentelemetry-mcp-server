@@ -326,8 +326,8 @@ func TestSchemaManager_GetLatestVersion(t *testing.T) {
 	// Verify the version has a valid format (major.minor.patch)
 	assert.Contains(t, version, ".", "Version should contain dots")
 
-	// Since we know we have v0.138.0 in the schemas directory, verify it's returned
-	assert.Equal(t, "0.138.0", version, "Expected version 0.138.0 as the latest")
+	// Since we know we have v0.139.0 in the schemas directory, verify it's returned
+	assert.Equal(t, "0.139.0", version, "Expected version 0.139.0 as the latest")
 
 	t.Logf("Latest version found: %s", version)
 }
@@ -484,6 +484,80 @@ func TestSchemaManager_GetChangelog_NonExistentVersion(t *testing.T) {
 	assert.Contains(t, err.Error(), "changelog not found for version 999.999.999", "Error should mention the specific version")
 
 	t.Logf("✅ Correctly returned error for non-existent version: %v", err)
+}
+
+func TestSchemaManager_ValidateComponentYAML(t *testing.T) {
+	manager := NewSchemaManager()
+
+	// Test valid YAML for OTLP receiver
+	validYAML := []byte(`
+protocols:
+  grpc:
+    endpoint: "0.0.0.0:4317"
+  http:
+    endpoint: "0.0.0.0:4318"
+`)
+
+	result, err := manager.ValidateComponentYAML(ComponentTypeReceiver, "otlp", "0.138.0", validYAML)
+	require.NoError(t, err, "Failed to validate valid OTLP receiver YAML")
+	require.NotNil(t, result, "Validation result should not be nil")
+
+	if !result.Valid() {
+		for _, desc := range result.Errors() {
+			t.Errorf("Validation error: %s", desc)
+		}
+	}
+	assert.True(t, result.Valid(), "Expected valid YAML to pass validation")
+
+	t.Logf("Successfully validated OTLP receiver YAML configuration")
+}
+
+func TestSchemaManager_ValidateComponentYAML_Invalid(t *testing.T) {
+	manager := NewSchemaManager()
+
+	// Test invalid YAML (include_metadata should be a boolean, not a string)
+	invalidYAML := []byte(`
+grpc:
+  include_metadata: "invalid_boolean_value"
+  keepalive:
+    server_parameters:
+      max_connection_idle: "invalid_duration_format"
+`)
+
+	result, err := manager.ValidateComponentYAML(ComponentTypeReceiver, "otlp", "0.138.0", invalidYAML)
+	require.NoError(t, err, "Failed to validate invalid OTLP receiver YAML")
+	require.NotNil(t, result, "Validation result should not be nil")
+
+	if result.Valid() {
+		assert.Fail(t, "Expected invalid YAML to fail validation, but it passed")
+	} else {
+		t.Logf("Correctly identified %d validation errors:", len(result.Errors()))
+		for _, desc := range result.Errors() {
+			t.Logf("  - %s", desc)
+		}
+		assert.False(t, result.Valid(), "Expected invalid YAML to fail validation")
+	}
+}
+
+func TestSchemaManager_ValidateComponentYAML_MalformedYAML(t *testing.T) {
+	manager := NewSchemaManager()
+
+	// Test malformed YAML
+	malformedYAML := []byte(`
+protocols:
+  grpc:
+    endpoint: "0.0.0.0:4317"
+  http:
+    endpoint: "0.0.0.0:4318"
+  # Indentation error
+endpoint: "invalid"
+`)
+
+	_, err := manager.ValidateComponentYAML(ComponentTypeReceiver, "otlp", "0.138.0", malformedYAML)
+	if err != nil {
+		t.Logf("Expected error for malformed YAML: %v", err)
+		assert.Contains(t, err.Error(), "failed to parse YAML data", "Error should mention YAML parsing failure")
+	}
 }
 
 // Helper function for minimum value

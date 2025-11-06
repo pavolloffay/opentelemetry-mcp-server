@@ -2,7 +2,6 @@ package main
 
 import (
 	"context"
-	"encoding/json"
 	"os"
 	"path/filepath"
 	"testing"
@@ -13,6 +12,7 @@ import (
 	"go.opentelemetry.io/collector/config/configoptional"
 	"go.opentelemetry.io/collector/consumer"
 	"go.opentelemetry.io/collector/receiver"
+	"gopkg.in/yaml.v3"
 )
 
 // TestSchemaGenerationWithCustomComponent tests the schema generator with our custom test component
@@ -30,18 +30,18 @@ func TestSchemaGenerationWithCustomComponent(t *testing.T) {
 	generator := NewSchemaGenerator("test_output")
 
 	// Generate schema for our test component
-	generatedSchema, err := generator.generateJSONSchema(defaultConfig)
+	generatedSchema, err := generator.generateYAMLSchema(defaultConfig)
 	if err != nil {
-		t.Fatalf("Failed to generate JSON schema: %v", err)
+		t.Fatalf("Failed to generate YAML schema: %v", err)
 	}
 
 	// Write generated schema to file
-	generatedBytes, err := json.MarshalIndent(generatedSchema, "", "  ")
+	generatedBytes, err := yaml.Marshal(generatedSchema)
 	if err != nil {
 		t.Fatalf("Failed to marshal generated schema: %v", err)
 	}
 
-	generatedFile := filepath.Join("test_output", "actual_generated_schema.json")
+	generatedFile := filepath.Join("test_output", "actual_generated_schema.yaml")
 	if err := os.MkdirAll("test_output", 0755); err != nil {
 		t.Fatalf("Failed to create test_output directory: %v", err)
 	}
@@ -51,7 +51,7 @@ func TestSchemaGenerationWithCustomComponent(t *testing.T) {
 	}
 
 	// Read expected schema file
-	expectedSchemaPath := filepath.Join("testdata", "expected_testcomponent_schema.json")
+	expectedSchemaPath := filepath.Join("testdata", "expected_testcomponent_schema.yaml")
 	expectedBytes, err := os.ReadFile(expectedSchemaPath)
 	if err != nil {
 		t.Fatalf("Failed to read expected schema file: %v", err)

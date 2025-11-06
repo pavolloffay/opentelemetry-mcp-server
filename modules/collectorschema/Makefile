@@ -20,14 +20,14 @@ SCHEMA_OUTPUT_DIR ?= ../schemas/$(OCB_VERSION)
 .PHONY: generate-schemas
 generate-schemas:
 	@echo "Generating JSON schemas for all OpenTelemetry collector components..."
-#	OCB_VERSION=0.135.0 make build-collector
-#	cd build && go mod vendor && SCHEMA_OUTPUT_DIR=../schemas/0.135.0 go test -run TestGenerateAllSchemas -v
-#	OCB_VERSION=0.136.0 make build-collector
-#	cd build && go mod vendor && SCHEMA_OUTPUT_DIR=../schemas/0.136.0 go test -run TestGenerateAllSchemas -v
-#	OCB_VERSION=0.137.0 make build-collector
-#	cd build && go mod vendor && SCHEMA_OUTPUT_DIR=../schemas/0.137.0 go test -run TestGenerateAllSchemas -v
-#	OCB_VERSION=0.138.0 make build-collector
-#	cd build && go mod vendor && SCHEMA_OUTPUT_DIR=../schemas/0.138.0 go test -run TestGenerateAllSchemas -v
+	OCB_VERSION=0.135.0 make build-collector
+	cd build && go mod vendor && SCHEMA_OUTPUT_DIR=../schemas/0.135.0 go test -run TestGenerateAllSchemas -v
+	OCB_VERSION=0.136.0 make build-collector
+	cd build && go mod vendor && SCHEMA_OUTPUT_DIR=../schemas/0.136.0 go test -run TestGenerateAllSchemas -v
+	OCB_VERSION=0.137.0 make build-collector
+	cd build && go mod vendor && SCHEMA_OUTPUT_DIR=../schemas/0.137.0 go test -run TestGenerateAllSchemas -v
+	OCB_VERSION=0.138.0 make build-collector
+	cd build && go mod vendor && SCHEMA_OUTPUT_DIR=../schemas/0.138.0 go test -run TestGenerateAllSchemas -v
 	OCB_VERSION=0.139.0 make build-collector
 	cd build && go mod vendor && SCHEMA_OUTPUT_DIR=../schemas/0.139.0 go test -run TestGenerateAllSchemas -v
 
