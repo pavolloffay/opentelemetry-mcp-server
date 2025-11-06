@@ -2,8 +2,7 @@
 
 The OpenTelemetry MCP server enables LLM to efficiently use OpenTelemetry stack.
 
-The MCP uses [opentelemetry-collector-config-schema](./modules/collectorschema) for the collector config validation.
-
+The MCP uses [collectorschema module](./modules/collectorschema) for the collector config validation.
 
 https://github.com/user-attachments/assets/af56cda4-9ab0-4c93-969e-a2ee7b9f0480
 
@@ -21,7 +20,7 @@ claude mcp add --transport=http otel http://localhost:8080/mcp --scope user
 
 ## Functionality
 
-At the moment the MCP serer offer tools to configure an OpenTelemetry collector.
+At the moment the MCP server offer tools to configure an OpenTelemetry collector.
 Tools return strict JSON schema for each collector component ensuring the configuration is correct.
 
 A complete list of tools can be found in the [tools](./TOOLS.md).
