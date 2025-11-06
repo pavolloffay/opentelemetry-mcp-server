@@ -61,9 +61,9 @@ claude mcp add --transport=http otelcol http://localhost:9999/mcp --scope user
 
 This MCP server is implemented as collector extension and connector which provides live view on the data.
 
-There are tool to get the collector config, schema for each component which is build into the collector and perform validation.
+There is a tool to get the collector config, schema for each component which is built into the collector and performs validation.
 
-The returned schema is incomplete, does not contain field explanation and type.
+The returned schema is incomplete, and it does not contain fields explanation and type.
 
 ```bash
 ● OTLP Receiver Schema
