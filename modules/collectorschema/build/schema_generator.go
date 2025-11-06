@@ -1,7 +1,6 @@
 package main
 
 import (
-	"encoding/json"
 	"fmt"
 	"go/ast"
 	"go/parser"
@@ -20,9 +19,10 @@ import (
 	"go.opentelemetry.io/collector/otelcol"
 	"go.opentelemetry.io/collector/processor"
 	"go.opentelemetry.io/collector/receiver"
+	"gopkg.in/yaml.v3"
 )
 
-// SchemaGenerator generates JSON schemas for OpenTelemetry collector component configurations
+// SchemaGenerator generates YAML schemas for OpenTelemetry collector component configurations
 type SchemaGenerator struct {
 	outputDir    string
 	commentCache map[string]map[string]string // packagePath -> typeName.fieldName -> comment
@@ -38,7 +38,7 @@ func NewSchemaGenerator(outputDir string) *SchemaGenerator {
 	}
 }
 
-// GenerateAllSchemas generates JSON schemas for all components
+// GenerateAllSchemas generates YAML schemas for all components
 func (sg *SchemaGenerator) GenerateAllSchemas() error {
 	// Ensure output directory exists
 	if err := os.MkdirAll(sg.outputDir, 0755); err != nil {
@@ -145,7 +145,7 @@ func (sg *SchemaGenerator) generateConnectorSchemas(factories map[component.Type
 	return nil
 }
 
-// generateSchemaForComponent generates a JSON schema for a specific component
+// generateSchemaForComponent generates a YAML schema for a specific component
 func (sg *SchemaGenerator) generateSchemaForComponent(componentCategory string, componentType component.Type, factory component.Factory) error {
 	// Get the default config from the factory
 	defaultConfig := factory.CreateDefaultConfig()
@@ -153,14 +153,14 @@ func (sg *SchemaGenerator) generateSchemaForComponent(componentCategory string, 
 		return fmt.Errorf("factory returned nil config")
 	}
 
-	// Generate JSON schema from the config struct
-	schema, err := sg.generateJSONSchema(defaultConfig)
+	// Generate YAML schema from the config struct
+	schema, err := sg.generateYAMLSchema(defaultConfig)
 	if err != nil {
-		return fmt.Errorf("failed to generate JSON schema: %w", err)
+		return fmt.Errorf("failed to generate YAML schema: %w", err)
 	}
 
 	// Create filename for this component
-	filename := fmt.Sprintf("%s_%s.json", componentCategory, componentType)
+	filename := fmt.Sprintf("%s_%s.yaml", componentCategory, componentType)
 	filePath := filepath.Join(sg.outputDir, filename)
 
 	// Write schema to file
@@ -172,9 +172,9 @@ func (sg *SchemaGenerator) generateSchemaForComponent(componentCategory string, 
 	return nil
 }
 
-// generateJSONSchema generates a JSON schema from a Go struct
-func (sg *SchemaGenerator) generateJSONSchema(config component.Config) (map[string]interface{}, error) {
-	// Use reflection to analyze the struct and generate a basic JSON schema
+// generateYAMLSchema generates a YAML schema from a Go struct
+func (sg *SchemaGenerator) generateYAMLSchema(config component.Config) (map[string]interface{}, error) {
+	// Use reflection to analyze the struct and generate a basic YAML schema
 	configType := reflect.TypeOf(config)
 	if configType.Kind() == reflect.Ptr {
 		configType = configType.Elem()
@@ -735,12 +735,12 @@ func (sg *SchemaGenerator) isFieldDeprecated(field reflect.StructField, descript
 	return false
 }
 
-// writeSchemaToFile writes a JSON schema to a file
+// writeSchemaToFile writes a YAML schema to a file
 func (sg *SchemaGenerator) writeSchemaToFile(filePath string, schema map[string]interface{}) error {
-	// Pretty print JSON
-	data, err := json.MarshalIndent(schema, "", "  ")
+	// Pretty print YAML
+	data, err := yaml.Marshal(schema)
 	if err != nil {
-		return fmt.Errorf("failed to marshal schema to JSON: %w", err)
+		return fmt.Errorf("failed to marshal schema to YAML: %w", err)
 	}
 
 	// Write to file

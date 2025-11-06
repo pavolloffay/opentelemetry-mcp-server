@@ -11,7 +11,7 @@ import (
 	"go.opentelemetry.io/collector/receiver"
 )
 
-// TestGenerateAllSchemas tests the schema generator by generating JSON schemas for all components
+// TestGenerateAllSchemas tests the schema generator by generating YAML schemas for all components
 func TestGenerateAllSchemas(t *testing.T) {
 	// Get output directory from environment variable, fallback to default
 	schemaOutputDir := os.Getenv("SCHEMA_OUTPUT_DIR")
@@ -32,7 +32,7 @@ func TestGenerateAllSchemas(t *testing.T) {
 		t.Fatalf("Schema verification failed: %v", err)
 	}
 
-	t.Logf("Successfully generated JSON schemas in directory: %s", schemaOutputDir)
+	t.Logf("Successfully generated YAML schemas in directory: %s", schemaOutputDir)
 }
 
 // verifyGeneratedSchemas verifies that schema files were created and are valid
@@ -43,7 +43,7 @@ func verifyGeneratedSchemas(t *testing.T, schemaOutputDir string) error {
 	}
 
 	// Count schema files
-	files, err := filepath.Glob(filepath.Join(schemaOutputDir, "*.json"))
+	files, err := filepath.Glob(filepath.Join(schemaOutputDir, "*.yaml"))
 	if err != nil {
 		return fmt.Errorf("failed to list schema files: %w", err)
 	}
@@ -56,10 +56,10 @@ func verifyGeneratedSchemas(t *testing.T, schemaOutputDir string) error {
 
 	// Verify a few sample schema files exist
 	expectedFiles := []string{
-		"receiver_otlp.json",
-		"exporter_debug.json",
-		"processor_batch.json",
-		"extension_zpages.json",
+		"receiver_otlp.yaml",
+		"exporter_debug.yaml",
+		"processor_batch.yaml",
+		"extension_zpages.yaml",
 	}
 
 	for _, expectedFile := range expectedFiles {
@@ -113,7 +113,7 @@ func TestSchemaGeneratorIndividualComponent(t *testing.T) {
 		}
 
 		// Verify file was created
-		expectedFile := filepath.Join(tmpDir, "receiver_otlp.json")
+		expectedFile := filepath.Join(tmpDir, "receiver_otlp.yaml")
 		if _, err := os.Stat(expectedFile); os.IsNotExist(err) {
 			t.Fatalf("Schema file was not created: %s", expectedFile)
 		}
@@ -155,9 +155,9 @@ func TestSchemaFormat(t *testing.T) {
 			t.Fatalf("Factory returned nil config")
 		}
 
-		schema, err := generator.generateJSONSchema(defaultConfig)
+		schema, err := generator.generateYAMLSchema(defaultConfig)
 		if err != nil {
-			t.Fatalf("Failed to generate JSON schema: %v", err)
+			t.Fatalf("Failed to generate YAML schema: %v", err)
 		}
 
 		// Verify required schema fields

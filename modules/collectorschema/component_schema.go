@@ -9,6 +9,7 @@ import (
 	"strings"
 
 	"github.com/xeipuuv/gojsonschema"
+	"gopkg.in/yaml.v3"
 )
 
 //go:embed schemas
@@ -25,7 +26,7 @@ const (
 	ComponentTypeConnector ComponentType = "connector"
 )
 
-// ComponentSchema represents a JSON schema for an OpenTelemetry component
+// ComponentSchema represents a YAML schema for an OpenTelemetry component
 type ComponentSchema struct {
 	Name    string                 `json:"name"`
 	Type    ComponentType          `json:"type"`
@@ -52,7 +53,7 @@ func NewSchemaManager() *SchemaManager {
 	}
 }
 
-// GetComponentSchema returns the JSON schema for a specific component
+// GetComponentSchema returns the YAML schema for a specific component
 func (sm *SchemaManager) GetComponentSchema(componentType ComponentType, componentName string, version string) (*ComponentSchema, error) {
 	// Create cache key
 	cacheKey := fmt.Sprintf("%s_%s_%s", componentType, componentName, version)
@@ -74,7 +75,7 @@ func (sm *SchemaManager) GetComponentSchema(componentType ComponentType, compone
 	return schema, nil
 }
 
-// GetComponentSchemaJSON returns the JSON schema as a JSON byte array
+// GetComponentSchemaJSON returns the YAML schema as a JSON byte array
 func (sm *SchemaManager) GetComponentSchemaJSON(componentType ComponentType, componentName string, version string) ([]byte, error) {
 	schema, err := sm.GetComponentSchema(componentType, componentName, version)
 	if err != nil {
@@ -118,6 +119,24 @@ func (sm *SchemaManager) ValidateComponentJSON(componentType ComponentType, comp
 	return result, nil
 }
 
+// ValidateComponentYAML validates a component configuration YAML against its schema
+func (sm *SchemaManager) ValidateComponentYAML(componentType ComponentType, componentName string, version string, yamlData []byte) (*gojsonschema.Result, error) {
+	// Parse YAML data to interface{}
+	var data interface{}
+	if err := yaml.Unmarshal(yamlData, &data); err != nil {
+		return nil, fmt.Errorf("failed to parse YAML data: %w", err)
+	}
+
+	// Convert to JSON for validation
+	jsonData, err := json.Marshal(data)
+	if err != nil {
+		return nil, fmt.Errorf("failed to convert YAML to JSON for validation: %w", err)
+	}
+
+	// Use existing JSON validation function
+	return sm.ValidateComponentJSON(componentType, componentName, version, jsonData)
+}
+
 // GetComponentReadme returns the README content for a specific component
 func (sm *SchemaManager) GetComponentReadme(componentType ComponentType, componentName string, version string) (string, error) {
 	// Construct filename (format: type_name.md)
@@ -159,14 +178,14 @@ func (sm *SchemaManager) listEmbeddedComponents(version string) (map[ComponentTy
 	}
 
 	for _, entry := range entries {
-		if entry.IsDir() || !strings.HasSuffix(entry.Name(), ".json") {
+		if entry.IsDir() || !strings.HasSuffix(entry.Name(), ".yaml") {
 			continue
 		}
 
-		// Remove .json extension
-		name := strings.TrimSuffix(entry.Name(), ".json")
+		// Remove .yaml extension
+		name := strings.TrimSuffix(entry.Name(), ".yaml")
 
-		// Parse component type and name from filename (format: type_name.json)
+		// Parse component type and name from filename (format: type_name.yaml)
 		parts := strings.SplitN(name, "_", 2)
 		if len(parts) != 2 {
 			continue // Skip files that don't match the expected format
@@ -188,8 +207,8 @@ func (sm *SchemaManager) listEmbeddedComponents(version string) (map[ComponentTy
 
 // loadSchemaFromFile loads a schema from embedded files
 func (sm *SchemaManager) loadSchemaFromFile(componentType ComponentType, componentName string, version string) (*ComponentSchema, error) {
-	// Construct filename (format: type_name.json)
-	filename := fmt.Sprintf("%s_%s.json", componentType, componentName)
+	// Construct filename (format: type_name.yaml)
+	filename := fmt.Sprintf("%s_%s.yaml", componentType, componentName)
 
 	// Load from embedded filesystem
 	schemaPath := fmt.Sprintf("schemas/%s", version)
@@ -199,10 +218,10 @@ func (sm *SchemaManager) loadSchemaFromFile(componentType ComponentType, compone
 		return nil, fmt.Errorf("schema not found for component %s %s", componentType, componentName)
 	}
 
-	// Parse JSON schema
+	// Parse YAML schema
 	var schemaData map[string]interface{}
-	if err := json.Unmarshal(data, &schemaData); err != nil {
-		return nil, fmt.Errorf("failed to parse schema JSON for %s %s: %w", componentType, componentName, err)
+	if err := yaml.Unmarshal(data, &schemaData); err != nil {
+		return nil, fmt.Errorf("failed to parse schema YAML for %s %s: %w", componentType, componentName, err)
 	}
 
 	// Use the provided version
@@ -296,14 +315,14 @@ func (sm *SchemaManager) GetComponentNames(componentType ComponentType, version 
 	prefix := string(componentType) + "_"
 
 	for _, entry := range entries {
-		if entry.IsDir() || !strings.HasSuffix(entry.Name(), ".json") {
+		if entry.IsDir() || !strings.HasSuffix(entry.Name(), ".yaml") {
 			continue
 		}
 
-		// Check if the file matches the component type pattern (e.g., "receiver_otlp.json")
+		// Check if the file matches the component type pattern (e.g., "receiver_otlp.yaml")
 		if strings.HasPrefix(entry.Name(), prefix) {
-			// Extract component name by removing prefix and .json suffix
-			name := strings.TrimSuffix(entry.Name(), ".json")
+			// Extract component name by removing prefix and .yaml suffix
+			name := strings.TrimSuffix(entry.Name(), ".yaml")
 			componentName := strings.TrimPrefix(name, prefix)
 			if componentName != "" {
 				componentNames = append(componentNames, componentName)

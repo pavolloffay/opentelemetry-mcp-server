@@ -24,7 +24,6 @@ import (
 	spanmetricsconnector "github.com/open-telemetry/opentelemetry-collector-contrib/connector/spanmetricsconnector"
 	sumconnector "github.com/open-telemetry/opentelemetry-collector-contrib/connector/sumconnector"
 	signaltometricsconnector "github.com/open-telemetry/opentelemetry-collector-contrib/connector/signaltometricsconnector"
-	mcpconnector "github.com/pavolloffay/otel-mcp/connector/mcpconnector"
 	debugexporter "go.opentelemetry.io/collector/exporter/debugexporter"
 	nopexporter "go.opentelemetry.io/collector/exporter/nopexporter"
 	otlpexporter "go.opentelemetry.io/collector/exporter/otlpexporter"
@@ -113,7 +112,6 @@ import (
 	redisstorageextension "github.com/open-telemetry/opentelemetry-collector-contrib/extension/storage/redisstorageextension"
 	sumologicextension "github.com/open-telemetry/opentelemetry-collector-contrib/extension/sumologicextension"
 	k8sleaderelector "github.com/open-telemetry/opentelemetry-collector-contrib/extension/k8sleaderelector"
-	mcpextension "github.com/pavolloffay/otel-mcp/extension/mcpextension"
 	batchprocessor "go.opentelemetry.io/collector/processor/batchprocessor"
 	memorylimiterprocessor "go.opentelemetry.io/collector/processor/memorylimiterprocessor"
 	attributesprocessor "github.com/open-telemetry/opentelemetry-collector-contrib/processor/attributesprocessor"
@@ -292,7 +290,6 @@ func components() (otelcol.Factories, error) {
 		redisstorageextension.NewFactory(),
 		sumologicextension.NewFactory(),
 		k8sleaderelector.NewFactory(),
-		mcpextension.NewFactory(),
 	)
 	if err != nil {
 		return otelcol.Factories{}, err
@@ -336,7 +333,6 @@ func components() (otelcol.Factories, error) {
 	factories.ExtensionModules[redisstorageextension.NewFactory().Type()] = "github.com/open-telemetry/opentelemetry-collector-contrib/extension/storage/redisstorageextension v0.139.0"
 	factories.ExtensionModules[sumologicextension.NewFactory().Type()] = "github.com/open-telemetry/opentelemetry-collector-contrib/extension/sumologicextension v0.139.0"
 	factories.ExtensionModules[k8sleaderelector.NewFactory().Type()] = "github.com/open-telemetry/opentelemetry-collector-contrib/extension/k8sleaderelector v0.139.0"
-	factories.ExtensionModules[mcpextension.NewFactory().Type()] = "github.com/pavolloffay/otel-mcp v0.0.0-20251105114117-f4334a2d096e"
 
 	factories.Receivers, err = otelcol.MakeFactoryMap[receiver.Factory](
 		nopreceiver.NewFactory(),
@@ -735,7 +731,6 @@ func components() (otelcol.Factories, error) {
 		spanmetricsconnector.NewFactory(),
 		sumconnector.NewFactory(),
 		signaltometricsconnector.NewFactory(),
-		mcpconnector.NewFactory(),
 	)
 	if err != nil {
 		return otelcol.Factories{}, err
@@ -754,7 +749,6 @@ func components() (otelcol.Factories, error) {
 	factories.ConnectorModules[spanmetricsconnector.NewFactory().Type()] = "github.com/open-telemetry/opentelemetry-collector-contrib/connector/spanmetricsconnector v0.139.0"
 	factories.ConnectorModules[sumconnector.NewFactory().Type()] = "github.com/open-telemetry/opentelemetry-collector-contrib/connector/sumconnector v0.139.0"
 	factories.ConnectorModules[signaltometricsconnector.NewFactory().Type()] = "github.com/open-telemetry/opentelemetry-collector-contrib/connector/signaltometricsconnector v0.139.0"
-	factories.ConnectorModules[mcpconnector.NewFactory().Type()] = "github.com/pavolloffay/otel-mcp v0.0.0-20251105114117-f4334a2d096e"
 
 	return factories, nil
 }
