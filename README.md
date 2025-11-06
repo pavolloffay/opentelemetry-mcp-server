@@ -21,36 +21,29 @@ claude mcp add --transport=http otel http://localhost:8080/mcp --scope user
 
 ## Functionality
 
-This MCP server helps with the following use-cases:
+At the moment the MCP serer offer tools to configure an OpenTelemetry collector.
+Tools return strict JSON schema for each collector component ensuring the configuration is correct.
 
-### Collector
-
-* Enable LLM to understand OpenTelemetry collector use-cases for each collector component.
-* Enable LLM to understand which collector components are included in each version.
-* Enable LLM to construct a valid collector configuration.
-* Enable LLM to validate collector configuration.
-* Enable LLM to find and fix deprecated configuration.
-* Enable LLM to understand deprecated configuration between versions.
-* Enable LLM to understand configuration differences between collector versions.
-
-### Instrumentation - Future work
-
-* Enable LLM to correctly instrument code.
-  * Enable LLM identify uninstrumented code (e.g. RPC frameworks that should be instrumented).
-* Enable LLM to identify high cardinality attributes explicitly added.
-* Enable LLM to identify PII attributes explicitly added.
-* Enable LLM to fix issues in the codebase based on the telemetry data.
+A complete list of tools can be found in the [tools](./TOOLS.md).
 
 ## Future work / Roadmap
 
-* Enable LLM to understand data the collector is processing. 
+* Enable LLM to understand/profile data collector is receiving. 
   * What are the (resource) attributes and values?
-  * It can help LLM to write PII (filtering) rules, specific for an organization.
+  * It can help LLM to write PII (filtering) rules specific for a given organization.
 * Enable LLM to understand which workloads are sending telemetry data.
 * Enable LLM to understand how much data each workload is sending.
 * Enable LLM to tweak sampling configuration based on the collected data.
 * Enable LLM to size storage based on the collected data volumes.
 * Enable LLM to validate OpenTelemetry transformation language.
+
+### Instrumentation
+
+* Enable LLM to correctly instrument code.
+    * Enable LLM identify uninstrumented code (e.g. RPC frameworks that should be instrumented).
+* Enable LLM to identify high cardinality attributes explicitly added.
+* Enable LLM to identify PII attributes explicitly added.
+* Enable LLM to fix issues in the codebase based on the telemetry data.
 
 ## Other OpenTelemetry MCP servers
 
