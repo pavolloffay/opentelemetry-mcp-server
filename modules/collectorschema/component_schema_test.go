@@ -568,6 +568,109 @@ func minInt(a, b int) int {
 	return b
 }
 
+func TestSchemaManager_QueryDocumentation(t *testing.T) {
+	manager := NewSchemaManager()
+
+	// Test basic documentation search for a specific version
+	results, err := manager.QueryDocumentation("OTLP receiver configuration", "0.139.0", 5)
+	require.NoError(t, err, "Failed to query documentation")
+	require.NotEmpty(t, results, "Expected search results")
+
+	// Verify result structure and that all results are from the specified version
+	for _, result := range results {
+		assert.NotEmpty(t, result.ID, "Result should have an ID")
+		assert.NotEmpty(t, result.Content, "Result should have content")
+		assert.NotNil(t, result.Metadata, "Result should have metadata")
+		assert.GreaterOrEqual(t, result.Similarity, float32(0.0), "Similarity should be non-negative")
+		assert.Equal(t, "0.139.0", result.Version, "All results should be from the specified version")
+
+		// Log result for debugging
+		t.Logf("Found document: ID=%s, Component=%s, Version=%s, Similarity=%.3f",
+			result.ID, result.Component, result.Version, result.Similarity)
+	}
+
+	t.Logf("Successfully found %d documentation results for version 0.139.0", len(results))
+}
+
+func TestSchemaManager_QueryDocumentation_VersionFiltering(t *testing.T) {
+	manager := NewSchemaManager()
+
+	// Test that version filtering works correctly
+	results139, err := manager.QueryDocumentation("OTLP receiver", "0.139.0", 3)
+	require.NoError(t, err, "Failed to query documentation for version 0.139.0")
+
+	results135, err := manager.QueryDocumentation("OTLP receiver", "0.135.0", 3)
+	require.NoError(t, err, "Failed to query documentation for version 0.135.0")
+
+	// Verify that all results are from the correct version
+	for _, result := range results139 {
+		assert.Equal(t, "0.139.0", result.Version, "All results should be from version 0.139.0")
+	}
+
+	for _, result := range results135 {
+		assert.Equal(t, "0.135.0", result.Version, "All results should be from version 0.135.0")
+	}
+
+	t.Logf("Version 0.139.0 returned %d results", len(results139))
+	t.Logf("Version 0.135.0 returned %d results", len(results135))
+	t.Log("Version filtering works correctly")
+}
+
+func TestSchemaManager_QueryDocumentationWithFilters(t *testing.T) {
+	manager := NewSchemaManager()
+
+	// Test filtered search for specific component type
+	results, err := manager.QueryDocumentationWithFilters("configuration examples", 3, "receiver", "", "")
+	require.NoError(t, err, "Failed to query documentation with filters")
+	require.NotEmpty(t, results, "Expected search results")
+
+	// Verify all results are from receivers
+	for _, result := range results {
+		if result.Metadata["component_type"] != "" {
+			assert.Equal(t, "receiver", result.Metadata["component_type"], "Should only return receiver components")
+		}
+		t.Logf("Filtered result: ID=%s, ComponentType=%s, Component=%s",
+			result.ID, result.Metadata["component_type"], result.Component)
+	}
+
+	// Test filtered search for specific component
+	results, err = manager.QueryDocumentationWithFilters("endpoints", 2, "receiver", "otlp", "")
+	require.NoError(t, err, "Failed to query documentation for OTLP receiver")
+
+	// Verify results are relevant to OTLP receiver
+	for _, result := range results {
+		if result.Component != "" {
+			assert.Contains(t, result.Component, "otlp", "Should contain OTLP-related content")
+		}
+		t.Logf("OTLP result: ID=%s, Component=%s, Content preview: %.100s...",
+			result.ID, result.Component, result.Content)
+	}
+
+	t.Logf("Successfully tested filtered documentation search")
+}
+
+func TestSchemaManager_QueryDocumentation_EmptyQuery(t *testing.T) {
+	manager := NewSchemaManager()
+
+	// Test with empty query - this should error since chromem doesn't allow empty queries
+	results, err := manager.QueryDocumentation("", "0.139.0", 5)
+	require.Error(t, err, "Empty query should error")
+	require.Empty(t, results, "Empty query should return no results")
+
+	t.Logf("Empty query correctly returned error: %v", err)
+}
+
+func TestSchemaManager_QueryDocumentation_NoResults(t *testing.T) {
+	manager := NewSchemaManager()
+
+	// Test with a query that should return no relevant results
+	results, err := manager.QueryDocumentation("xyzunlikelytermabc123", "0.139.0", 5)
+	require.NoError(t, err, "Query should not error even with no results")
+
+	// Should return empty results or very low similarity results
+	t.Logf("Unlikely query returned %d results for version 0.139.0", len(results))
+}
+
 func BenchmarkSchemaManager_GetComponentSchema(b *testing.B) {
 	manager := NewSchemaManager()
 
@@ -579,6 +682,21 @@ func BenchmarkSchemaManager_GetComponentSchema(b *testing.B) {
 		_, err := manager.GetComponentSchema(ComponentTypeReceiver, "otlp", "0.138.0")
 		if err != nil {
 			b.Fatalf("Failed to get schema: %v", err)
+		}
+	}
+}
+
+func BenchmarkSchemaManager_QueryDocumentation(b *testing.B) {
+	manager := NewSchemaManager()
+
+	// Pre-initialize RAG database
+	_, _ = manager.QueryDocumentation("test", "0.139.0", 1)
+
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		_, err := manager.QueryDocumentation("OTLP configuration", "0.139.0", 3)
+		if err != nil {
+			b.Fatalf("Failed to query documentation: %v", err)
 		}
 	}
 }

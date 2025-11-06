@@ -1,13 +1,19 @@
 package collectorschema
 
 import (
+	"context"
+	"crypto/md5"
 	"embed"
 	"encoding/json"
 	"fmt"
+	"hash/fnv"
 	"io/fs"
+	"math"
 	"path/filepath"
 	"strings"
+	"sync"
 
+	"github.com/philippgille/chromem-go"
 	"github.com/xeipuuv/gojsonschema"
 	"gopkg.in/yaml.v3"
 )
@@ -41,9 +47,13 @@ type DeprecatedField struct {
 	Type        string `json:"type"`
 }
 
-// SchemaManager manages component schemas
+// SchemaManager manages component schemas and documentation RAG database
 type SchemaManager struct {
-	cache map[string]*ComponentSchema
+	cache          map[string]*ComponentSchema
+	ragDB          *chromem.DB
+	ragCollection  *chromem.Collection
+	ragMutex       sync.RWMutex
+	ragInit        sync.Once
 }
 
 // NewSchemaManager creates a new schema manager
@@ -51,6 +61,156 @@ func NewSchemaManager() *SchemaManager {
 	return &SchemaManager{
 		cache: make(map[string]*ComponentSchema),
 	}
+}
+
+// createSimpleEmbeddingFunc creates a simple hash-based embedding function for testing
+// This avoids external API dependencies and creates deterministic embeddings
+func createSimpleEmbeddingFunc() chromem.EmbeddingFunc {
+	return func(ctx context.Context, text string) ([]float32, error) {
+		// Create a simple embedding using text hashes
+		// This is for testing purposes only and not suitable for production
+
+		// Use multiple hash functions to create a 384-dimensional embedding
+		h1 := fnv.New64a()
+		h2 := fnv.New64()
+		h1.Write([]byte(text))
+		h2.Write([]byte(text))
+
+		hash1 := h1.Sum64()
+		hash2 := h2.Sum64()
+
+		// Create MD5 hash for additional entropy
+		md5Hash := md5.Sum([]byte(text))
+
+		embedding := make([]float32, 384) // Standard embedding dimension
+
+		// Fill embedding with normalized values derived from hashes
+		for i := 0; i < 384; i++ {
+			var value uint64
+			if i < 128 {
+				value = hash1 + uint64(i)
+			} else if i < 256 {
+				value = hash2 + uint64(i)
+			} else {
+				// Use MD5 bytes for remaining dimensions
+				byteIdx := (i - 256) % 16
+				value = uint64(md5Hash[byteIdx]) + uint64(i)
+			}
+
+			// Convert to float and normalize to [-1, 1]
+			embedding[i] = float32(int32(value)) / float32(math.MaxInt32)
+		}
+
+		// Normalize the embedding vector
+		var norm float32
+		for _, val := range embedding {
+			norm += val * val
+		}
+		norm = float32(math.Sqrt(float64(norm)))
+
+		if norm > 0 {
+			for i := range embedding {
+				embedding[i] /= norm
+			}
+		}
+
+		return embedding, nil
+	}
+}
+
+// initRAGDatabase initializes the RAG database and indexes all markdown files
+func (sm *SchemaManager) initRAGDatabase() error {
+	var err error
+	sm.ragInit.Do(func() {
+		// Create a new ChromaDB instance
+		sm.ragDB = chromem.NewDB()
+
+		// Create a collection for documentation
+		embeddingFunc := createSimpleEmbeddingFunc()
+		metadata := map[string]string{
+			"description": "OpenTelemetry Collector Component Documentation",
+		}
+
+		collection, collErr := sm.ragDB.CreateCollection("otel-docs", metadata, embeddingFunc)
+		if collErr != nil {
+			err = fmt.Errorf("failed to create RAG collection: %w", collErr)
+			return
+		}
+		sm.ragCollection = collection
+
+		// Get all versions to index documentation from all versions
+		versions, vErr := sm.GetAllVersions()
+		if vErr != nil {
+			err = fmt.Errorf("failed to get versions for RAG indexing: %w", vErr)
+			return
+		}
+
+		// Index all markdown files across all versions
+		for _, version := range versions {
+			if indexErr := sm.indexMarkdownFiles(version); indexErr != nil {
+				err = fmt.Errorf("failed to index markdown files for version %s: %w", version, indexErr)
+				return
+			}
+		}
+	})
+	return err
+}
+
+// indexMarkdownFiles indexes all markdown files for a specific version
+func (sm *SchemaManager) indexMarkdownFiles(version string) error {
+	schemaPath := fmt.Sprintf("schemas/%s", version)
+	entries, err := fs.ReadDir(embeddedSchemas, schemaPath)
+	if err != nil {
+		return fmt.Errorf("failed to read schema directory for version %s: %w", version, err)
+	}
+
+	for _, entry := range entries {
+		if entry.IsDir() || !strings.HasSuffix(entry.Name(), ".md") {
+			continue
+		}
+
+		// Read the markdown file
+		filePath := filepath.Join(schemaPath, entry.Name())
+		content, err := fs.ReadFile(embeddedSchemas, filePath)
+		if err != nil {
+			// Log warning but continue with other files
+			fmt.Printf("Warning: failed to read markdown file %s: %v\n", filePath, err)
+			continue
+		}
+
+		// Create document metadata
+		componentName := strings.TrimSuffix(entry.Name(), ".md")
+		metadata := map[string]string{
+			"version":    version,
+			"component":  componentName,
+			"file_path":  filePath,
+			"file_type":  "markdown",
+		}
+
+		// Parse component type and name
+		parts := strings.SplitN(componentName, "_", 2)
+		if len(parts) == 2 {
+			metadata["component_type"] = parts[0]
+			metadata["component_name"] = parts[1]
+		}
+
+		// Create document for RAG database
+		docID := fmt.Sprintf("%s/%s", version, componentName)
+		doc := chromem.Document{
+			ID:       docID,
+			Content:  string(content),
+			Metadata: metadata,
+		}
+
+		// Add document to RAG collection
+		if err := sm.ragCollection.AddDocument(context.Background(), doc); err != nil {
+			// Log warning but continue with other files
+			fmt.Printf("Warning: failed to add document %s to RAG database: %v\n", docID, err)
+			continue
+		}
+	}
+
+	return nil
 }
 
 // GetComponentSchema returns the YAML schema for a specific component
@@ -335,6 +495,122 @@ func (sm *SchemaManager) GetComponentNames(componentType ComponentType, version 
 	}
 
 	return componentNames, nil
+}
+
+// DocumentSearchResult represents a search result from the RAG database
+type DocumentSearchResult struct {
+	ID          string            `json:"id"`
+	Content     string            `json:"content"`
+	Metadata    map[string]string `json:"metadata"`
+	Similarity  float32           `json:"similarity"`
+	Component   string            `json:"component,omitempty"`
+	Version     string            `json:"version,omitempty"`
+	FilePath    string            `json:"file_path,omitempty"`
+}
+
+// QueryDocumentation searches the RAG database for relevant documentation based on the query text for a specific version
+func (sm *SchemaManager) QueryDocumentation(query string, version string, maxResults int) ([]DocumentSearchResult, error) {
+	sm.ragMutex.RLock()
+	defer sm.ragMutex.RUnlock()
+
+	// Initialize RAG database if not already done
+	if err := sm.initRAGDatabase(); err != nil {
+		return nil, fmt.Errorf("failed to initialize RAG database: %w", err)
+	}
+
+	// Build where filter to restrict search to the specified version
+	where := map[string]string{
+		"version": version,
+	}
+
+	// Perform the search with version filter
+	results, err := sm.ragCollection.Query(context.Background(), query, maxResults, where, nil)
+	if err != nil {
+		return nil, fmt.Errorf("failed to query RAG database: %w", err)
+	}
+
+	// Convert chromem results to our result structure
+	searchResults := make([]DocumentSearchResult, len(results))
+	for i, result := range results {
+		searchResult := DocumentSearchResult{
+			ID:         result.ID,
+			Content:    result.Content,
+			Metadata:   result.Metadata,
+			Similarity: result.Similarity,
+		}
+
+		// Extract commonly used metadata fields for easier access
+		if component, exists := result.Metadata["component"]; exists {
+			searchResult.Component = component
+		}
+		if resultVersion, exists := result.Metadata["version"]; exists {
+			searchResult.Version = resultVersion
+		}
+		if filePath, exists := result.Metadata["file_path"]; exists {
+			searchResult.FilePath = filePath
+		}
+
+		searchResults[i] = searchResult
+	}
+
+	return searchResults, nil
+}
+
+// QueryDocumentationWithFilters searches the RAG database with additional filtering options beyond version.
+// Use this method when you need to filter by component type, component name, or version.
+// For simple version-scoped searches, use QueryDocumentation instead.
+func (sm *SchemaManager) QueryDocumentationWithFilters(query string, maxResults int, componentType, componentName, version string) ([]DocumentSearchResult, error) {
+	sm.ragMutex.RLock()
+	defer sm.ragMutex.RUnlock()
+
+	// Initialize RAG database if not already done
+	if err := sm.initRAGDatabase(); err != nil {
+		return nil, fmt.Errorf("failed to initialize RAG database: %w", err)
+	}
+
+	// Build where filter
+	where := make(map[string]string)
+	if componentType != "" {
+		where["component_type"] = componentType
+	}
+	if componentName != "" {
+		where["component_name"] = componentName
+	}
+	if version != "" {
+		where["version"] = version
+	}
+
+	// Perform the search with filters
+	results, err := sm.ragCollection.Query(context.Background(), query, maxResults, where, nil)
+	if err != nil {
+		return nil, fmt.Errorf("failed to query RAG database with filters: %w", err)
+	}
+
+	// Convert chromem results to our result structure
+	searchResults := make([]DocumentSearchResult, len(results))
+	for i, result := range results {
+		searchResult := DocumentSearchResult{
+			ID:         result.ID,
+			Content:    result.Content,
+			Metadata:   result.Metadata,
+			Similarity: result.Similarity,
+		}
+
+		// Extract commonly used metadata fields for easier access
+		if component, exists := result.Metadata["component"]; exists {
+			searchResult.Component = component
+		}
+		if resultVersion, exists := result.Metadata["version"]; exists {
+			searchResult.Version = resultVersion
+		}
+		if filePath, exists := result.Metadata["file_path"]; exists {
+			searchResult.FilePath = filePath
+		}
+
+		searchResults[i] = searchResult
+	}
+
+	return searchResults, nil
 }
 
 // GetDeprecatedFields returns a list of deprecated fields with their information for a specific component

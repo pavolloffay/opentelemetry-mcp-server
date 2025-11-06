@@ -30,6 +30,7 @@ func GetAllTools() ([]Tool, error) {
 		getCollectorSchemaValidationTool(schemaManager, latestCollectorVersion),
 		getCollectorComponentDeprecatedTool(schemaManager, latestCollectorVersion),
 		getCollectorChangelogTool(schemaManager, latestCollectorVersion),
+		getCollectorDocumentationRAG(schemaManager, latestCollectorVersion),
 	}
 
 	return tools, nil
@@ -238,6 +239,11 @@ func getCollectorSchemaValidationTool(schemaManager *collectorschema.SchemaManag
 	return Tool{Tool: tool, Handler: handler}
 }
 
+type DeprecatedComponentFields struct {
+	ComponentName    string                            `json:"componentName"`
+	DeprecatedFields []collectorschema.DeprecatedField `json:"deprecatedFields"`
+}
+
 // getCollectorComponentDeprecatedTool returns the collector schema validation tool
 func getCollectorComponentDeprecatedTool(schemaManager *collectorschema.SchemaManager, latestCollectorVersion string) Tool {
 	tool := mcp.NewTool("opentelemetry-collector-component-deprecated-fields",
@@ -289,7 +295,66 @@ func getCollectorComponentDeprecatedTool(schemaManager *collectorschema.SchemaMa
 	return Tool{Tool: tool, Handler: handler}
 }
 
-type DeprecatedComponentFields struct {
-	ComponentName    string                            `json:"componentName"`
-	DeprecatedFields []collectorschema.DeprecatedField `json:"deprecatedFields"`
+type DocumentationSearchResult struct {
+	Results []collectorschema.DocumentSearchResult `json:"results"`
+}
+
+// getCollectorDocumentationRAG returns the query from the RAG
+func getCollectorDocumentationRAG(schemaManager *collectorschema.SchemaManager, latestCollectorVersion string) Tool {
+	tool := mcp.NewTool("opentelemetry-collector-rag",
+		mcp.WithDescription("Answer questions about OpenTelemetry collector"),
+		mcp.WithDestructiveHintAnnotation(false),
+		mcp.WithOpenWorldHintAnnotation(false),
+		mcp.WithString("query",
+			mcp.Description("Query about OpenTelemetry collector's documentation"),
+			mcp.Required(),
+		),
+		mcp.WithString("version",
+			mcp.Description("The OpenTelemetry Collector version e.g. 0.138.0"),
+			mcp.Required(),
+		),
+		mcp.WithString("kind",
+			mcp.Description("Collector component kind. It can be receiver, exporter, processor, connector and extension. If kind is provided name has to be provided as well."),
+		),
+		mcp.WithString("name",
+			mcp.Description("Collector component name e.g. otlp. If name is provided kind has to be provided as well."),
+		),
+	)
+
+	handler := func(ctx context.Context, request mcp.CallToolRequest) (*mcp.CallToolResult, error) {
+		undefined := "none"
+		componentKind := request.GetString("kind", undefined)
+		componentName := request.GetString("name", undefined)
+		version, err := request.RequireString("version")
+		if err != nil {
+			return mcp.NewToolResultError(fmt.Sprintf("version argument is required: %v", err)), nil
+		}
+		query, err := request.RequireString("query")
+		if err != nil {
+			return mcp.NewToolResultError(fmt.Sprintf("query argument is required: %v", err)), nil
+		}
+
+		if (componentKind == undefined && componentName != undefined) && (componentName == undefined && componentKind != undefined) {
+			return mcp.NewToolResultError(fmt.Sprintf("if kind is provided name has to be provided as well: %v", err)), nil
+		}
+
+		var result DocumentationSearchResult
+		if componentKind == undefined {
+			results, err := schemaManager.QueryDocumentation(query, version, 3)
+			if err != nil {
+				return mcp.NewToolResultError(fmt.Sprintf("Failed to process query %s: %v", query, err)), nil
+			}
+			result = DocumentationSearchResult{Results: results}
+		} else {
+			results, err := schemaManager.QueryDocumentationWithFilters(query, 3, componentKind, componentName, version)
+			if err != nil {
+				return mcp.NewToolResultError(fmt.Sprintf("Failed to process query %s: %v", query, err)), nil
+			}
+			result = DocumentationSearchResult{Results: results}
+		}
+
+		return mcp.NewToolResultJSON(result)
+	}
+
+	return Tool{Tool: tool, Handler: handler}
 }
