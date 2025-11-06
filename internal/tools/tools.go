@@ -63,22 +63,22 @@ func getCollectorComponentsTool(schemaManager *collectorschema.SchemaManager, la
 		mcp.WithString("version",
 			mcp.Description("The OpenTelemetry Collector version e.g. 0.138.0"),
 		),
-		mcp.WithString("type",
+		mcp.WithString("kind",
 			mcp.Required(),
-			mcp.Description("Collector component type. It can be receiver, exporter, processor, connector and extension."),
+			mcp.Description("Collector component kind. It can be receiver, exporter, processor, connector and extension."),
 		),
 	)
 
 	handler := func(ctx context.Context, request mcp.CallToolRequest) (*mcp.CallToolResult, error) {
-		componentType, err := request.RequireString("type")
+		componentKind, err := request.RequireString("kind")
 		if err != nil {
-			return mcp.NewToolResultError(fmt.Sprintf("type argument is required: %v", err)), nil
+			return mcp.NewToolResultError(fmt.Sprintf("kind argument is required: %v", err)), nil
 		}
 		version := request.GetString("version", latestCollectorVersion)
 
-		components, err := schemaManager.GetComponentNames(collectorschema.ComponentType(componentType), version)
+		components, err := schemaManager.GetComponentNames(collectorschema.ComponentType(componentKind), version)
 		if err != nil {
-			return mcp.NewToolResultError(fmt.Sprintf("failed to get components for %s: %v", componentType, err)), nil
+			return mcp.NewToolResultError(fmt.Sprintf("failed to get components for %s: %v", componentKind, err)), nil
 		}
 		return mcp.NewToolResultText(fmt.Sprintf("%s", components)), nil
 	}
@@ -95,9 +95,9 @@ func getCollectorReadmeTool(schemaManager *collectorschema.SchemaManager, latest
 		mcp.WithString("version",
 			mcp.Description("The OpenTelemetry Collector version e.g. 0.138.0"),
 		),
-		mcp.WithString("type",
+		mcp.WithString("kind",
 			mcp.Required(),
-			mcp.Description("Collector component type. It can be receiver, exporter, processor, connector and extension."),
+			mcp.Description("Collector component kind. It can be receiver, exporter, processor, connector and extension."),
 		),
 		mcp.WithString("name",
 			mcp.Required(),
@@ -106,9 +106,9 @@ func getCollectorReadmeTool(schemaManager *collectorschema.SchemaManager, latest
 	)
 
 	handler := func(ctx context.Context, request mcp.CallToolRequest) (*mcp.CallToolResult, error) {
-		componentType, err := request.RequireString("type")
+		componentKind, err := request.RequireString("kind")
 		if err != nil {
-			return mcp.NewToolResultError(fmt.Sprintf("type argument is required: %v", err)), nil
+			return mcp.NewToolResultError(fmt.Sprintf("kind argument is required: %v", err)), nil
 		}
 		componentName, err := request.RequireString("name")
 		if err != nil {
@@ -116,9 +116,9 @@ func getCollectorReadmeTool(schemaManager *collectorschema.SchemaManager, latest
 		}
 		version := request.GetString("version", latestCollectorVersion)
 
-		readme, err := schemaManager.GetComponentReadme(collectorschema.ComponentType(componentType), componentName, version)
+		readme, err := schemaManager.GetComponentReadme(collectorschema.ComponentType(componentKind), componentName, version)
 		if err != nil {
-			return mcp.NewToolResultError(fmt.Sprintf("failed to get readme for %s %s: %v", componentType, componentName, err)), nil
+			return mcp.NewToolResultError(fmt.Sprintf("failed to get readme for %s %s: %v", componentKind, componentName, err)), nil
 		}
 		return mcp.NewToolResultText(readme), nil
 	}
@@ -159,9 +159,9 @@ func getCollectorSchemaGetTool(schemaManager *collectorschema.SchemaManager, lat
 		mcp.WithString("version",
 			mcp.Description("The OpenTelemetry Collector version e.g. 0.138.0"),
 		),
-		mcp.WithString("type",
+		mcp.WithString("kind",
 			mcp.Required(),
-			mcp.Description("Collector component type. It can be receiver, exporter, processor, connector and extension."),
+			mcp.Description("Collector component kind. It can be receiver, exporter, processor, connector and extension."),
 		),
 		mcp.WithString("name",
 			mcp.Required(),
@@ -170,9 +170,9 @@ func getCollectorSchemaGetTool(schemaManager *collectorschema.SchemaManager, lat
 	)
 
 	handler := func(ctx context.Context, request mcp.CallToolRequest) (*mcp.CallToolResult, error) {
-		componentType, err := request.RequireString("type")
+		componentKind, err := request.RequireString("kind")
 		if err != nil {
-			return mcp.NewToolResultError(fmt.Sprintf("type argument is required: %v", err)), nil
+			return mcp.NewToolResultError(fmt.Sprintf("kind argument is required: %v", err)), nil
 		}
 		componentName, err := request.RequireString("name")
 		if err != nil {
@@ -180,9 +180,9 @@ func getCollectorSchemaGetTool(schemaManager *collectorschema.SchemaManager, lat
 		}
 		version := request.GetString("version", latestCollectorVersion)
 
-		schemaJSON, err := schemaManager.GetComponentSchemaJSON(collectorschema.ComponentType(componentType), componentName, version)
+		schemaJSON, err := schemaManager.GetComponentSchemaJSON(collectorschema.ComponentType(componentKind), componentName, version)
 		if err != nil {
-			return mcp.NewToolResultError(fmt.Sprintf("failed to get schema for %s/%s@%s: %v", componentType, componentName, version, err)), nil
+			return mcp.NewToolResultError(fmt.Sprintf("failed to get schema for %s/%s@%s: %v", componentKind, componentName, version, err)), nil
 		}
 		return mcp.NewToolResultText(string(schemaJSON)), nil
 	}
@@ -199,9 +199,9 @@ func getCollectorSchemaValidationTool(schemaManager *collectorschema.SchemaManag
 		mcp.WithString("version",
 			mcp.Description("The OpenTelemetry Collector version e.g. 0.138.0"),
 		),
-		mcp.WithString("type",
+		mcp.WithString("kind",
 			mcp.Required(),
-			mcp.Description("Collector component type. It can be receiver, exporter, processor, connector and extension."),
+			mcp.Description("Collector component kind. It can be receiver, exporter, processor, connector and extension."),
 		),
 		mcp.WithString("name",
 			mcp.Required(),
@@ -214,9 +214,9 @@ func getCollectorSchemaValidationTool(schemaManager *collectorschema.SchemaManag
 	)
 
 	handler := func(ctx context.Context, request mcp.CallToolRequest) (*mcp.CallToolResult, error) {
-		componentType, err := request.RequireString("type")
+		componentKind, err := request.RequireString("kind")
 		if err != nil {
-			return mcp.NewToolResultError(fmt.Sprintf("type argument is required: %v", err)), nil
+			return mcp.NewToolResultError(fmt.Sprintf("kind argument is required: %v", err)), nil
 		}
 		componentName, err := request.RequireString("name")
 		if err != nil {
@@ -228,9 +228,9 @@ func getCollectorSchemaValidationTool(schemaManager *collectorschema.SchemaManag
 		}
 		version := request.GetString("version", latestCollectorVersion)
 
-		validationResult, err := schemaManager.ValidateComponentJSON(collectorschema.ComponentType(componentType), componentName, version, []byte(config))
+		validationResult, err := schemaManager.ValidateComponentJSON(collectorschema.ComponentType(componentKind), componentName, version, []byte(config))
 		if err != nil {
-			return mcp.NewToolResultError(fmt.Sprintf("failed to validate json for %s/%s@%s: %v", componentType, componentName, version, err)), nil
+			return mcp.NewToolResultError(fmt.Sprintf("failed to validate json for %s/%s@%s: %v", componentKind, componentName, version, err)), nil
 		}
 		return mcp.NewToolResultText(fmt.Sprintf("is valid: %v, errors: %v", validationResult.Valid(), validationResult.Errors())), nil
 	}
@@ -247,9 +247,9 @@ func getCollectorComponentDeprecatedTool(schemaManager *collectorschema.SchemaMa
 		mcp.WithString("version",
 			mcp.Description("The OpenTelemetry Collector version e.g. 0.138.0"),
 		),
-		mcp.WithString("type",
+		mcp.WithString("kind",
 			mcp.Required(),
-			mcp.Description("Collector component type. It can be receiver, exporter, extension."),
+			mcp.Description("Collector component kind. It can be receiver, exporter, extension."),
 		),
 		mcp.WithArray("names",
 			mcp.WithStringItems(),
@@ -259,9 +259,9 @@ func getCollectorComponentDeprecatedTool(schemaManager *collectorschema.SchemaMa
 	)
 
 	handler := func(ctx context.Context, request mcp.CallToolRequest) (*mcp.CallToolResult, error) {
-		componentType, err := request.RequireString("type")
+		componentKind, err := request.RequireString("kind")
 		if err != nil {
-			return mcp.NewToolResultError(fmt.Sprintf("type argument is required: %v", err)), nil
+			return mcp.NewToolResultError(fmt.Sprintf("kind argument is required: %v", err)), nil
 		}
 		componentNames, err := request.RequireStringSlice("names")
 		if err != nil {
@@ -271,9 +271,9 @@ func getCollectorComponentDeprecatedTool(schemaManager *collectorschema.SchemaMa
 
 		var deprecations []DeprecatedComponentFields
 		for _, componentName := range componentNames {
-			deprecatedFields, err := schemaManager.GetDeprecatedFields(collectorschema.ComponentType(componentType), componentName, version)
+			deprecatedFields, err := schemaManager.GetDeprecatedFields(collectorschema.ComponentType(componentKind), componentName, version)
 			if err != nil {
-				return mcp.NewToolResultError(fmt.Sprintf("failed to validate json for %s/%s@%s: %v", componentType, componentName, version, err)), nil
+				return mcp.NewToolResultError(fmt.Sprintf("failed to validate json for %s/%s@%s: %v", componentKind, componentName, version, err)), nil
 			}
 			deprecations = append(deprecations, DeprecatedComponentFields{
 				ComponentName:    componentName,
