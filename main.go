@@ -7,7 +7,7 @@ import (
 	"github.com/mark3labs/mcp-go/server"
 	"github.com/spf13/cobra"
 
-	"github.com/pavolloffay/opentelemetry-mcp-server/internal/tools"
+	"github.com/niwoerner/opentelemetry-mcp-server/internal/tools"
 )
 
 var rootCmd = &cobra.Command{

@@ -9,8 +9,8 @@ import (
 	"github.com/hashicorp/go-version"
 	"github.com/mark3labs/mcp-go/mcp"
 	"github.com/open-telemetry/opentelemetry-operator/apis/v1beta1"
-	"github.com/pavolloffay/opentelemetry-mcp-server/internal/k8s"
-	"github.com/pavolloffay/opentelemetry-mcp-server/modules/collectorschema"
+	"github.com/niwoerner/opentelemetry-mcp-server/internal/k8s"
+	"github.com/niwoerner/opentelemetry-mcp-server/modules/collectorschema"
 )
 
 func getK8sCollectorsDiscoveryTool() Tool {

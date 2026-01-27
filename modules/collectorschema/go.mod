@@ -1,4 +1,4 @@
-module github.com/pavolloffay/opentelemetry-mcp-server/modules/collectorschema
+module github.com/niwoerner/opentelemetry-mcp-server/modules/collectorschema
 
 go 1.25.1
 

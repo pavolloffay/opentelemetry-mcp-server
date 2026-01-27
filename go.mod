@@ -1,19 +1,19 @@
-module github.com/pavolloffay/opentelemetry-mcp-server
+module github.com/niwoerner/opentelemetry-mcp-server
 
 go 1.25.1
 
 require (
 	github.com/hashicorp/go-version v1.7.0
 	github.com/mark3labs/mcp-go v0.42.0
+	github.com/niwoerner/opentelemetry-mcp-server/modules/collectorschema v0.0.0-20260114143808-d05445cfd181
 	github.com/open-telemetry/opentelemetry-operator v0.120.0
-	github.com/pavolloffay/opentelemetry-mcp-server/modules/collectorschema v0.0.0-20260114143808-d05445cfd181
 	github.com/spf13/cobra v1.8.1
 	gopkg.in/yaml.v3 v3.0.1
 	k8s.io/apimachinery v0.32.2
 	k8s.io/client-go v0.32.2
 )
 
-replace github.com/pavolloffay/opentelemetry-mcp-server/modules/collectorschema => ./modules/collectorschema
+replace github.com/niwoerner/opentelemetry-mcp-server/modules/collectorschema => ./modules/collectorschema
 
 require (
 	dario.cat/mergo v1.0.1 // indirect
