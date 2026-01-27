@@ -486,6 +486,32 @@ func TestSchemaManager_GetChangelog_NonExistentVersion(t *testing.T) {
 	t.Logf("✅ Correctly returned error for non-existent version: %v", err)
 }
 
+func TestSchemaManager_GetParsedChangelog(t *testing.T) {
+	manager := NewSchemaManager()
+	version := "0.138.0"
+
+	parsed, err := manager.GetParsedChangelog(version)
+	require.NoError(t, err, "Failed to get parsed changelog for version %s", version)
+	require.NotNil(t, parsed, "Parsed changelog should not be nil")
+
+	// Verify we got some breaking changes (0.138.0 has breaking changes)
+	t.Logf("Breaking changes: %d", len(parsed.BreakingChanges))
+	t.Logf("Deprecations: %d", len(parsed.Deprecations))
+	t.Logf("Enhancements: %d", len(parsed.Enhancements))
+	t.Logf("Bug fixes: %d", len(parsed.BugFixes))
+
+	// Verify at least some sections are populated
+	assert.True(t, len(parsed.BreakingChanges) > 0 || len(parsed.Enhancements) > 0 || len(parsed.BugFixes) > 0,
+		"Expected at least one changelog section to be populated")
+}
+
+func TestSchemaManager_GetParsedChangelog_NonExistentVersion(t *testing.T) {
+	manager := NewSchemaManager()
+
+	_, err := manager.GetParsedChangelog("999.999.999")
+	require.Error(t, err, "Expected error for non-existent version")
+}
+
 func TestSchemaManager_ValidateComponentYAML(t *testing.T) {
 	manager := NewSchemaManager()
 

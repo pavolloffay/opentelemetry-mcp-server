@@ -37,7 +37,7 @@ type ComponentSchema struct {
 	Name    string                 `json:"name"`
 	Type    ComponentType          `json:"type"`
 	Version string                 `json:"version,omitempty"`
-	Schema  map[string]interface{} `json:"schema"`
+	Schema  map[string]any `json:"schema"`
 }
 
 // DeprecatedField represents a deprecated field with its information
@@ -281,8 +281,8 @@ func (sm *SchemaManager) ValidateComponentJSON(componentType ComponentType, comp
 
 // ValidateComponentYAML validates a component configuration YAML against its schema
 func (sm *SchemaManager) ValidateComponentYAML(componentType ComponentType, componentName string, version string, yamlData []byte) (*gojsonschema.Result, error) {
-	// Parse YAML data to interface{}
-	var data interface{}
+	// Parse YAML data
+	var data any
 	if err := yaml.Unmarshal(yamlData, &data); err != nil {
 		return nil, fmt.Errorf("failed to parse YAML data: %w", err)
 	}
@@ -324,6 +324,15 @@ func (sm *SchemaManager) GetChangelog(version string) (string, error) {
 	}
 
 	return string(data), nil
+}
+
+// GetParsedChangelog returns the parsed changelog for a specific collector version
+func (sm *SchemaManager) GetParsedChangelog(version string) (*ParsedChangelog, error) {
+	changelog, err := sm.GetChangelog(version)
+	if err != nil {
+		return nil, err
+	}
+	return ParseChangelog(changelog)
 }
 
 // listEmbeddedComponents lists components from embedded filesystem
@@ -379,7 +388,7 @@ func (sm *SchemaManager) loadSchemaFromFile(componentType ComponentType, compone
 	}
 
 	// Parse YAML schema
-	var schemaData map[string]interface{}
+	var schemaData map[string]any
 	if err := yaml.Unmarshal(data, &schemaData); err != nil {
 		return nil, fmt.Errorf("failed to parse schema YAML for %s %s: %w", componentType, componentName, err)
 	}
@@ -508,67 +517,49 @@ type DocumentSearchResult struct {
 	FilePath    string            `json:"file_path,omitempty"`
 }
 
+// convertRAGResults converts chromem results to DocumentSearchResult slice
+func convertRAGResults(results []chromem.Result) []DocumentSearchResult {
+	searchResults := make([]DocumentSearchResult, len(results))
+	for i, result := range results {
+		searchResults[i] = DocumentSearchResult{
+			ID:         result.ID,
+			Content:    result.Content,
+			Metadata:   result.Metadata,
+			Similarity: result.Similarity,
+			Component:  result.Metadata["component"],
+			Version:    result.Metadata["version"],
+			FilePath:   result.Metadata["file_path"],
+		}
+	}
+	return searchResults
+}
+
 // QueryDocumentation searches the RAG database for relevant documentation based on the query text for a specific version
 func (sm *SchemaManager) QueryDocumentation(query string, version string, maxResults int) ([]DocumentSearchResult, error) {
 	sm.ragMutex.RLock()
 	defer sm.ragMutex.RUnlock()
 
-	// Initialize RAG database if not already done
 	if err := sm.initRAGDatabase(); err != nil {
 		return nil, fmt.Errorf("failed to initialize RAG database: %w", err)
 	}
 
-	// Build where filter to restrict search to the specified version
-	where := map[string]string{
-		"version": version,
-	}
-
-	// Perform the search with version filter
-	results, err := sm.ragCollection.Query(context.Background(), query, maxResults, where, nil)
+	results, err := sm.ragCollection.Query(context.Background(), query, maxResults, map[string]string{"version": version}, nil)
 	if err != nil {
 		return nil, fmt.Errorf("failed to query RAG database: %w", err)
 	}
 
-	// Convert chromem results to our result structure
-	searchResults := make([]DocumentSearchResult, len(results))
-	for i, result := range results {
-		searchResult := DocumentSearchResult{
-			ID:         result.ID,
-			Content:    result.Content,
-			Metadata:   result.Metadata,
-			Similarity: result.Similarity,
-		}
-
-		// Extract commonly used metadata fields for easier access
-		if component, exists := result.Metadata["component"]; exists {
-			searchResult.Component = component
-		}
-		if resultVersion, exists := result.Metadata["version"]; exists {
-			searchResult.Version = resultVersion
-		}
-		if filePath, exists := result.Metadata["file_path"]; exists {
-			searchResult.FilePath = filePath
-		}
-
-		searchResults[i] = searchResult
-	}
-
-	return searchResults, nil
+	return convertRAGResults(results), nil
 }
 
 // QueryDocumentationWithFilters searches the RAG database with additional filtering options beyond version.
-// Use this method when you need to filter by component type, component name, or version.
-// For simple version-scoped searches, use QueryDocumentation instead.
 func (sm *SchemaManager) QueryDocumentationWithFilters(query string, maxResults int, componentType, componentName, version string) ([]DocumentSearchResult, error) {
 	sm.ragMutex.RLock()
 	defer sm.ragMutex.RUnlock()
 
-	// Initialize RAG database if not already done
 	if err := sm.initRAGDatabase(); err != nil {
 		return nil, fmt.Errorf("failed to initialize RAG database: %w", err)
 	}
 
-	// Build where filter
 	where := make(map[string]string)
 	if componentType != "" {
 		where["component_type"] = componentType
@@ -580,37 +571,12 @@ func (sm *SchemaManager) QueryDocumentationWithFilters(query string, maxResults 
 		where["version"] = version
 	}
 
-	// Perform the search with filters
 	results, err := sm.ragCollection.Query(context.Background(), query, maxResults, where, nil)
 	if err != nil {
 		return nil, fmt.Errorf("failed to query RAG database with filters: %w", err)
 	}
 
-	// Convert chromem results to our result structure
-	searchResults := make([]DocumentSearchResult, len(results))
-	for i, result := range results {
-		searchResult := DocumentSearchResult{
-			ID:         result.ID,
-			Content:    result.Content,
-			Metadata:   result.Metadata,
-			Similarity: result.Similarity,
-		}
-
-		// Extract commonly used metadata fields for easier access
-		if component, exists := result.Metadata["component"]; exists {
-			searchResult.Component = component
-		}
-		if resultVersion, exists := result.Metadata["version"]; exists {
-			searchResult.Version = resultVersion
-		}
-		if filePath, exists := result.Metadata["file_path"]; exists {
-			searchResult.FilePath = filePath
-		}
-
-		searchResults[i] = searchResult
-	}
-
-	return searchResults, nil
+	return convertRAGResults(results), nil
 }
 
 // GetDeprecatedFields returns a list of deprecated fields with their information for a specific component
@@ -630,9 +596,9 @@ func (sm *SchemaManager) GetDeprecatedFields(componentType ComponentType, compon
 }
 
 // findDeprecatedFields recursively searches for deprecated fields in a JSON schema
-func (sm *SchemaManager) findDeprecatedFields(schema map[string]interface{}, currentPath string, deprecatedFields *[]DeprecatedField) {
+func (sm *SchemaManager) findDeprecatedFields(schema map[string]any, currentPath string, deprecatedFields *[]DeprecatedField) {
 	// Check if this schema has properties
-	if properties, ok := schema["properties"].(map[string]interface{}); ok {
+	if properties, ok := schema["properties"].(map[string]any); ok {
 		// Iterate through all properties
 		for fieldName, fieldSchema := range properties {
 			// Build the current field path
@@ -644,7 +610,7 @@ func (sm *SchemaManager) findDeprecatedFields(schema map[string]interface{}, cur
 			}
 
 			// Check if the field schema is a map
-			if fieldSchemaMap, ok := fieldSchema.(map[string]interface{}); ok {
+			if fieldSchemaMap, ok := fieldSchema.(map[string]any); ok {
 				// Check if this field is marked as deprecated
 				if deprecated, exists := fieldSchemaMap["deprecated"]; exists {
 					if deprecatedBool, ok := deprecated.(bool); ok && deprecatedBool {

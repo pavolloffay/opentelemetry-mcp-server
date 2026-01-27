@@ -31,6 +31,8 @@ func GetAllTools() ([]Tool, error) {
 		getCollectorComponentDeprecatedTool(schemaManager, latestCollectorVersion),
 		getCollectorChangelogTool(schemaManager, latestCollectorVersion),
 		getCollectorDocumentationRAG(schemaManager, latestCollectorVersion),
+		getK8sCollectorsDiscoveryTool(),
+		getK8sCollectorUpgradePathTool(schemaManager, latestCollectorVersion),
 	}
 
 	return tools, nil
@@ -300,7 +302,7 @@ type DocumentationSearchResult struct {
 }
 
 // getCollectorDocumentationRAG returns the query from the RAG
-func getCollectorDocumentationRAG(schemaManager *collectorschema.SchemaManager, latestCollectorVersion string) Tool {
+func getCollectorDocumentationRAG(schemaManager *collectorschema.SchemaManager, _ string) Tool {
 	tool := mcp.NewTool("opentelemetry-collector-rag",
 		mcp.WithDescription("Answer questions about OpenTelemetry collector"),
 		mcp.WithDestructiveHintAnnotation(false),
