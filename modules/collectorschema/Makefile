@@ -36,8 +36,16 @@ generate-schemas:
 #	cd build && go mod vendor && SCHEMA_OUTPUT_DIR=../schemas/0.141.0 go test -run TestGenerateAllSchemas -v
 #	OCB_VERSION=0.142.0 make build-collector
 #	cd build && go mod vendor && SCHEMA_OUTPUT_DIR=../schemas/0.142.0 go test -run TestGenerateAllSchemas -v
-	OCB_VERSION=0.143.0 make build-collector
-	cd build && go mod vendor && SCHEMA_OUTPUT_DIR=../schemas/0.143.0 go test -run TestGenerateAllSchemas -v
+#	OCB_VERSION=0.143.0 make build-collector
+#	cd build && go mod vendor && SCHEMA_OUTPUT_DIR=../schemas/0.143.0 go test -run TestGenerateAllSchemas -v
+	OCB_VERSION=0.144.0 make build-collector
+	cd build && go mod vendor && SCHEMA_OUTPUT_DIR=../schemas/0.144.0 go test -run TestGenerateAllSchemas -v
+	OCB_VERSION=0.145.0 make build-collector
+	cd build && go mod vendor && SCHEMA_OUTPUT_DIR=../schemas/0.145.0 go test -run TestGenerateAllSchemas -v
+	OCB_VERSION=0.146.0 make build-collector
+	cd build && go mod vendor && SCHEMA_OUTPUT_DIR=../schemas/0.146.0 go test -run TestGenerateAllSchemas -v
+	OCB_VERSION=0.147.0 make build-collector
+	cd build && go mod vendor && SCHEMA_OUTPUT_DIR=../schemas/0.147.0 go test -run TestGenerateAllSchemas -v
 
 .PHONY: changelogs
 changelogs:
