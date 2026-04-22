@@ -326,8 +326,8 @@ func TestSchemaManager_GetLatestVersion(t *testing.T) {
 	// Verify the version has a valid format (major.minor.patch)
 	assert.Contains(t, version, ".", "Version should contain dots")
 
-	// Since we know we have v0.139.0 in the schemas directory, verify it's returned
-	assert.Equal(t, "0.139.0", version, "Expected version 0.139.0 as the latest")
+	// Since we know we have v0.147.0 in the schemas directory, verify it's returned
+	assert.Equal(t, "0.147.0", version, "Expected version 0.147.0 as the latest")
 
 	t.Logf("Latest version found: %s", version)
 }

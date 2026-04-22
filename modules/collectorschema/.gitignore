@@ -1,5 +1,6 @@
 .bin/
 tmp/
+testdata/actual_generated_schema.yaml
 
 build/otelcol-contrib
 build/test-schemas
