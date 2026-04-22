@@ -219,7 +219,6 @@ properties:
                                                     description: PasswordRef is the name of the secret within the secret manager to use as the password.
                                                     type: string
                                                 username:
-                                                    description: username
                                                     type: string
                                                 username_file:
                                                     type: string
@@ -268,14 +267,29 @@ properties:
                                         oauth2:
                                             description: The OAuth2 client credentials used to fetch a token for the targets.
                                             properties:
+                                                audience:
+                                                    description: Audience optionally specifies the intended audience of the request.  If empty, the value of TokenURL is used as the intended audience. Only used if GrantType is set to "urn:ietf:params:oauth:grant-type:jwt-bearer".
+                                                    type: string
+                                                claims:
+                                                    additionalProperties:
+                                                        additionalProperties: true
+                                                        type: object
+                                                    description: Claims is a map of claims to be added to the JWT token. Only used if GrantType is set to "urn:ietf:params:oauth:grant-type:jwt-bearer".
+                                                    type: object
+                                                client_certificate_key:
+                                                    type: string
+                                                client_certificate_key_file:
+                                                    type: string
+                                                client_certificate_key_id:
+                                                    type: string
+                                                client_certificate_key_ref:
+                                                    description: ClientCertificateKeyRef is the name of the secret within the secret manager to use as the client secret.
+                                                    type: string
                                                 client_id:
-                                                    description: client_id
                                                     type: string
                                                 client_secret:
-                                                    description: client_secret
                                                     type: string
                                                 client_secret_file:
-                                                    description: client_secret_file
                                                     type: string
                                                 client_secret_ref:
                                                     description: ClientSecretRef is the name of the secret within the secret manager to use as the client secret.
@@ -284,6 +298,12 @@ properties:
                                                     additionalProperties:
                                                         type: string
                                                     type: object
+                                                grant_type:
+                                                    description: GrantType is the OAuth2 grant type to use. It can be one of "client_credentials" or "urn:ietf:params:oauth:grant-type:jwt-bearer" (RFC 7523). Default value is "client_credentials"
+                                                    type: string
+                                                iss:
+                                                    description: Iss is the OAuth client identifier used when communicating with the configured OAuth provider. Default value is client_id. Only used if GrantType is set to "urn:ietf:params:oauth:grant-type:jwt-bearer".
+                                                    type: string
                                                 no_proxy:
                                                     description: NoProxy contains addresses that should not use a proxy.
                                                     type: string
@@ -327,6 +347,9 @@ properties:
                                                     items:
                                                         type: string
                                                     type: array
+                                                signature_algorithm:
+                                                    description: SignatureAlgorithm is the RSA algorithm used to sign JWT token. Only used if GrantType is set to "urn:ietf:params:oauth:grant-type:jwt-bearer". Default value is RS256 and valid values RS256, RS384, RS512
+                                                    type: string
                                                 tlsconfig:
                                                     properties:
                                                         ca:
@@ -370,7 +393,6 @@ properties:
                                                             type: string
                                                     type: object
                                                 token_url:
-                                                    description: token_url
                                                     type: string
                                             type: object
                                         proxy_connect_header:
@@ -675,7 +697,6 @@ properties:
                                             description: PasswordRef is the name of the secret within the secret manager to use as the password.
                                             type: string
                                         username:
-                                            description: username
                                             type: string
                                         username_file:
                                             type: string
@@ -724,14 +745,29 @@ properties:
                                 oauth2:
                                     description: The OAuth2 client credentials used to fetch a token for the targets.
                                     properties:
+                                        audience:
+                                            description: Audience optionally specifies the intended audience of the request.  If empty, the value of TokenURL is used as the intended audience. Only used if GrantType is set to "urn:ietf:params:oauth:grant-type:jwt-bearer".
+                                            type: string
+                                        claims:
+                                            additionalProperties:
+                                                additionalProperties: true
+                                                type: object
+                                            description: Claims is a map of claims to be added to the JWT token. Only used if GrantType is set to "urn:ietf:params:oauth:grant-type:jwt-bearer".
+                                            type: object
+                                        client_certificate_key:
+                                            type: string
+                                        client_certificate_key_file:
+                                            type: string
+                                        client_certificate_key_id:
+                                            type: string
+                                        client_certificate_key_ref:
+                                            description: ClientCertificateKeyRef is the name of the secret within the secret manager to use as the client secret.
+                                            type: string
                                         client_id:
-                                            description: client_id
                                             type: string
                                         client_secret:
-                                            description: client_secret
                                             type: string
                                         client_secret_file:
-                                            description: client_secret_file
                                             type: string
                                         client_secret_ref:
                                             description: ClientSecretRef is the name of the secret within the secret manager to use as the client secret.
@@ -740,6 +776,12 @@ properties:
                                             additionalProperties:
                                                 type: string
                                             type: object
+                                        grant_type:
+                                            description: GrantType is the OAuth2 grant type to use. It can be one of "client_credentials" or "urn:ietf:params:oauth:grant-type:jwt-bearer" (RFC 7523). Default value is "client_credentials"
+                                            type: string
+                                        iss:
+                                            description: Iss is the OAuth client identifier used when communicating with the configured OAuth provider. Default value is client_id. Only used if GrantType is set to "urn:ietf:params:oauth:grant-type:jwt-bearer".
+                                            type: string
                                         no_proxy:
                                             description: NoProxy contains addresses that should not use a proxy.
                                             type: string
@@ -783,6 +825,9 @@ properties:
                                             items:
                                                 type: string
                                             type: array
+                                        signature_algorithm:
+                                            description: SignatureAlgorithm is the RSA algorithm used to sign JWT token. Only used if GrantType is set to "urn:ietf:params:oauth:grant-type:jwt-bearer". Default value is RS256 and valid values RS256, RS384, RS512
+                                            type: string
                                         tlsconfig:
                                             properties:
                                                 ca:
@@ -826,7 +871,6 @@ properties:
                                                     type: string
                                             type: object
                                         token_url:
-                                            description: token_url
                                             type: string
                                     type: object
                                 proxy_connect_header:
@@ -1033,7 +1077,6 @@ properties:
                                             description: PasswordRef is the name of the secret within the secret manager to use as the password.
                                             type: string
                                         username:
-                                            description: username
                                             type: string
                                         username_file:
                                             type: string
@@ -1082,14 +1125,29 @@ properties:
                                 oauth2:
                                     description: The OAuth2 client credentials used to fetch a token for the targets.
                                     properties:
+                                        audience:
+                                            description: Audience optionally specifies the intended audience of the request.  If empty, the value of TokenURL is used as the intended audience. Only used if GrantType is set to "urn:ietf:params:oauth:grant-type:jwt-bearer".
+                                            type: string
+                                        claims:
+                                            additionalProperties:
+                                                additionalProperties: true
+                                                type: object
+                                            description: Claims is a map of claims to be added to the JWT token. Only used if GrantType is set to "urn:ietf:params:oauth:grant-type:jwt-bearer".
+                                            type: object
+                                        client_certificate_key:
+                                            type: string
+                                        client_certificate_key_file:
+                                            type: string
+                                        client_certificate_key_id:
+                                            type: string
+                                        client_certificate_key_ref:
+                                            description: ClientCertificateKeyRef is the name of the secret within the secret manager to use as the client secret.
+                                            type: string
                                         client_id:
-                                            description: client_id
                                             type: string
                                         client_secret:
-                                            description: client_secret
                                             type: string
                                         client_secret_file:
-                                            description: client_secret_file
                                             type: string
                                         client_secret_ref:
                                             description: ClientSecretRef is the name of the secret within the secret manager to use as the client secret.
@@ -1098,6 +1156,12 @@ properties:
                                             additionalProperties:
                                                 type: string
                                             type: object
+                                        grant_type:
+                                            description: GrantType is the OAuth2 grant type to use. It can be one of "client_credentials" or "urn:ietf:params:oauth:grant-type:jwt-bearer" (RFC 7523). Default value is "client_credentials"
+                                            type: string
+                                        iss:
+                                            description: Iss is the OAuth client identifier used when communicating with the configured OAuth provider. Default value is client_id. Only used if GrantType is set to "urn:ietf:params:oauth:grant-type:jwt-bearer".
+                                            type: string
                                         no_proxy:
                                             description: NoProxy contains addresses that should not use a proxy.
                                             type: string
@@ -1141,6 +1205,9 @@ properties:
                                             items:
                                                 type: string
                                             type: array
+                                        signature_algorithm:
+                                            description: SignatureAlgorithm is the RSA algorithm used to sign JWT token. Only used if GrantType is set to "urn:ietf:params:oauth:grant-type:jwt-bearer". Default value is RS256 and valid values RS256, RS384, RS512
+                                            type: string
                                         tlsconfig:
                                             properties:
                                                 ca:
@@ -1184,7 +1251,6 @@ properties:
                                                     type: string
                                             type: object
                                         token_url:
-                                            description: token_url
                                             type: string
                                     type: object
                                 proxy_connect_header:
@@ -1457,7 +1523,6 @@ properties:
                                             description: PasswordRef is the name of the secret within the secret manager to use as the password.
                                             type: string
                                         username:
-                                            description: username
                                             type: string
                                         username_file:
                                             type: string
@@ -1506,14 +1571,29 @@ properties:
                                 oauth2:
                                     description: The OAuth2 client credentials used to fetch a token for the targets.
                                     properties:
+                                        audience:
+                                            description: Audience optionally specifies the intended audience of the request.  If empty, the value of TokenURL is used as the intended audience. Only used if GrantType is set to "urn:ietf:params:oauth:grant-type:jwt-bearer".
+                                            type: string
+                                        claims:
+                                            additionalProperties:
+                                                additionalProperties: true
+                                                type: object
+                                            description: Claims is a map of claims to be added to the JWT token. Only used if GrantType is set to "urn:ietf:params:oauth:grant-type:jwt-bearer".
+                                            type: object
+                                        client_certificate_key:
+                                            type: string
+                                        client_certificate_key_file:
+                                            type: string
+                                        client_certificate_key_id:
+                                            type: string
+                                        client_certificate_key_ref:
+                                            description: ClientCertificateKeyRef is the name of the secret within the secret manager to use as the client secret.
+                                            type: string
                                         client_id:
-                                            description: client_id
                                             type: string
                                         client_secret:
-                                            description: client_secret
                                             type: string
                                         client_secret_file:
-                                            description: client_secret_file
                                             type: string
                                         client_secret_ref:
                                             description: ClientSecretRef is the name of the secret within the secret manager to use as the client secret.
@@ -1522,6 +1602,12 @@ properties:
                                             additionalProperties:
                                                 type: string
                                             type: object
+                                        grant_type:
+                                            description: GrantType is the OAuth2 grant type to use. It can be one of "client_credentials" or "urn:ietf:params:oauth:grant-type:jwt-bearer" (RFC 7523). Default value is "client_credentials"
+                                            type: string
+                                        iss:
+                                            description: Iss is the OAuth client identifier used when communicating with the configured OAuth provider. Default value is client_id. Only used if GrantType is set to "urn:ietf:params:oauth:grant-type:jwt-bearer".
+                                            type: string
                                         no_proxy:
                                             description: NoProxy contains addresses that should not use a proxy.
                                             type: string
@@ -1565,6 +1651,9 @@ properties:
                                             items:
                                                 type: string
                                             type: array
+                                        signature_algorithm:
+                                            description: SignatureAlgorithm is the RSA algorithm used to sign JWT token. Only used if GrantType is set to "urn:ietf:params:oauth:grant-type:jwt-bearer". Default value is RS256 and valid values RS256, RS384, RS512
+                                            type: string
                                         tlsconfig:
                                             properties:
                                                 ca:
@@ -1608,7 +1697,6 @@ properties:
                                                     type: string
                                             type: object
                                         token_url:
-                                            description: token_url
                                             type: string
                                     type: object
                                 proxy_connect_header:
@@ -1910,7 +1998,8 @@ properties:
                 type: object
         type: object
     report_extra_scrape_metrics:
-        description: ReportExtraScrapeMetrics - enables reporting of additional metrics for Prometheus client like scrape_body_size_bytes
+        deprecated: true
+        description: 'ReportExtraScrapeMetrics - enables reporting of additional metrics for Prometheus client like scrape_body_size_bytes Deprecated: use the feature gate "receiver.prometheusreceiver.EnableReportExtraScrapeMetrics" instead.'
         type: boolean
     start_time_metric_regex:
         type: string
@@ -1934,11 +2023,6 @@ properties:
                         type: integer
                 type: object
             cookies:
-                description: Cookies configures the cookie management of the HTTP client.
-                properties:
-                    enabled:
-                        description: Enabled if true, cookies from HTTP responses will be reused in further HTTP requests with the same server.
-                        type: boolean
                 type: object
             disable_keep_alives:
                 description: 'DisableKeepAlives, if true, disables HTTP keep-alives and will only use the connection to the server for a single HTTP request. WARNING: enabling this option can result in significant overhead establishing a new HTTP(S) connection for every request. Before enabling this option please consider whether changes to idle connection settings can achieve your goal.'
@@ -1983,7 +2067,6 @@ properties:
                                 description: PasswordRef is the name of the secret within the secret manager to use as the password.
                                 type: string
                             username:
-                                description: username
                                 type: string
                             username_file:
                                 type: string
@@ -2026,14 +2109,29 @@ properties:
                         type: string
                     oauth2:
                         properties:
+                            audience:
+                                description: Audience optionally specifies the intended audience of the request.  If empty, the value of TokenURL is used as the intended audience. Only used if GrantType is set to "urn:ietf:params:oauth:grant-type:jwt-bearer".
+                                type: string
+                            claims:
+                                additionalProperties:
+                                    additionalProperties: true
+                                    type: object
+                                description: Claims is a map of claims to be added to the JWT token. Only used if GrantType is set to "urn:ietf:params:oauth:grant-type:jwt-bearer".
+                                type: object
+                            client_certificate_key:
+                                type: string
+                            client_certificate_key_file:
+                                type: string
+                            client_certificate_key_id:
+                                type: string
+                            client_certificate_key_ref:
+                                description: ClientCertificateKeyRef is the name of the secret within the secret manager to use as the client secret.
+                                type: string
                             client_id:
-                                description: client_id
                                 type: string
                             client_secret:
-                                description: client_secret
                                 type: string
                             client_secret_file:
-                                description: client_secret_file
                                 type: string
                             client_secret_ref:
                                 description: ClientSecretRef is the name of the secret within the secret manager to use as the client secret.
@@ -2042,6 +2140,12 @@ properties:
                                 additionalProperties:
                                     type: string
                                 type: object
+                            grant_type:
+                                description: GrantType is the OAuth2 grant type to use. It can be one of "client_credentials" or "urn:ietf:params:oauth:grant-type:jwt-bearer" (RFC 7523). Default value is "client_credentials"
+                                type: string
+                            iss:
+                                description: Iss is the OAuth client identifier used when communicating with the configured OAuth provider. Default value is client_id. Only used if GrantType is set to "urn:ietf:params:oauth:grant-type:jwt-bearer".
+                                type: string
                             no_proxy:
                                 description: NoProxy contains addresses that should not use a proxy.
                                 type: string
@@ -2085,6 +2189,9 @@ properties:
                                 items:
                                     type: string
                                 type: array
+                            signature_algorithm:
+                                description: SignatureAlgorithm is the RSA algorithm used to sign JWT token. Only used if GrantType is set to "urn:ietf:params:oauth:grant-type:jwt-bearer". Default value is RS256 and valid values RS256, RS384, RS512
+                                type: string
                             tlsconfig:
                                 properties:
                                     ca:
@@ -2128,7 +2235,6 @@ properties:
                                         type: string
                                 type: object
                             token_url:
-                                description: token_url
                                 type: string
                         type: object
                     proxy_connect_header:
@@ -2238,7 +2344,6 @@ properties:
                                         description: PasswordRef is the name of the secret within the secret manager to use as the password.
                                         type: string
                                     username:
-                                        description: username
                                         type: string
                                     username_file:
                                         type: string
@@ -2287,14 +2392,29 @@ properties:
                             oauth2:
                                 description: The OAuth2 client credentials used to fetch a token for the targets.
                                 properties:
+                                    audience:
+                                        description: Audience optionally specifies the intended audience of the request.  If empty, the value of TokenURL is used as the intended audience. Only used if GrantType is set to "urn:ietf:params:oauth:grant-type:jwt-bearer".
+                                        type: string
+                                    claims:
+                                        additionalProperties:
+                                            additionalProperties: true
+                                            type: object
+                                        description: Claims is a map of claims to be added to the JWT token. Only used if GrantType is set to "urn:ietf:params:oauth:grant-type:jwt-bearer".
+                                        type: object
+                                    client_certificate_key:
+                                        type: string
+                                    client_certificate_key_file:
+                                        type: string
+                                    client_certificate_key_id:
+                                        type: string
+                                    client_certificate_key_ref:
+                                        description: ClientCertificateKeyRef is the name of the secret within the secret manager to use as the client secret.
+                                        type: string
                                     client_id:
-                                        description: client_id
                                         type: string
                                     client_secret:
-                                        description: client_secret
                                         type: string
                                     client_secret_file:
-                                        description: client_secret_file
                                         type: string
                                     client_secret_ref:
                                         description: ClientSecretRef is the name of the secret within the secret manager to use as the client secret.
@@ -2303,6 +2423,12 @@ properties:
                                         additionalProperties:
                                             type: string
                                         type: object
+                                    grant_type:
+                                        description: GrantType is the OAuth2 grant type to use. It can be one of "client_credentials" or "urn:ietf:params:oauth:grant-type:jwt-bearer" (RFC 7523). Default value is "client_credentials"
+                                        type: string
+                                    iss:
+                                        description: Iss is the OAuth client identifier used when communicating with the configured OAuth provider. Default value is client_id. Only used if GrantType is set to "urn:ietf:params:oauth:grant-type:jwt-bearer".
+                                        type: string
                                     no_proxy:
                                         description: NoProxy contains addresses that should not use a proxy.
                                         type: string
@@ -2346,6 +2472,9 @@ properties:
                                         items:
                                             type: string
                                         type: array
+                                    signature_algorithm:
+                                        description: SignatureAlgorithm is the RSA algorithm used to sign JWT token. Only used if GrantType is set to "urn:ietf:params:oauth:grant-type:jwt-bearer". Default value is RS256 and valid values RS256, RS384, RS512
+                                        type: string
                                     tlsconfig:
                                         properties:
                                             ca:
@@ -2389,7 +2518,6 @@ properties:
                                                 type: string
                                         type: object
                                     token_url:
-                                        description: token_url
                                         type: string
                                 type: object
                             proxy_connect_header:

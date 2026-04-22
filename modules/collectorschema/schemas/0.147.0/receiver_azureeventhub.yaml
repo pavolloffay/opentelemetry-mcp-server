@@ -2,8 +2,19 @@ $schema: https://json-schema.org/draft/2020-12/schema
 properties:
     apply_semantic_conventions:
         type: boolean
+    auth:
+        type: object
     connection:
         type: string
+    event_hub:
+        properties:
+            name:
+                description: Name is the name of the Event Hub.
+                type: string
+            namespace:
+                description: Namespace is the fully qualified namespace of the Event Hub.
+                type: string
+        type: object
     format:
         type: string
     group:

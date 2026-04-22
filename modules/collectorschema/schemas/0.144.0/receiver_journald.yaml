@@ -26,6 +26,8 @@ properties:
                 items:
                     type: string
                 type: array
+            journalctl_path:
+                type: string
             matches:
                 items:
                     additionalProperties: true
@@ -45,6 +47,8 @@ properties:
                 additionalProperties:
                     type: string
                 type: object
+            root_path:
+                type: string
             start_at:
                 type: string
             type:

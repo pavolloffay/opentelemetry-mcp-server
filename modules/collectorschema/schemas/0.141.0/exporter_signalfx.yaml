@@ -92,11 +92,6 @@ properties:
                 type: integer
         type: object
     cookies:
-        description: Cookies configures the cookie management of the HTTP client.
-        properties:
-            enabled:
-                description: Enabled if true, cookies from HTTP responses will be reused in further HTTP requests with the same server.
-                type: boolean
         type: object
     correlation:
         description: Correlation configuration for syncing traces service and environment to metrics.
@@ -121,11 +116,6 @@ properties:
                         type: integer
                 type: object
             cookies:
-                description: Cookies configures the cookie management of the HTTP client.
-                properties:
-                    enabled:
-                        description: Enabled if true, cookies from HTTP responses will be reused in further HTTP requests with the same server.
-                        type: boolean
                 type: object
             disable_keep_alives:
                 description: 'DisableKeepAlives, if true, disables HTTP keep-alives and will only use the connection to the server for a single HTTP request. WARNING: enabling this option can result in significant overhead establishing a new HTTP(S) connection for every request. Before enabling this option please consider whether changes to idle connection settings can achieve your goal.'
@@ -284,6 +274,8 @@ properties:
     dimension_client:
         description: Dimension update client configuration used for metadata updates.
         properties:
+            drop_tags:
+                type: boolean
             idle_conn_timeout:
                 description: Duration string (e.g., '1s', '5m', '1h')
                 pattern: ^[0-9]+(ns|us|µs|ms|s|m|h)$

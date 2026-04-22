@@ -16,6 +16,18 @@ properties:
     insecure:
         description: Only has effect if Endpoint is not ""
         type: boolean
+    logs:
+        description: LogsSignalConfig allows for custom log configuration
+        properties:
+            attributes:
+                additionalProperties:
+                    type: string
+                description: Attributes are custom Pub/Sub message attributes
+                type: object
+            encoding:
+                description: Encoding is a custom encoding for the marshaling the data onto the message
+                type: object
+        type: object
     max_elapsed_time:
         description: Duration string (e.g., '1s', '5m', '1h')
         pattern: ^[0-9]+(ns|us|µs|ms|s|m|h)$
@@ -24,6 +36,18 @@ properties:
         description: Duration string (e.g., '1s', '5m', '1h')
         pattern: ^[0-9]+(ns|us|µs|ms|s|m|h)$
         type: string
+    metrics:
+        description: MetricsSignalConfig allows for custom log configuration
+        properties:
+            attributes:
+                additionalProperties:
+                    type: string
+                description: Attributes are custom Pub/Sub message attributes
+                type: object
+            encoding:
+                description: Encoding is a custom encoding for the marshaling the data onto the message
+                type: object
+        type: object
     multiplier:
         description: Multiplier is the value multiplied by the backoff interval bounds
         type: number
@@ -67,9 +91,6 @@ properties:
             block_on_overflow:
                 description: BlockOnOverflow determines the behavior when the component's TotalSize limit is reached. If true, the component will wait for space; otherwise, operations will immediately return a retryable error.
                 type: boolean
-            enabled:
-                description: Enabled indicates whether to not enqueue and batch before exporting.
-                type: boolean
             num_consumers:
                 description: NumConsumers is the maximum number of concurrent consumers from the queue. This applies across all different optional configurations from above (e.g. wait_for_result, block_on_overflow, storage, etc.).
                 type: integer
@@ -97,6 +118,18 @@ properties:
     topic:
         description: The fully qualified resource name of the Pubsub topic
         type: string
+    traces:
+        description: TracesSignalConfig allows for custom log configuration
+        properties:
+            attributes:
+                additionalProperties:
+                    type: string
+                description: Attributes are custom Pub/Sub message attributes
+                type: object
+            encoding:
+                description: Encoding is a custom encoding for the marshaling the data onto the message
+                type: object
+        type: object
     user_agent:
         description: User agent that will be used by the Pubsub client to connect to the service
         type: string

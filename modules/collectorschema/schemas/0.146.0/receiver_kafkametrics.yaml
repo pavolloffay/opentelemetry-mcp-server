@@ -139,6 +139,10 @@ properties:
         description: Duration string (e.g., '1s', '5m', '1h')
         pattern: ^[0-9]+(ns|us|µs|ms|s|m|h)$
         type: string
+    conn_idle_timeout:
+        description: Duration string (e.g., '1s', '5m', '1h')
+        pattern: ^[0-9]+(ns|us|µs|ms|s|m|h)$
+        type: string
     group_match:
         description: GroupMatch consumer groups to collect on
         type: string

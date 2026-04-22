@@ -3,7 +3,7 @@ dist:
   name: otelcol-contrib
   description: OpenTelemetry Collector Contrib
   version: 0.143.1
-  output_path: ./_build
+  output_path: ./build
   build_tags: "grpcnotrace"
 
 extensions:

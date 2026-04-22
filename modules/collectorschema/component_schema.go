@@ -9,6 +9,7 @@ import (
 	"hash/fnv"
 	"io/fs"
 	"math"
+	"os"
 	"path/filepath"
 	"strings"
 	"sync"
@@ -50,17 +51,47 @@ type DeprecatedField struct {
 // SchemaManager manages component schemas and documentation RAG database
 type SchemaManager struct {
 	cache          map[string]*ComponentSchema
+	schemaFS       fs.FS
+	schemaBasePath string
 	ragDB          *chromem.DB
 	ragCollection  *chromem.Collection
 	ragMutex       sync.RWMutex
 	ragInit        sync.Once
 }
 
-// NewSchemaManager creates a new schema manager
+// NewSchemaManager creates a new schema manager using embedded schemas
 func NewSchemaManager() *SchemaManager {
 	return &SchemaManager{
-		cache: make(map[string]*ComponentSchema),
+		cache:          make(map[string]*ComponentSchema),
+		schemaFS:       embeddedSchemas,
+		schemaBasePath: "schemas",
 	}
+}
+
+// NewSchemaManagerFromDir creates a new schema manager using schemas from the specified directory.
+// The directory should contain version subdirectories (e.g., "0.139.0/") with schema files.
+func NewSchemaManagerFromDir(schemaDir string) (*SchemaManager, error) {
+	info, err := os.Stat(schemaDir)
+	if err != nil {
+		return nil, fmt.Errorf("failed to access schema directory %s: %w", schemaDir, err)
+	}
+	if !info.IsDir() {
+		return nil, fmt.Errorf("schema path %s is not a directory", schemaDir)
+	}
+
+	return &SchemaManager{
+		cache:          make(map[string]*ComponentSchema),
+		schemaFS:       os.DirFS(schemaDir),
+		schemaBasePath: ".",
+	}, nil
+}
+
+// versionPath returns the filesystem path for a specific version
+func (sm *SchemaManager) versionPath(version string) string {
+	if sm.schemaBasePath == "." {
+		return version
+	}
+	return filepath.Join(sm.schemaBasePath, version)
 }
 
 // createSimpleEmbeddingFunc creates a simple hash-based embedding function for testing
@@ -158,8 +189,8 @@ func (sm *SchemaManager) initRAGDatabase() error {
 
 // indexMarkdownFiles indexes all markdown files for a specific version
 func (sm *SchemaManager) indexMarkdownFiles(version string) error {
-	schemaPath := fmt.Sprintf("schemas/%s", version)
-	entries, err := fs.ReadDir(embeddedSchemas, schemaPath)
+	schemaPath := sm.versionPath(version)
+	entries, err := fs.ReadDir(sm.schemaFS, schemaPath)
 	if err != nil {
 		return fmt.Errorf("failed to read schema directory for version %s: %w", version, err)
 	}
@@ -171,7 +202,7 @@ func (sm *SchemaManager) indexMarkdownFiles(version string) error {
 
 		// Read the markdown file
 		filePath := filepath.Join(schemaPath, entry.Name())
-		content, err := fs.ReadFile(embeddedSchemas, filePath)
+		content, err := fs.ReadFile(sm.schemaFS, filePath)
 		if err != nil {
 			// Log warning but continue with other files
 			fmt.Printf("Warning: failed to read markdown file %s: %v\n", filePath, err)
@@ -247,7 +278,7 @@ func (sm *SchemaManager) GetComponentSchemaJSON(componentType ComponentType, com
 
 // ListAvailableComponents returns a list of all available components by type
 func (sm *SchemaManager) ListAvailableComponents(version string) (map[ComponentType][]string, error) {
-	return sm.listEmbeddedComponents(version)
+	return sm.listComponents(version)
 }
 
 // ValidateComponentJSON validates a component configuration JSON against its schema
@@ -302,10 +333,10 @@ func (sm *SchemaManager) GetComponentReadme(componentType ComponentType, compone
 	// Construct filename (format: type_name.md)
 	filename := fmt.Sprintf("%s_%s.md", componentType, componentName)
 
-	// Load from embedded filesystem
-	schemaPath := fmt.Sprintf("schemas/%s", version)
-	embeddedFilepath := filepath.Join(schemaPath, filename)
-	data, err := fs.ReadFile(embeddedSchemas, embeddedFilepath)
+	// Load from filesystem
+	schemaPath := sm.versionPath(version)
+	filePath := filepath.Join(schemaPath, filename)
+	data, err := fs.ReadFile(sm.schemaFS, filePath)
 	if err != nil {
 		return "", fmt.Errorf("README not found for component %s %s v%s", componentType, componentName, version)
 	}
@@ -315,10 +346,10 @@ func (sm *SchemaManager) GetComponentReadme(componentType ComponentType, compone
 
 // GetChangelog returns the changelog content for a specific collector version
 func (sm *SchemaManager) GetChangelog(version string) (string, error) {
-	// Load changelog.md from embedded filesystem
-	schemaPath := fmt.Sprintf("schemas/%s", version)
-	embeddedFilepath := filepath.Join(schemaPath, "changelog.md")
-	data, err := fs.ReadFile(embeddedSchemas, embeddedFilepath)
+	// Load changelog.md from filesystem
+	schemaPath := sm.versionPath(version)
+	filePath := filepath.Join(schemaPath, "changelog.md")
+	data, err := fs.ReadFile(sm.schemaFS, filePath)
 	if err != nil {
 		return "", fmt.Errorf("changelog not found for version %s", version)
 	}
@@ -326,15 +357,15 @@ func (sm *SchemaManager) GetChangelog(version string) (string, error) {
 	return string(data), nil
 }
 
-// listEmbeddedComponents lists components from embedded filesystem
-func (sm *SchemaManager) listEmbeddedComponents(version string) (map[ComponentType][]string, error) {
+// listComponents lists components from the schema filesystem
+func (sm *SchemaManager) listComponents(version string) (map[ComponentType][]string, error) {
 	components := make(map[ComponentType][]string)
 
-	// Read embedded directory
-	schemaPath := fmt.Sprintf("schemas/%s", version)
-	entries, err := fs.ReadDir(embeddedSchemas, schemaPath)
+	// Read schema directory
+	schemaPath := sm.versionPath(version)
+	entries, err := fs.ReadDir(sm.schemaFS, schemaPath)
 	if err != nil {
-		return nil, fmt.Errorf("failed to read embedded schema directory: %w", err)
+		return nil, fmt.Errorf("failed to read schema directory: %w", err)
 	}
 
 	for _, entry := range entries {
@@ -365,15 +396,15 @@ func (sm *SchemaManager) listEmbeddedComponents(version string) (map[ComponentTy
 	return components, nil
 }
 
-// loadSchemaFromFile loads a schema from embedded files
+// loadSchemaFromFile loads a schema from the schema filesystem
 func (sm *SchemaManager) loadSchemaFromFile(componentType ComponentType, componentName string, version string) (*ComponentSchema, error) {
 	// Construct filename (format: type_name.yaml)
 	filename := fmt.Sprintf("%s_%s.yaml", componentType, componentName)
 
-	// Load from embedded filesystem
-	schemaPath := fmt.Sprintf("schemas/%s", version)
-	embeddedFilepath := filepath.Join(schemaPath, filename)
-	data, err := fs.ReadFile(embeddedSchemas, embeddedFilepath)
+	// Load from filesystem
+	schemaPath := sm.versionPath(version)
+	filePath := filepath.Join(schemaPath, filename)
+	data, err := fs.ReadFile(sm.schemaFS, filePath)
 	if err != nil {
 		return nil, fmt.Errorf("schema not found for component %s %s", componentType, componentName)
 	}
@@ -407,7 +438,7 @@ func isValidComponentType(componentType ComponentType) bool {
 
 // GetLatestVersion returns the latest version available in the schemas directory
 func (sm *SchemaManager) GetLatestVersion() (string, error) {
-	entries, err := fs.ReadDir(embeddedSchemas, "schemas")
+	entries, err := fs.ReadDir(sm.schemaFS, sm.schemaBasePath)
 	if err != nil {
 		return "", fmt.Errorf("failed to read schemas directory: %w", err)
 	}
@@ -434,7 +465,7 @@ func (sm *SchemaManager) GetLatestVersion() (string, error) {
 
 // GetAllVersions returns all versions available in the schemas directory
 func (sm *SchemaManager) GetAllVersions() ([]string, error) {
-	entries, err := fs.ReadDir(embeddedSchemas, "schemas")
+	entries, err := fs.ReadDir(sm.schemaFS, sm.schemaBasePath)
 	if err != nil {
 		return nil, fmt.Errorf("failed to read schemas directory: %w", err)
 	}
@@ -464,9 +495,9 @@ func (sm *SchemaManager) GetComponentNames(componentType ComponentType, version 
 		return nil, fmt.Errorf("invalid component type: %s", componentType)
 	}
 
-	// Read embedded directory for the specific version
-	schemaPath := fmt.Sprintf("schemas/%s", version)
-	entries, err := fs.ReadDir(embeddedSchemas, schemaPath)
+	// Read schema directory for the specific version
+	schemaPath := sm.versionPath(version)
+	entries, err := fs.ReadDir(sm.schemaFS, schemaPath)
 	if err != nil {
 		return nil, fmt.Errorf("failed to read schema directory for version %s: %w", version, err)
 	}

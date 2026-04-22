@@ -19,11 +19,6 @@ properties:
                 type: integer
         type: object
     cookies:
-        description: Cookies configures the cookie management of the HTTP client.
-        properties:
-            enabled:
-                description: Enabled if true, cookies from HTTP responses will be reused in further HTTP requests with the same server.
-                type: boolean
         type: object
     dataset:
         description: The Observability indices would follow the recommended for immutable data stream ingestion pattern using the data_stream concepts. See https://opensearch.org/docs/latest/dashboards/im-dashboards/datastream/ Index pattern will follow the next naming template ss4o_{type}-{dataset}-{namespace}

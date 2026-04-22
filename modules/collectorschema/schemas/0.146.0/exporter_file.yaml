@@ -6,6 +6,12 @@ properties:
     compression:
         description: Compression Codec used to export telemetry data Supported compression algorithms:`zstd`
         type: string
+    create_directory:
+        description: CreateDirectory specifies that the parent directory of the output file should be created automatically on start.
+        type: boolean
+    directory_permissions:
+        description: DirectoryPermissions specifies permissions used when creating directories (minus process umask). Value must be an octal string like "0755".
+        type: string
     encoding:
         description: Encoding defines the encoding of the telemetry data. If specified, it overrides `FormatType` and applies an encoding extension.
         type: object
@@ -20,7 +26,7 @@ properties:
         description: GroupBy enables writing to separate files based on a resource attribute.
         properties:
             enabled:
-                description: Enables group_by. When group_by is enabled, rotation setting is ignored.  Default is false.
+                description: Enables group_by. Default is false.
                 type: boolean
             max_open_files:
                 description: MaxOpenFiles specifies the maximum number of open file descriptors for the output files. The default is 100.
@@ -33,7 +39,7 @@ properties:
         description: Path of the file to write to. Path is relative to current directory.
         type: string
     rotation:
-        description: Rotation defines an option about rotation of telemetry files. Ignored when GroupByAttribute is used.
+        description: Rotation defines an option about rotation of telemetry files.
         properties:
             localtime:
                 description: LocalTime determines if the time used for formatting the timestamps in backup files is the computer's local time.  The default is to use UTC time.

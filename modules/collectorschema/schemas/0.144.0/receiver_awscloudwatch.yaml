@@ -8,6 +8,12 @@ properties:
                 properties:
                     autodiscover:
                         properties:
+                            account_identifiers:
+                                items:
+                                    type: string
+                                type: array
+                            include_linked_accounts:
+                                type: boolean
                             limit:
                                 type: integer
                             pattern:

@@ -6,6 +6,12 @@ properties:
     compression:
         description: Compression Codec used to export telemetry data Supported compression algorithms:`zstd`
         type: string
+    create_directory:
+        description: CreateDirectory specifies that the parent directory of the output file should be created automatically on start.
+        type: boolean
+    directory_permissions:
+        description: DirectoryPermissions specifies permissions used when creating directories (minus process umask). Value must be an octal string like "0755".
+        type: string
     encoding:
         description: Encoding defines the encoding of the telemetry data. If specified, it overrides `FormatType` and applies an encoding extension.
         type: object

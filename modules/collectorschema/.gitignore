@@ -4,4 +4,5 @@ tmp/
 build/otelcol-contrib
 build/test-schemas
 build/test_output/
-build/vendor
+build/vendor/
+build/contrim

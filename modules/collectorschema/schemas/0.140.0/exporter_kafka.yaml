@@ -236,6 +236,10 @@ properties:
             flush_max_messages:
                 description: The maximum number of messages the producer will send in a single broker request. Defaults to 0 for unlimited. Similar to `queue.buffering.max.messages` in the JVM producer.
                 type: integer
+            linger:
+                description: Duration string (e.g., '1s', '5m', '1h')
+                pattern: ^[0-9]+(ns|us|µs|ms|s|m|h)$
+                type: string
             max_message_bytes:
                 description: Maximum message bytes the producer will accept to produce (default 1000000)
                 type: integer

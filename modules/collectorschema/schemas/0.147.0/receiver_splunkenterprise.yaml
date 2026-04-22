@@ -20,11 +20,6 @@ properties:
                         type: integer
                 type: object
             cookies:
-                description: Cookies configures the cookie management of the HTTP client.
-                properties:
-                    enabled:
-                        description: Enabled if true, cookies from HTTP responses will be reused in further HTTP requests with the same server.
-                        type: boolean
                 type: object
             disable_keep_alives:
                 description: 'DisableKeepAlives, if true, disables HTTP keep-alives and will only use the connection to the server for a single HTTP request. WARNING: enabling this option can result in significant overhead establishing a new HTTP(S) connection for every request. Before enabling this option please consider whether changes to idle connection settings can achieve your goal.'
@@ -178,11 +173,6 @@ properties:
                         type: integer
                 type: object
             cookies:
-                description: Cookies configures the cookie management of the HTTP client.
-                properties:
-                    enabled:
-                        description: Enabled if true, cookies from HTTP responses will be reused in further HTTP requests with the same server.
-                        type: boolean
                 type: object
             disable_keep_alives:
                 description: 'DisableKeepAlives, if true, disables HTTP keep-alives and will only use the connection to the server for a single HTTP request. WARNING: enabling this option can result in significant overhead establishing a new HTTP(S) connection for every request. Before enabling this option please consider whether changes to idle connection settings can achieve your goal.'
@@ -322,256 +312,562 @@ properties:
         properties:
             splunk.aggregation.queue.ratio:
                 properties:
+                    aggregation_strategy:
+                        type: string
+                    attributes:
+                        items:
+                            type: string
+                        type: array
                     enabled:
                         type: boolean
                 type: object
             splunk.buckets.searchable.status:
                 properties:
+                    aggregation_strategy:
+                        type: string
+                    attributes:
+                        items:
+                            type: string
+                        type: array
                     enabled:
                         type: boolean
                 type: object
             splunk.data.indexes.extended.bucket.count:
                 properties:
+                    aggregation_strategy:
+                        type: string
+                    attributes:
+                        items:
+                            type: string
+                        type: array
                     enabled:
                         type: boolean
                 type: object
             splunk.data.indexes.extended.bucket.event.count:
                 properties:
+                    aggregation_strategy:
+                        type: string
+                    attributes:
+                        items:
+                            type: string
+                        type: array
                     enabled:
                         type: boolean
                 type: object
             splunk.data.indexes.extended.bucket.hot.count:
                 properties:
+                    aggregation_strategy:
+                        type: string
+                    attributes:
+                        items:
+                            type: string
+                        type: array
                     enabled:
                         type: boolean
                 type: object
             splunk.data.indexes.extended.bucket.warm.count:
                 properties:
+                    aggregation_strategy:
+                        type: string
+                    attributes:
+                        items:
+                            type: string
+                        type: array
                     enabled:
                         type: boolean
                 type: object
             splunk.data.indexes.extended.event.count:
                 properties:
+                    aggregation_strategy:
+                        type: string
+                    attributes:
+                        items:
+                            type: string
+                        type: array
                     enabled:
                         type: boolean
                 type: object
             splunk.data.indexes.extended.raw.size:
                 properties:
+                    aggregation_strategy:
+                        type: string
+                    attributes:
+                        items:
+                            type: string
+                        type: array
                     enabled:
                         type: boolean
                 type: object
             splunk.data.indexes.extended.total.size:
                 properties:
+                    aggregation_strategy:
+                        type: string
+                    attributes:
+                        items:
+                            type: string
+                        type: array
                     enabled:
                         type: boolean
                 type: object
             splunk.health:
                 properties:
+                    aggregation_strategy:
+                        type: string
+                    attributes:
+                        items:
+                            type: string
+                        type: array
                     enabled:
                         type: boolean
                 type: object
             splunk.indexer.avg.rate:
                 properties:
+                    aggregation_strategy:
+                        type: string
+                    attributes:
+                        items:
+                            type: string
+                        type: array
                     enabled:
                         type: boolean
                 type: object
             splunk.indexer.cpu.time:
                 properties:
+                    aggregation_strategy:
+                        type: string
+                    attributes:
+                        items:
+                            type: string
+                        type: array
                     enabled:
                         type: boolean
                 type: object
             splunk.indexer.queue.ratio:
                 properties:
+                    aggregation_strategy:
+                        type: string
+                    attributes:
+                        items:
+                            type: string
+                        type: array
                     enabled:
                         type: boolean
                 type: object
             splunk.indexer.raw.write.time:
                 properties:
+                    aggregation_strategy:
+                        type: string
+                    attributes:
+                        items:
+                            type: string
+                        type: array
                     enabled:
                         type: boolean
                 type: object
             splunk.indexer.rollingrestart.status:
                 properties:
+                    aggregation_strategy:
+                        type: string
+                    attributes:
+                        items:
+                            type: string
+                        type: array
                     enabled:
                         type: boolean
                 type: object
             splunk.indexer.throughput:
                 properties:
+                    aggregation_strategy:
+                        type: string
+                    attributes:
+                        items:
+                            type: string
+                        type: array
                     enabled:
                         type: boolean
                 type: object
             splunk.indexes.avg.size:
                 properties:
+                    aggregation_strategy:
+                        type: string
+                    attributes:
+                        items:
+                            type: string
+                        type: array
                     enabled:
                         type: boolean
                 type: object
             splunk.indexes.avg.usage:
                 properties:
+                    aggregation_strategy:
+                        type: string
+                    attributes:
+                        items:
+                            type: string
+                        type: array
                     enabled:
                         type: boolean
                 type: object
             splunk.indexes.bucket.count:
                 properties:
+                    aggregation_strategy:
+                        type: string
+                    attributes:
+                        items:
+                            type: string
+                        type: array
                     enabled:
                         type: boolean
                 type: object
             splunk.indexes.median.data.age:
                 properties:
+                    aggregation_strategy:
+                        type: string
+                    attributes:
+                        items:
+                            type: string
+                        type: array
                     enabled:
                         type: boolean
                 type: object
             splunk.indexes.size:
                 properties:
+                    aggregation_strategy:
+                        type: string
+                    attributes:
+                        items:
+                            type: string
+                        type: array
                     enabled:
                         type: boolean
                 type: object
             splunk.io.avg.iops:
                 properties:
+                    aggregation_strategy:
+                        type: string
+                    attributes:
+                        items:
+                            type: string
+                        type: array
                     enabled:
                         type: boolean
                 type: object
             splunk.kvstore.backup.status:
                 properties:
+                    aggregation_strategy:
+                        type: string
+                    attributes:
+                        items:
+                            type: string
+                        type: array
                     enabled:
                         type: boolean
                 type: object
             splunk.kvstore.replication.status:
                 properties:
+                    aggregation_strategy:
+                        type: string
+                    attributes:
+                        items:
+                            type: string
+                        type: array
                     enabled:
                         type: boolean
                 type: object
             splunk.kvstore.status:
                 properties:
+                    aggregation_strategy:
+                        type: string
+                    attributes:
+                        items:
+                            type: string
+                        type: array
                     enabled:
                         type: boolean
                 type: object
             splunk.license.expiration.seconds_remaining:
                 properties:
+                    aggregation_strategy:
+                        type: string
+                    attributes:
+                        items:
+                            type: string
+                        type: array
                     enabled:
                         type: boolean
                 type: object
             splunk.license.index.usage:
                 properties:
+                    aggregation_strategy:
+                        type: string
+                    attributes:
+                        items:
+                            type: string
+                        type: array
                     enabled:
                         type: boolean
                 type: object
             splunk.parse.queue.ratio:
                 properties:
+                    aggregation_strategy:
+                        type: string
+                    attributes:
+                        items:
+                            type: string
+                        type: array
                     enabled:
                         type: boolean
                 type: object
             splunk.pipeline.set.count:
                 properties:
+                    aggregation_strategy:
+                        type: string
+                    attributes:
+                        items:
+                            type: string
+                        type: array
                     enabled:
                         type: boolean
                 type: object
             splunk.scheduler.avg.execution.latency:
                 properties:
+                    aggregation_strategy:
+                        type: string
+                    attributes:
+                        items:
+                            type: string
+                        type: array
                     enabled:
                         type: boolean
                 type: object
             splunk.scheduler.avg.run.time:
                 properties:
+                    aggregation_strategy:
+                        type: string
+                    attributes:
+                        items:
+                            type: string
+                        type: array
                     enabled:
                         type: boolean
                 type: object
             splunk.scheduler.completion.ratio:
                 properties:
+                    aggregation_strategy:
+                        type: string
+                    attributes:
+                        items:
+                            type: string
+                        type: array
                     enabled:
                         type: boolean
                 type: object
             splunk.search.duration:
                 properties:
+                    aggregation_strategy:
+                        type: string
+                    attributes:
+                        items:
+                            type: string
+                        type: array
                     enabled:
                         type: boolean
                 type: object
             splunk.search.initiation:
                 properties:
+                    aggregation_strategy:
+                        type: string
+                    attributes:
+                        items:
+                            type: string
+                        type: array
                     enabled:
                         type: boolean
                 type: object
             splunk.search.status:
                 properties:
+                    aggregation_strategy:
+                        type: string
+                    attributes:
+                        items:
+                            type: string
+                        type: array
                     enabled:
                         type: boolean
                 type: object
             splunk.search.success:
                 properties:
+                    aggregation_strategy:
+                        type: string
+                    attributes:
+                        items:
+                            type: string
+                        type: array
                     enabled:
                         type: boolean
                 type: object
             splunk.server.introspection.queues.current:
                 properties:
+                    aggregation_strategy:
+                        type: string
+                    attributes:
+                        items:
+                            type: string
+                        type: array
                     enabled:
                         type: boolean
                 type: object
             splunk.server.introspection.queues.current.bytes:
                 properties:
+                    aggregation_strategy:
+                        type: string
+                    attributes:
+                        items:
+                            type: string
+                        type: array
                     enabled:
                         type: boolean
                 type: object
             splunk.server.searchartifacts.adhoc:
                 properties:
+                    aggregation_strategy:
+                        type: string
+                    attributes:
+                        items:
+                            type: string
+                        type: array
                     enabled:
                         type: boolean
                 type: object
             splunk.server.searchartifacts.adhoc.size:
                 properties:
+                    aggregation_strategy:
+                        type: string
+                    attributes:
+                        items:
+                            type: string
+                        type: array
                     enabled:
                         type: boolean
                 type: object
             splunk.server.searchartifacts.completed:
                 properties:
+                    aggregation_strategy:
+                        type: string
+                    attributes:
+                        items:
+                            type: string
+                        type: array
                     enabled:
                         type: boolean
                 type: object
             splunk.server.searchartifacts.completed.size:
                 properties:
+                    aggregation_strategy:
+                        type: string
+                    attributes:
+                        items:
+                            type: string
+                        type: array
                     enabled:
                         type: boolean
                 type: object
             splunk.server.searchartifacts.incomplete:
                 properties:
+                    aggregation_strategy:
+                        type: string
+                    attributes:
+                        items:
+                            type: string
+                        type: array
                     enabled:
                         type: boolean
                 type: object
             splunk.server.searchartifacts.incomplete.size:
                 properties:
+                    aggregation_strategy:
+                        type: string
+                    attributes:
+                        items:
+                            type: string
+                        type: array
                     enabled:
                         type: boolean
                 type: object
             splunk.server.searchartifacts.invalid:
                 properties:
+                    aggregation_strategy:
+                        type: string
+                    attributes:
+                        items:
+                            type: string
+                        type: array
                     enabled:
                         type: boolean
                 type: object
             splunk.server.searchartifacts.job.cache.count:
                 properties:
+                    aggregation_strategy:
+                        type: string
+                    attributes:
+                        items:
+                            type: string
+                        type: array
                     enabled:
                         type: boolean
                 type: object
             splunk.server.searchartifacts.job.cache.size:
                 properties:
+                    aggregation_strategy:
+                        type: string
+                    attributes:
+                        items:
+                            type: string
+                        type: array
                     enabled:
                         type: boolean
                 type: object
             splunk.server.searchartifacts.savedsearches:
                 properties:
+                    aggregation_strategy:
+                        type: string
+                    attributes:
+                        items:
+                            type: string
+                        type: array
                     enabled:
                         type: boolean
                 type: object
             splunk.server.searchartifacts.scheduled:
                 properties:
+                    aggregation_strategy:
+                        type: string
+                    attributes:
+                        items:
+                            type: string
+                        type: array
                     enabled:
                         type: boolean
                 type: object
             splunk.server.searchartifacts.scheduled.size:
                 properties:
+                    aggregation_strategy:
+                        type: string
+                    attributes:
+                        items:
+                            type: string
+                        type: array
                     enabled:
                         type: boolean
                 type: object
             splunk.typing.queue.ratio:
                 properties:
+                    aggregation_strategy:
+                        type: string
+                    attributes:
+                        items:
+                            type: string
+                        type: array
                     enabled:
                         type: boolean
                 type: object
@@ -594,11 +890,6 @@ properties:
                         type: integer
                 type: object
             cookies:
-                description: Cookies configures the cookie management of the HTTP client.
-                properties:
-                    enabled:
-                        description: Enabled if true, cookies from HTTP responses will be reused in further HTTP requests with the same server.
-                        type: boolean
                 type: object
             disable_keep_alives:
                 description: 'DisableKeepAlives, if true, disables HTTP keep-alives and will only use the connection to the server for a single HTTP request. WARNING: enabling this option can result in significant overhead establishing a new HTTP(S) connection for every request. Before enabling this option please consider whether changes to idle connection settings can achieve your goal.'

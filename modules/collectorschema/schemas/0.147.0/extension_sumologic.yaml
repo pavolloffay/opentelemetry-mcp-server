@@ -58,11 +58,6 @@ properties:
                 type: integer
         type: object
     cookies:
-        description: Cookies configures the cookie management of the HTTP client.
-        properties:
-            enabled:
-                description: Enabled if true, cookies from HTTP responses will be reused in further HTTP requests with the same server.
-                type: boolean
         type: object
     credentials:
         description: Credentials contains Installation Token for Sumo Logic service. Please refer to https://help.sumologic.com/docs/manage/security/installation-tokens for detailed instructions how to obtain the token.
@@ -215,6 +210,9 @@ properties:
                         type: string
                 type: object
         type: object
+    update_metadata:
+        description: UpdateMetadata defines whether the collector will update its metadata on startup. This includes host details, collector details, network details, and optionally discovered tags. By default this is true.
+        type: boolean
     write_buffer_size:
         description: WriteBufferSize for HTTP client. See http.Transport.WriteBufferSize. Default is 0.
         type: integer

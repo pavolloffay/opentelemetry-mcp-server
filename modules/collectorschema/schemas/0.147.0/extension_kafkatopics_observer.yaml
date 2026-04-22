@@ -132,6 +132,10 @@ properties:
     client_id:
         description: ClientID holds the client ID advertised to Kafka, which can be used for enforcing ACLs, throttling quotas, and more (default "otel-collector")
         type: string
+    conn_idle_timeout:
+        description: Duration string (e.g., '1s', '5m', '1h')
+        pattern: ^[0-9]+(ns|us|µs|ms|s|m|h)$
+        type: string
     metadata:
         description: Metadata holds metadata-related configuration for producers and consumers.
         properties:

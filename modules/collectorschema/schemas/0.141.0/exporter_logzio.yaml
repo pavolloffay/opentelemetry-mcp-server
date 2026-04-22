@@ -19,11 +19,6 @@ properties:
                 type: integer
         type: object
     cookies:
-        description: Cookies configures the cookie management of the HTTP client.
-        properties:
-            enabled:
-                description: Enabled if true, cookies from HTTP responses will be reused in further HTTP requests with the same server.
-                type: boolean
         type: object
     custom_endpoint:
         deprecated: true

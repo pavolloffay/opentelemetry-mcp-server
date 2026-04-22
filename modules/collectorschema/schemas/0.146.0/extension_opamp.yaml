@@ -15,6 +15,9 @@ properties:
     capabilities:
         description: Capabilities contains options to enable a particular OpAMP capability
         properties:
+            accepts_restart_command:
+                description: 'AcceptsRestartCommand enables the OpAMP AcceptsRestartCommand Capability (default: false)'
+                type: boolean
             reports_available_components:
                 description: 'ReportsAvailableComponents enables the OpAMP ReportsAvailableComponents Capability (default: true)'
                 type: boolean

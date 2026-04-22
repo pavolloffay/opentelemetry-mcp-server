@@ -24,11 +24,6 @@ properties:
                 type: integer
         type: object
     cookies:
-        description: Cookies configures the cookie management of the HTTP client.
-        properties:
-            enabled:
-                description: Enabled if true, cookies from HTTP responses will be reused in further HTTP requests with the same server.
-                type: boolean
         type: object
     disable_keep_alives:
         description: 'DisableKeepAlives, if true, disables HTTP keep-alives and will only use the connection to the server for a single HTTP request. WARNING: enabling this option can result in significant overhead establishing a new HTTP(S) connection for every request. Before enabling this option please consider whether changes to idle connection settings can achieve your goal.'
@@ -118,6 +113,9 @@ properties:
             enabled:
                 description: Enabled indicates whether to convert resource attributes to telemetry attributes. Default is `false`.
                 type: boolean
+            exclude_service_attributes:
+                description: ExcludeServiceAttributes indicates whether to exclude `service.name`, `service.instance.id` and `service.namespace` resource attributes from being converted to metric attributes. Default is `false`. When set to `true`, these attributes will not be added to metric labels since they are already mapped to Prometheus `job` and `instance` labels respectively.
+                type: boolean
         type: object
     sending_queue:
         properties:
@@ -139,9 +137,6 @@ properties:
                 type: object
             block_on_overflow:
                 description: BlockOnOverflow determines the behavior when the component's TotalSize limit is reached. If true, the component will wait for space; otherwise, operations will immediately return a retryable error.
-                type: boolean
-            enabled:
-                description: Enabled indicates whether to not enqueue and batch before exporting.
                 type: boolean
             num_consumers:
                 description: NumConsumers is the maximum number of concurrent consumers from the queue. This applies across all different optional configurations from above (e.g. wait_for_result, block_on_overflow, storage, etc.).

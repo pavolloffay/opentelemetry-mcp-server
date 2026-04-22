@@ -1,5 +1,13 @@
 $schema: https://json-schema.org/draft/2020-12/schema
 properties:
+    auth_mechanism:
+        type: string
+    auth_mechanism_properties:
+        additionalProperties:
+            type: string
+        type: object
+    auth_source:
+        type: string
     ca_file:
         description: Path to the CA cert. For a client this verifies the server certificate. For a server this verifies client certificates. If empty uses system root CA. (optional)
         type: string

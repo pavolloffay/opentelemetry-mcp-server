@@ -17,6 +17,9 @@ properties:
         description: Duration string (e.g., '1s', '5m', '1h')
         pattern: ^[0-9]+(ns|us|µs|ms|s|m|h)$
         type: string
+    drop_pending_traces_on_shutdown:
+        description: DropPendingTracesOnShutdown will drop all traces that are part of batches that have not yet reached the decision wait when the processor is shutdown.
+        type: boolean
     expected_new_traces_per_sec:
         description: ExpectedNewTracesPerSec sets the expected number of new traces sending to the tail sampling processor per second. This helps with allocating data structures with closer to actual usage size.
         type: integer

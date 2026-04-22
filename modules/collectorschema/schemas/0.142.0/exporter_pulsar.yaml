@@ -135,9 +135,6 @@ properties:
             block_on_overflow:
                 description: BlockOnOverflow determines the behavior when the component's TotalSize limit is reached. If true, the component will wait for space; otherwise, operations will immediately return a retryable error.
                 type: boolean
-            enabled:
-                description: Enabled indicates whether to not enqueue and batch before exporting.
-                type: boolean
             num_consumers:
                 description: NumConsumers is the maximum number of concurrent consumers from the queue. This applies across all different optional configurations from above (e.g. wait_for_result, block_on_overflow, storage, etc.).
                 type: integer

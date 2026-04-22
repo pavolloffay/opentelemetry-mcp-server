@@ -12,6 +12,9 @@ properties:
         description: Table contains the routing table for this processor. Required.
         items:
             properties:
+                action:
+                    description: Action indicates the type of operation we intend to do when the condition Matches for the corresponding context and data.
+                    type: string
                 condition:
                     description: Condition is an OTTL condition used for making a routing decision. For the "request" context, 'Condition' is required and must be of the form 'request["<attribute>"] {== | !=} <value>'. For all other contexts, 'Statement' or 'Condition' must be provided, and must be a valid OTTL condition.
                     type: string

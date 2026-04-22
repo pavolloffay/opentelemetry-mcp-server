@@ -16,6 +16,18 @@ properties:
     insecure:
         description: Only has effect if Endpoint is not ""
         type: boolean
+    logs:
+        description: LogsSignalConfig allows for custom log configuration
+        properties:
+            attributes:
+                additionalProperties:
+                    type: string
+                description: Attributes are custom Pub/Sub message attributes
+                type: object
+            encoding:
+                description: Encoding is a custom encoding for the marshaling the data onto the message
+                type: object
+        type: object
     max_elapsed_time:
         description: Duration string (e.g., '1s', '5m', '1h')
         pattern: ^[0-9]+(ns|us|µs|ms|s|m|h)$
@@ -24,6 +36,18 @@ properties:
         description: Duration string (e.g., '1s', '5m', '1h')
         pattern: ^[0-9]+(ns|us|µs|ms|s|m|h)$
         type: string
+    metrics:
+        description: MetricsSignalConfig allows for custom log configuration
+        properties:
+            attributes:
+                additionalProperties:
+                    type: string
+                description: Attributes are custom Pub/Sub message attributes
+                type: object
+            encoding:
+                description: Encoding is a custom encoding for the marshaling the data onto the message
+                type: object
+        type: object
     multiplier:
         description: Multiplier is the value multiplied by the backoff interval bounds
         type: number
@@ -60,15 +84,21 @@ properties:
                     min_size:
                         description: MinSize defines the configuration for the minimum size of a batch.
                         type: integer
+                    partition:
+                        description: Partition defines the partitioning of the batches configuration.
+                        properties:
+                            metadata_keys:
+                                description: MetadataKeys is a list of client.Metadata keys that will be used to partition the data into batches. If this setting is empty, a single batcher instance will be used. When this setting is not empty, one batcher will be used per distinct combination of values for the listed metadata keys. Empty value and unset metadata are treated as distinct cases. Entries are case-insensitive. Duplicated entries will trigger a validation error.
+                                items:
+                                    type: string
+                                type: array
+                        type: object
                     sizer:
                         description: Sizer determines the type of size measurement used by the batch. If not configured, use the same configuration as the queue. It accepts "requests", "items", or "bytes".
                         type: object
                 type: object
             block_on_overflow:
                 description: BlockOnOverflow determines the behavior when the component's TotalSize limit is reached. If true, the component will wait for space; otherwise, operations will immediately return a retryable error.
-                type: boolean
-            enabled:
-                description: Enabled indicates whether to not enqueue and batch before exporting.
                 type: boolean
             num_consumers:
                 description: NumConsumers is the maximum number of concurrent consumers from the queue. This applies across all different optional configurations from above (e.g. wait_for_result, block_on_overflow, storage, etc.).
@@ -97,6 +127,18 @@ properties:
     topic:
         description: The fully qualified resource name of the Pubsub topic
         type: string
+    traces:
+        description: TracesSignalConfig allows for custom log configuration
+        properties:
+            attributes:
+                additionalProperties:
+                    type: string
+                description: Attributes are custom Pub/Sub message attributes
+                type: object
+            encoding:
+                description: Encoding is a custom encoding for the marshaling the data onto the message
+                type: object
+        type: object
     user_agent:
         description: User agent that will be used by the Pubsub client to connect to the service
         type: string

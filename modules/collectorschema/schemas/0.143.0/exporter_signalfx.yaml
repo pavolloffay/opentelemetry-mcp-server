@@ -92,11 +92,6 @@ properties:
                 type: integer
         type: object
     cookies:
-        description: Cookies configures the cookie management of the HTTP client.
-        properties:
-            enabled:
-                description: Enabled if true, cookies from HTTP responses will be reused in further HTTP requests with the same server.
-                type: boolean
         type: object
     correlation:
         description: Correlation configuration for syncing traces service and environment to metrics.
@@ -121,11 +116,6 @@ properties:
                         type: integer
                 type: object
             cookies:
-                description: Cookies configures the cookie management of the HTTP client.
-                properties:
-                    enabled:
-                        description: Enabled if true, cookies from HTTP responses will be reused in further HTTP requests with the same server.
-                        type: boolean
                 type: object
             disable_keep_alives:
                 description: 'DisableKeepAlives, if true, disables HTTP keep-alives and will only use the connection to the server for a single HTTP request. WARNING: enabling this option can result in significant overhead establishing a new HTTP(S) connection for every request. Before enabling this option please consider whether changes to idle connection settings can achieve your goal.'
@@ -278,12 +268,19 @@ properties:
                 description: WriteBufferSize for HTTP client. See http.Transport.WriteBufferSize. Default is 0.
                 type: integer
         type: object
+    default_properties:
+        additionalProperties:
+            type: string
+        description: DefaultProperties defines a set of properties to be added to any dimension updates to the Splunk Observability backend. Any explicit property value takes precedence over those defaults.
+        type: object
     delta_translation_ttl:
         description: DeltaTranslationTTL specifies in seconds the max duration to keep the most recent datapoint for any `delta_metric` specified in TranslationRules. Default is 3600s.
         type: integer
     dimension_client:
         description: Dimension update client configuration used for metadata updates.
         properties:
+            drop_tags:
+                type: boolean
             idle_conn_timeout:
                 description: Duration string (e.g., '1s', '5m', '1h')
                 pattern: ^[0-9]+(ns|us|µs|ms|s|m|h)$
@@ -552,9 +549,6 @@ properties:
                 type: object
             block_on_overflow:
                 description: BlockOnOverflow determines the behavior when the component's TotalSize limit is reached. If true, the component will wait for space; otherwise, operations will immediately return a retryable error.
-                type: boolean
-            enabled:
-                description: Enabled indicates whether to not enqueue and batch before exporting.
                 type: boolean
             num_consumers:
                 description: NumConsumers is the maximum number of concurrent consumers from the queue. This applies across all different optional configurations from above (e.g. wait_for_result, block_on_overflow, storage, etc.).

@@ -1,5 +1,23 @@
 $schema: https://json-schema.org/draft/2020-12/schema
 properties:
+    audience:
+        description: Audience optionally specifies the intended audience of the request.  If empty, the value of TokenURL is used as the intended audience. Only used if GrantType is set to "urn:ietf:params:oauth:grant-type:jwt-bearer".
+        type: string
+    claims:
+        additionalProperties:
+            additionalProperties: true
+            type: object
+        description: Claims is a map of claims to be added to the JWT token. Only used if GrantType is set to "urn:ietf:params:oauth:grant-type:jwt-bearer".
+        type: object
+    client_certificate_key:
+        description: ClientCertificateKey is the application's private key. Only used if GrantType is set to "urn:ietf:params:oauth:grant-type:jwt-bearer".
+        type: string
+    client_certificate_key_file:
+        description: ClientSecrClientCertificateKeyFileetFile is the file pathg to read the application's secret from. Only used if GrantType is set to "urn:ietf:params:oauth:grant-type:jwt-bearer".
+        type: string
+    client_certificate_key_id:
+        description: ClientCertificateKeyID is the Key ID to include in the jwt. Only used if GrantType is set to "urn:ietf:params:oauth:grant-type:jwt-bearer".
+        type: string
     client_id:
         description: ClientID is the application's ID. See https://datatracker.ietf.org/doc/html/rfc6749#section-2.2
         type: string
@@ -23,11 +41,20 @@ properties:
         description: Duration string (e.g., '1s', '5m', '1h')
         pattern: ^[0-9]+(ns|us|µs|ms|s|m|h)$
         type: string
+    grant_type:
+        description: GrantType is the OAuth2 grant type to use. It can be one of "client_credentials" or "urn:ietf:params:oauth:grant-type:jwt-bearer" (RFC 7523). Default value is "client_credentials"
+        type: string
+    iss:
+        description: Iss is the OAuth client identifier used when communicating with the configured OAuth provider. Default value is client_id. Only used if GrantType is set to "urn:ietf:params:oauth:grant-type:jwt-bearer".
+        type: string
     scopes:
         description: Scope specifies optional requested permissions. See https://datatracker.ietf.org/doc/html/rfc6749#section-3.3
         items:
             type: string
         type: array
+    signature_algorithm:
+        description: SignatureAlgorithm is the RSA algorithm used to sign JWT token. Only used if GrantType is set to "urn:ietf:params:oauth:grant-type:jwt-bearer". Default value is RS256 and valid values RS256, RS384, RS512
+        type: string
     timeout:
         description: Duration string (e.g., '1s', '5m', '1h')
         pattern: ^[0-9]+(ns|us|µs|ms|s|m|h)$

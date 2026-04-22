@@ -76,6 +76,8 @@ properties:
                     enabled:
                         type: boolean
                 type: object
+            sanitize_span_name:
+                type: boolean
             sql:
                 properties:
                     attributes:
@@ -100,6 +102,11 @@ properties:
     hash_function:
         description: HashFunction defines the function for hashing the values instead of masking them with a fixed string. By default, no hash function is used and masking with a fixed string is performed.
         type: string
+    ignored_key_patterns:
+        description: IgnoredKeyPatterns is a list of attribute key patterns (regex) that are not redacted. attributes matching any of these patterns are allowed to pass through the filter without their values being checked or modified.
+        items:
+            type: string
+        type: array
     ignored_keys:
         description: IgnoredKeys is a list of span attribute keys that are not redacted. Span attributes in this list are allowed to pass through the filter without being changed or removed.
         items:
@@ -120,6 +127,9 @@ properties:
                     type: string
                 type: array
             enabled:
+                type: boolean
+            sanitize_span_name:
+                description: SanitizeSpanName controls whether span names should be sanitized.
                 type: boolean
         type: object
 type: object

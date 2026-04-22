@@ -16,11 +16,6 @@ properties:
                 type: integer
         type: object
     cookies:
-        description: Cookies configures the cookie management of the HTTP client.
-        properties:
-            enabled:
-                description: Enabled if true, cookies from HTTP responses will be reused in further HTTP requests with the same server.
-                type: boolean
         type: object
     create_history_days:
         description: The number of days in the history partition that was created when the table was created; ignored if create_schema is false. If history_days is not 0, create_history_days needs to be less than or equal to history_days.

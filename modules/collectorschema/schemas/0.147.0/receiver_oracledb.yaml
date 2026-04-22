@@ -33,211 +33,463 @@ properties:
         properties:
             oracledb.consistent_gets:
                 properties:
+                    aggregation_strategy:
+                        type: string
+                    attributes:
+                        items:
+                            type: string
+                        type: array
                     enabled:
                         type: boolean
                 type: object
             oracledb.cpu_time:
                 properties:
+                    aggregation_strategy:
+                        type: string
+                    attributes:
+                        items:
+                            type: string
+                        type: array
                     enabled:
                         type: boolean
                 type: object
             oracledb.db_block_gets:
                 properties:
+                    aggregation_strategy:
+                        type: string
+                    attributes:
+                        items:
+                            type: string
+                        type: array
                     enabled:
                         type: boolean
                 type: object
             oracledb.ddl_statements_parallelized:
                 properties:
+                    aggregation_strategy:
+                        type: string
+                    attributes:
+                        items:
+                            type: string
+                        type: array
                     enabled:
                         type: boolean
                 type: object
             oracledb.dml_locks.limit:
                 properties:
+                    aggregation_strategy:
+                        type: string
+                    attributes:
+                        items:
+                            type: string
+                        type: array
                     enabled:
                         type: boolean
                 type: object
             oracledb.dml_locks.usage:
                 properties:
+                    aggregation_strategy:
+                        type: string
+                    attributes:
+                        items:
+                            type: string
+                        type: array
                     enabled:
                         type: boolean
                 type: object
             oracledb.dml_statements_parallelized:
                 properties:
+                    aggregation_strategy:
+                        type: string
+                    attributes:
+                        items:
+                            type: string
+                        type: array
                     enabled:
                         type: boolean
                 type: object
             oracledb.enqueue_deadlocks:
                 properties:
+                    aggregation_strategy:
+                        type: string
+                    attributes:
+                        items:
+                            type: string
+                        type: array
                     enabled:
                         type: boolean
                 type: object
             oracledb.enqueue_locks.limit:
                 properties:
+                    aggregation_strategy:
+                        type: string
+                    attributes:
+                        items:
+                            type: string
+                        type: array
                     enabled:
                         type: boolean
                 type: object
             oracledb.enqueue_locks.usage:
                 properties:
+                    aggregation_strategy:
+                        type: string
+                    attributes:
+                        items:
+                            type: string
+                        type: array
                     enabled:
                         type: boolean
                 type: object
             oracledb.enqueue_resources.limit:
                 properties:
+                    aggregation_strategy:
+                        type: string
+                    attributes:
+                        items:
+                            type: string
+                        type: array
                     enabled:
                         type: boolean
                 type: object
             oracledb.enqueue_resources.usage:
                 properties:
+                    aggregation_strategy:
+                        type: string
+                    attributes:
+                        items:
+                            type: string
+                        type: array
                     enabled:
                         type: boolean
                 type: object
             oracledb.exchange_deadlocks:
                 properties:
+                    aggregation_strategy:
+                        type: string
+                    attributes:
+                        items:
+                            type: string
+                        type: array
                     enabled:
                         type: boolean
                 type: object
             oracledb.executions:
                 properties:
+                    aggregation_strategy:
+                        type: string
+                    attributes:
+                        items:
+                            type: string
+                        type: array
                     enabled:
                         type: boolean
                 type: object
             oracledb.hard_parses:
                 properties:
+                    aggregation_strategy:
+                        type: string
+                    attributes:
+                        items:
+                            type: string
+                        type: array
                     enabled:
                         type: boolean
                 type: object
             oracledb.logical_reads:
                 properties:
+                    aggregation_strategy:
+                        type: string
+                    attributes:
+                        items:
+                            type: string
+                        type: array
                     enabled:
                         type: boolean
                 type: object
             oracledb.logons:
                 properties:
+                    aggregation_strategy:
+                        type: string
+                    attributes:
+                        items:
+                            type: string
+                        type: array
                     enabled:
                         type: boolean
                 type: object
             oracledb.parallel_operations_downgraded_1_to_25_pct:
                 properties:
+                    aggregation_strategy:
+                        type: string
+                    attributes:
+                        items:
+                            type: string
+                        type: array
                     enabled:
                         type: boolean
                 type: object
             oracledb.parallel_operations_downgraded_25_to_50_pct:
                 properties:
+                    aggregation_strategy:
+                        type: string
+                    attributes:
+                        items:
+                            type: string
+                        type: array
                     enabled:
                         type: boolean
                 type: object
             oracledb.parallel_operations_downgraded_50_to_75_pct:
                 properties:
+                    aggregation_strategy:
+                        type: string
+                    attributes:
+                        items:
+                            type: string
+                        type: array
                     enabled:
                         type: boolean
                 type: object
             oracledb.parallel_operations_downgraded_75_to_99_pct:
                 properties:
+                    aggregation_strategy:
+                        type: string
+                    attributes:
+                        items:
+                            type: string
+                        type: array
                     enabled:
                         type: boolean
                 type: object
             oracledb.parallel_operations_downgraded_to_serial:
                 properties:
+                    aggregation_strategy:
+                        type: string
+                    attributes:
+                        items:
+                            type: string
+                        type: array
                     enabled:
                         type: boolean
                 type: object
             oracledb.parallel_operations_not_downgraded:
                 properties:
+                    aggregation_strategy:
+                        type: string
+                    attributes:
+                        items:
+                            type: string
+                        type: array
                     enabled:
                         type: boolean
                 type: object
             oracledb.parse_calls:
                 properties:
+                    aggregation_strategy:
+                        type: string
+                    attributes:
+                        items:
+                            type: string
+                        type: array
                     enabled:
                         type: boolean
                 type: object
             oracledb.pga_memory:
                 properties:
+                    aggregation_strategy:
+                        type: string
+                    attributes:
+                        items:
+                            type: string
+                        type: array
                     enabled:
                         type: boolean
                 type: object
             oracledb.physical_read_io_requests:
                 properties:
+                    aggregation_strategy:
+                        type: string
+                    attributes:
+                        items:
+                            type: string
+                        type: array
                     enabled:
                         type: boolean
                 type: object
             oracledb.physical_reads:
                 properties:
+                    aggregation_strategy:
+                        type: string
+                    attributes:
+                        items:
+                            type: string
+                        type: array
                     enabled:
                         type: boolean
                 type: object
             oracledb.physical_reads_direct:
                 properties:
+                    aggregation_strategy:
+                        type: string
+                    attributes:
+                        items:
+                            type: string
+                        type: array
                     enabled:
                         type: boolean
                 type: object
             oracledb.physical_write_io_requests:
                 properties:
+                    aggregation_strategy:
+                        type: string
+                    attributes:
+                        items:
+                            type: string
+                        type: array
                     enabled:
                         type: boolean
                 type: object
             oracledb.physical_writes:
                 properties:
+                    aggregation_strategy:
+                        type: string
+                    attributes:
+                        items:
+                            type: string
+                        type: array
                     enabled:
                         type: boolean
                 type: object
             oracledb.physical_writes_direct:
                 properties:
+                    aggregation_strategy:
+                        type: string
+                    attributes:
+                        items:
+                            type: string
+                        type: array
                     enabled:
                         type: boolean
                 type: object
             oracledb.processes.limit:
                 properties:
+                    aggregation_strategy:
+                        type: string
+                    attributes:
+                        items:
+                            type: string
+                        type: array
                     enabled:
                         type: boolean
                 type: object
             oracledb.processes.usage:
                 properties:
+                    aggregation_strategy:
+                        type: string
+                    attributes:
+                        items:
+                            type: string
+                        type: array
                     enabled:
                         type: boolean
                 type: object
             oracledb.queries_parallelized:
                 properties:
+                    aggregation_strategy:
+                        type: string
+                    attributes:
+                        items:
+                            type: string
+                        type: array
                     enabled:
                         type: boolean
                 type: object
             oracledb.sessions.limit:
                 properties:
+                    aggregation_strategy:
+                        type: string
+                    attributes:
+                        items:
+                            type: string
+                        type: array
                     enabled:
                         type: boolean
                 type: object
             oracledb.sessions.usage:
                 properties:
+                    aggregation_strategy:
+                        type: string
+                    attributes:
+                        items:
+                            type: string
+                        type: array
                     enabled:
                         type: boolean
                 type: object
             oracledb.tablespace_size.limit:
                 properties:
+                    aggregation_strategy:
+                        type: string
+                    attributes:
+                        items:
+                            type: string
+                        type: array
                     enabled:
                         type: boolean
                 type: object
             oracledb.tablespace_size.usage:
                 properties:
+                    aggregation_strategy:
+                        type: string
+                    attributes:
+                        items:
+                            type: string
+                        type: array
                     enabled:
                         type: boolean
                 type: object
             oracledb.transactions.limit:
                 properties:
+                    aggregation_strategy:
+                        type: string
+                    attributes:
+                        items:
+                            type: string
+                        type: array
                     enabled:
                         type: boolean
                 type: object
             oracledb.transactions.usage:
                 properties:
+                    aggregation_strategy:
+                        type: string
+                    attributes:
+                        items:
+                            type: string
+                        type: array
                     enabled:
                         type: boolean
                 type: object
             oracledb.user_commits:
                 properties:
+                    aggregation_strategy:
+                        type: string
+                    attributes:
+                        items:
+                            type: string
+                        type: array
                     enabled:
                         type: boolean
                 type: object
             oracledb.user_rollbacks:
                 properties:
+                    aggregation_strategy:
+                        type: string
+                    attributes:
+                        items:
+                            type: string
+                        type: array
                     enabled:
                         type: boolean
                 type: object

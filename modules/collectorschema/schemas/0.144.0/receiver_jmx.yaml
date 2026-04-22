@@ -12,6 +12,10 @@ properties:
     endpoint:
         description: 'The Service URL or host:port for the target coerced to one of form: service:jmx:rmi:///jndi/rmi://<host>:<port>/jmxrmi. Supported by: jmx-scraper and jmx-metric-gatherer'
         type: string
+    initial_delay:
+        description: Duration string (e.g., '1s', '5m', '1h')
+        pattern: ^[0-9]+(ns|us|µs|ms|s|m|h)$
+        type: string
     jar_path:
         description: 'The path for the JMX Metric Gatherer or JMX Scraper JAR (/opt/opentelemetry-java-contrib-jmx-metrics.jar by default). Supported by: jmx-scraper and jmx-metric-gatherer'
         type: string
@@ -70,6 +74,10 @@ properties:
         type: string
     target_system:
         description: 'Comma-separated list of systems to monitor Supported by: jmx-scraper and jmx-metric-gatherer'
+        type: string
+    timeout:
+        description: Duration string (e.g., '1s', '5m', '1h')
+        pattern: ^[0-9]+(ns|us|µs|ms|s|m|h)$
         type: string
     truststore_password:
         description: 'The truststore password for SSL Supported by: jmx-scraper and jmx-metric-gatherer'

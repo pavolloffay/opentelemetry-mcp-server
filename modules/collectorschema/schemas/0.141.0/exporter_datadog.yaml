@@ -29,11 +29,6 @@ properties:
                 type: integer
         type: object
     cookies:
-        description: Cookies configures the cookie management of the HTTP client.
-        properties:
-            enabled:
-                description: Enabled if true, cookies from HTTP responses will be reused in further HTTP requests with the same server.
-                type: boolean
         type: object
     disable_keep_alives:
         description: 'DisableKeepAlives, if true, disables HTTP keep-alives and will only use the connection to the server for a single HTTP request. WARNING: enabling this option can result in significant overhead establishing a new HTTP(S) connection for every request. Before enabling this option please consider whether changes to idle connection settings can achieve your goal.'
@@ -214,6 +209,15 @@ properties:
     only_metadata:
         description: OnlyMetadata defines whether to only send metadata This is useful for agent-collector setups, so that metadata about a host is sent to the backend even when telemetry data is reported via a different host. This flag is incompatible with disabling host metadata, `use_resource_metadata`, or `host_metadata::hostname_source != first_resource`
         type: boolean
+    orchestrator_explorer:
+        properties:
+            cluster_name:
+                description: ClusterName defines the kubernetes cluster name.
+                type: string
+            enabled:
+                description: Enabled enables the orchestrator explorer.
+                type: boolean
+        type: object
     proxy_url:
         description: ProxyURL setting for the collector
         type: string

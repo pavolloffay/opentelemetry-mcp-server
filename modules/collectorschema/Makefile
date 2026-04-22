@@ -13,6 +13,11 @@ install-ocb:
 .PHONY: build-collector
 build-collector: install-ocb
 	./.bin/builder --config manifest-$(OCB_VERSION).yaml --skip-compilation
+	@# Add collectorschema dependency (OCB regenerates go.mod, removing our additions)
+	@cd build && \
+		echo 'require github.com/pavolloffay/opentelemetry-mcp-server/modules/collectorschema v0.0.0' >> go.mod && \
+		echo 'replace github.com/pavolloffay/opentelemetry-mcp-server/modules/collectorschema => ../' >> go.mod && \
+		go mod tidy
 
 # Schema output directory (can be overridden)
 SCHEMA_OUTPUT_DIR ?= ../schemas/$(OCB_VERSION)
@@ -30,14 +35,14 @@ generate-schemas:
 #	cd build && go mod vendor && SCHEMA_OUTPUT_DIR=../schemas/0.138.0 go test -run TestGenerateAllSchemas -v
 #	OCB_VERSION=0.139.0 make build-collector
 #	cd build && go mod vendor && SCHEMA_OUTPUT_DIR=../schemas/0.139.0 go test -run TestGenerateAllSchemas -v
-#	OCB_VERSION=0.140.0 make build-collector
-#	cd build && go mod vendor && SCHEMA_OUTPUT_DIR=../schemas/0.140.0 go test -run TestGenerateAllSchemas -v
-#	OCB_VERSION=0.141.0 make build-collector
-#	cd build && go mod vendor && SCHEMA_OUTPUT_DIR=../schemas/0.141.0 go test -run TestGenerateAllSchemas -v
-#	OCB_VERSION=0.142.0 make build-collector
-#	cd build && go mod vendor && SCHEMA_OUTPUT_DIR=../schemas/0.142.0 go test -run TestGenerateAllSchemas -v
-#	OCB_VERSION=0.143.0 make build-collector
-#	cd build && go mod vendor && SCHEMA_OUTPUT_DIR=../schemas/0.143.0 go test -run TestGenerateAllSchemas -v
+	OCB_VERSION=0.140.0 make build-collector
+	cd build && go mod vendor && SCHEMA_OUTPUT_DIR=../schemas/0.140.0 go test -run TestGenerateAllSchemas -v
+	OCB_VERSION=0.141.0 make build-collector
+	cd build && go mod vendor && SCHEMA_OUTPUT_DIR=../schemas/0.141.0 go test -run TestGenerateAllSchemas -v
+	OCB_VERSION=0.142.0 make build-collector
+	cd build && go mod vendor && SCHEMA_OUTPUT_DIR=../schemas/0.142.0 go test -run TestGenerateAllSchemas -v
+	OCB_VERSION=0.143.0 make build-collector
+	cd build && go mod vendor && SCHEMA_OUTPUT_DIR=../schemas/0.143.0 go test -run TestGenerateAllSchemas -v
 	OCB_VERSION=0.144.0 make build-collector
 	cd build && go mod vendor && SCHEMA_OUTPUT_DIR=../schemas/0.144.0 go test -run TestGenerateAllSchemas -v
 	OCB_VERSION=0.145.0 make build-collector

@@ -6,8 +6,14 @@ properties:
             password:
                 description: Password holds the password to use for client authentication.
                 type: string
+            password_file:
+                description: PasswordFile points to a file that contains the password. If set, takes precedence over Password. The file is watched for changes.
+                type: string
             username:
                 description: Username holds the username to use for client authentication.
+                type: string
+            username_file:
+                description: UsernameFile points to a file that contains the username. If set, takes precedence over Username. The file is watched for changes.
                 type: string
         type: object
     htpasswd:

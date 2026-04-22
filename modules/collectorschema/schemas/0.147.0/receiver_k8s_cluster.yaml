@@ -222,6 +222,16 @@ properties:
                     enabled:
                         type: boolean
                 type: object
+            k8s.service.endpoint.count:
+                properties:
+                    enabled:
+                        type: boolean
+                type: object
+            k8s.service.load_balancer.ingress.count:
+                properties:
+                    enabled:
+                        type: boolean
+                type: object
             k8s.statefulset.current_pods:
                 properties:
                     enabled:
@@ -1105,6 +1115,131 @@ properties:
                         type: array
                 type: object
             k8s.resourcequota.uid:
+                properties:
+                    enabled:
+                        type: boolean
+                    metrics_exclude:
+                        description: 'Experimental: MetricsExclude defines a list of filters for attribute values. If the list is not empty, metrics with matching resource attribute values will not be emitted. MetricsInclude has higher priority than MetricsExclude.'
+                        items:
+                            properties:
+                                regexp:
+                                    type: string
+                                strict:
+                                    type: string
+                            type: object
+                        type: array
+                    metrics_include:
+                        description: 'Experimental: MetricsInclude defines a list of filters for attribute values. If the list is not empty, only metrics with matching resource attribute values will be emitted.'
+                        items:
+                            properties:
+                                regexp:
+                                    type: string
+                                strict:
+                                    type: string
+                            type: object
+                        type: array
+                type: object
+            k8s.service.name:
+                properties:
+                    enabled:
+                        type: boolean
+                    metrics_exclude:
+                        description: 'Experimental: MetricsExclude defines a list of filters for attribute values. If the list is not empty, metrics with matching resource attribute values will not be emitted. MetricsInclude has higher priority than MetricsExclude.'
+                        items:
+                            properties:
+                                regexp:
+                                    type: string
+                                strict:
+                                    type: string
+                            type: object
+                        type: array
+                    metrics_include:
+                        description: 'Experimental: MetricsInclude defines a list of filters for attribute values. If the list is not empty, only metrics with matching resource attribute values will be emitted.'
+                        items:
+                            properties:
+                                regexp:
+                                    type: string
+                                strict:
+                                    type: string
+                            type: object
+                        type: array
+                type: object
+            k8s.service.publish_not_ready_addresses:
+                properties:
+                    enabled:
+                        type: boolean
+                    metrics_exclude:
+                        description: 'Experimental: MetricsExclude defines a list of filters for attribute values. If the list is not empty, metrics with matching resource attribute values will not be emitted. MetricsInclude has higher priority than MetricsExclude.'
+                        items:
+                            properties:
+                                regexp:
+                                    type: string
+                                strict:
+                                    type: string
+                            type: object
+                        type: array
+                    metrics_include:
+                        description: 'Experimental: MetricsInclude defines a list of filters for attribute values. If the list is not empty, only metrics with matching resource attribute values will be emitted.'
+                        items:
+                            properties:
+                                regexp:
+                                    type: string
+                                strict:
+                                    type: string
+                            type: object
+                        type: array
+                type: object
+            k8s.service.traffic_distribution:
+                properties:
+                    enabled:
+                        type: boolean
+                    metrics_exclude:
+                        description: 'Experimental: MetricsExclude defines a list of filters for attribute values. If the list is not empty, metrics with matching resource attribute values will not be emitted. MetricsInclude has higher priority than MetricsExclude.'
+                        items:
+                            properties:
+                                regexp:
+                                    type: string
+                                strict:
+                                    type: string
+                            type: object
+                        type: array
+                    metrics_include:
+                        description: 'Experimental: MetricsInclude defines a list of filters for attribute values. If the list is not empty, only metrics with matching resource attribute values will be emitted.'
+                        items:
+                            properties:
+                                regexp:
+                                    type: string
+                                strict:
+                                    type: string
+                            type: object
+                        type: array
+                type: object
+            k8s.service.type:
+                properties:
+                    enabled:
+                        type: boolean
+                    metrics_exclude:
+                        description: 'Experimental: MetricsExclude defines a list of filters for attribute values. If the list is not empty, metrics with matching resource attribute values will not be emitted. MetricsInclude has higher priority than MetricsExclude.'
+                        items:
+                            properties:
+                                regexp:
+                                    type: string
+                                strict:
+                                    type: string
+                            type: object
+                        type: array
+                    metrics_include:
+                        description: 'Experimental: MetricsInclude defines a list of filters for attribute values. If the list is not empty, only metrics with matching resource attribute values will be emitted.'
+                        items:
+                            properties:
+                                regexp:
+                                    type: string
+                                strict:
+                                    type: string
+                            type: object
+                        type: array
+                type: object
+            k8s.service.uid:
                 properties:
                     enabled:
                         type: boolean

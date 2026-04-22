@@ -1,5 +1,10 @@
 $schema: https://json-schema.org/draft/2020-12/schema
 properties:
+    output_paths:
+        description: OutputPaths is a list of file paths to write logging output to. This option can only be used when use_internal_logger is false. Special strings "stdout" and "stderr" are interpreted as os.Stdout and os.Stderr respectively. All other values are treated as file paths. If not set, defaults to ["stdout"].
+        items:
+            type: string
+        type: array
     sampling_initial:
         description: SamplingInitial defines how many samples are initially logged during each second.
         type: integer
@@ -26,9 +31,6 @@ properties:
                 type: object
             block_on_overflow:
                 description: BlockOnOverflow determines the behavior when the component's TotalSize limit is reached. If true, the component will wait for space; otherwise, operations will immediately return a retryable error.
-                type: boolean
-            enabled:
-                description: Enabled indicates whether to not enqueue and batch before exporting.
                 type: boolean
             num_consumers:
                 description: NumConsumers is the maximum number of concurrent consumers from the queue. This applies across all different optional configurations from above (e.g. wait_for_result, block_on_overflow, storage, etc.).

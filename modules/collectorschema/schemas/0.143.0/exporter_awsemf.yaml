@@ -115,6 +115,9 @@ properties:
             enabled:
                 description: Enabled indicates whether to convert resource attributes to telemetry attributes. Default is `false`.
                 type: boolean
+            exclude_service_attributes:
+                description: ExcludeServiceAttributes indicates whether to exclude `service.name`, `service.instance.id` and `service.namespace` resource attributes from being converted to metric attributes. Default is `false`. When set to `true`, these attributes will not be added to metric labels since they are already mapped to Prometheus `job` and `instance` labels respectively.
+                type: boolean
         type: object
     retain_initial_value_of_delta_metric:
         description: RetainInitialValueOfDeltaMetric is the flag to signal that the initial value of a metric is a valid datapoint. The default behavior is that the first value occurrence of a metric is set as the baseline for the calculation of the delta to the next occurrence. With this flag set to true the exporter will instead use this first value as the initial delta value. This is especially useful when handling low frequency metrics.

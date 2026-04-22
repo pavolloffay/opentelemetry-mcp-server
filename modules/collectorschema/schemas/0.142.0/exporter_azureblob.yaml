@@ -41,9 +41,13 @@ properties:
                 type: object
             serial_num_before_extension:
                 type: boolean
+            serial_num_enabled:
+                type: boolean
             serial_num_range:
                 type: integer
             template_enabled:
+                type: boolean
+            time_parser_enabled:
                 type: boolean
             traces_format:
                 type: string

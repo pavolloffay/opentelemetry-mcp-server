@@ -14,6 +14,9 @@ properties:
     domain_settings:
         description: Transport settings used with Domain (supports both gRPC and HTTP)
         properties:
+            accept_encoding:
+                description: AcceptEncoding specifies the compression encoding to accept for gRPC responses. Defaults to "gzip" if not set. Only used when protocol is "grpc".
+                type: string
             auth:
                 properties:
                     authenticator:
@@ -158,6 +161,9 @@ properties:
     logs:
         description: The Coralogix logs ingress endpoint (supports both gRPC and HTTP)
         properties:
+            accept_encoding:
+                description: AcceptEncoding specifies the compression encoding to accept for gRPC responses. Defaults to "gzip" if not set. Only used when protocol is "grpc".
+                type: string
             auth:
                 properties:
                     authenticator:
@@ -303,6 +309,9 @@ properties:
     metrics:
         description: The Coralogix metrics ingress endpoint (supports both gRPC and HTTP)
         properties:
+            accept_encoding:
+                description: AcceptEncoding specifies the compression encoding to accept for gRPC responses. Defaults to "gzip" if not set. Only used when protocol is "grpc".
+                type: string
             auth:
                 properties:
                     authenticator:
@@ -614,9 +623,6 @@ properties:
             block_on_overflow:
                 description: BlockOnOverflow determines the behavior when the component's TotalSize limit is reached. If true, the component will wait for space; otherwise, operations will immediately return a retryable error.
                 type: boolean
-            enabled:
-                description: Enabled indicates whether to not enqueue and batch before exporting.
-                type: boolean
             num_consumers:
                 description: NumConsumers is the maximum number of concurrent consumers from the queue. This applies across all different optional configurations from above (e.g. wait_for_result, block_on_overflow, storage, etc.).
                 type: integer
@@ -649,6 +655,9 @@ properties:
     traces:
         description: Coralogix traces ingress endpoint (supports both gRPC and HTTP)
         properties:
+            accept_encoding:
+                description: AcceptEncoding specifies the compression encoding to accept for gRPC responses. Defaults to "gzip" if not set. Only used when protocol is "grpc".
+                type: string
             auth:
                 properties:
                     authenticator:

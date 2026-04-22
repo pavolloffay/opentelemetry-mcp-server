@@ -1,11 +1,5 @@
 $schema: https://json-schema.org/draft/2020-12/schema
 properties:
-    attributes:
-        deprecated: true
-        description: 'Attributes is an allowlist of attributes to add. If a supplied attribute is not a valid attribute of a supplied detector it will be ignored. Deprecated: Please use detector''s resource_attributes config instead'
-        items:
-            type: string
-        type: array
     auth:
         properties:
             authenticator:
@@ -22,11 +16,6 @@ properties:
                 type: integer
         type: object
     cookies:
-        description: Cookies configures the cookie management of the HTTP client.
-        properties:
-            enabled:
-                description: Enabled if true, cookies from HTTP responses will be reused in further HTTP requests with the same server.
-                type: boolean
         type: object
     detectorconfig:
         description: DetectorConfig is a list of settings specific to all detectors
@@ -99,6 +88,62 @@ properties:
                                         type: boolean
                                 type: object
                             k8s.cluster.name:
+                                properties:
+                                    enabled:
+                                        type: boolean
+                                type: object
+                        type: object
+                type: object
+            alibaba_ecs:
+                description: AlibabaECSConfig contains user-specified configurations for the Alibaba Cloud ECS detector
+                properties:
+                    fail_on_missing_metadata:
+                        description: FailOnMissingMetadata, if true, causes the detector to return an error when the Alibaba Cloud ECS metadata service is unavailable or required fields are missing. If false (default), the detector does best-effort population.
+                        type: boolean
+                    resource_attributes:
+                        description: ResourceAttributes controls which standard resource attributes are enabled (e.g., host.id, host.name, cloud.provider, etc.).
+                        properties:
+                            cloud.account.id:
+                                properties:
+                                    enabled:
+                                        type: boolean
+                                type: object
+                            cloud.availability_zone:
+                                properties:
+                                    enabled:
+                                        type: boolean
+                                type: object
+                            cloud.platform:
+                                properties:
+                                    enabled:
+                                        type: boolean
+                                type: object
+                            cloud.provider:
+                                properties:
+                                    enabled:
+                                        type: boolean
+                                type: object
+                            cloud.region:
+                                properties:
+                                    enabled:
+                                        type: boolean
+                                type: object
+                            host.id:
+                                properties:
+                                    enabled:
+                                        type: boolean
+                                type: object
+                            host.image.id:
+                                properties:
+                                    enabled:
+                                        type: boolean
+                                type: object
+                            host.name:
+                                properties:
+                                    enabled:
+                                        type: boolean
+                                type: object
+                            host.type:
                                 properties:
                                     enabled:
                                         type: boolean
@@ -248,6 +293,16 @@ properties:
                 properties:
                     resource_attributes:
                         properties:
+                            container.image.name:
+                                properties:
+                                    enabled:
+                                        type: boolean
+                                type: object
+                            container.name:
+                                properties:
+                                    enabled:
+                                        type: boolean
+                                type: object
                             host.name:
                                 properties:
                                     enabled:
@@ -324,6 +379,9 @@ properties:
                         items:
                             type: string
                         type: array
+                    tags_from_imds:
+                        description: 'TagsFromIMDS controls whether instance tags are fetched via IMDS (true) or via the EC2 DescribeTags API (false, default). IMDS does not require IAM permissions but requires InstanceMetadataTags=enabled on the instance. Note: IMDS must be network-accessible from the process; workloads running in containers (e.g., EKS pods, ECS tasks) may not have access to IMDS even if it is enabled on the host, unless the instance metadata options are configured to allow container access.'
+                        type: boolean
                 type: object
             ecs:
                 description: ECSConfig contains user-specified configurations for the ECS detector
@@ -501,6 +559,11 @@ properties:
             gcp:
                 description: GcpConfig contains user-specified configurations for the gcp detector
                 properties:
+                    labels:
+                        description: Labels is a list of regex's to match gce instance label keys that users want to add as resource attributes to processed data
+                        items:
+                            type: string
+                        type: array
                     resource_attributes:
                         properties:
                             cloud.account.id:
@@ -524,11 +587,6 @@ properties:
                                         type: boolean
                                 type: object
                             cloud.region:
-                                properties:
-                                    enabled:
-                                        type: boolean
-                                type: object
-                            faas.id:
                                 properties:
                                     enabled:
                                         type: boolean
@@ -662,6 +720,11 @@ properties:
                                     enabled:
                                         type: boolean
                                 type: object
+                            cloud.platform:
+                                properties:
+                                    enabled:
+                                        type: boolean
+                                type: object
                             cloud.provider:
                                 properties:
                                     enabled:
@@ -786,7 +849,7 @@ properties:
                         type: object
                 type: object
             nova:
-                description: OpenShift contains user-specified configurations for the OpenShift detector
+                description: OpenStackNovaConfig contains user-specified configurations for the OpenStackNova detector
                 properties:
                     fail_on_missing_metadata:
                         description: FailOnMissingMetadata, if true, causes the detector to return an error when the Nova metadata service is unavailable or required fields are missing. If false (default), the detector does best-effort population.
@@ -981,10 +1044,15 @@ properties:
                                     enabled:
                                         type: boolean
                                 type: object
+                            oracle_cloud.realm:
+                                properties:
+                                    enabled:
+                                        type: boolean
+                                type: object
                         type: object
                 type: object
             scaleway:
-                description: ScalewayConfig contains user-specified configurations for the akamai detector
+                description: ScalewayConfig contains user-specified configurations for the scaleway detector
                 properties:
                     resource_attributes:
                         properties:
@@ -1137,6 +1205,62 @@ properties:
                                 type: object
                         type: object
                 type: object
+            tencent_cvm:
+                description: TencentCVMConfig contains user-specified configurations for the Tencent Cloud CVM detector
+                properties:
+                    fail_on_missing_metadata:
+                        description: FailOnMissingMetadata, if true, causes the detector to return an error when the Tencent Cloud CVM metadata service is unavailable or any required field is missing. If false (default), the detector logs the failure and returns an empty resource (no attributes set).
+                        type: boolean
+                    resource_attributes:
+                        description: ResourceAttributes controls which standard resource attributes are enabled (e.g., host.id, host.name, cloud.provider, etc.).
+                        properties:
+                            cloud.account.id:
+                                properties:
+                                    enabled:
+                                        type: boolean
+                                type: object
+                            cloud.availability_zone:
+                                properties:
+                                    enabled:
+                                        type: boolean
+                                type: object
+                            cloud.platform:
+                                properties:
+                                    enabled:
+                                        type: boolean
+                                type: object
+                            cloud.provider:
+                                properties:
+                                    enabled:
+                                        type: boolean
+                                type: object
+                            cloud.region:
+                                properties:
+                                    enabled:
+                                        type: boolean
+                                type: object
+                            host.id:
+                                properties:
+                                    enabled:
+                                        type: boolean
+                                type: object
+                            host.image.id:
+                                properties:
+                                    enabled:
+                                        type: boolean
+                                type: object
+                            host.name:
+                                properties:
+                                    enabled:
+                                        type: boolean
+                                type: object
+                            host.type:
+                                properties:
+                                    enabled:
+                                        type: boolean
+                                type: object
+                        type: object
+                type: object
             upcloud:
                 description: UpcloudConfig contains user-specified configurations for the upcloud detector
                 properties:
@@ -1173,6 +1297,11 @@ properties:
                         type: boolean
                     resource_attributes:
                         properties:
+                            cloud.platform:
+                                properties:
+                                    enabled:
+                                        type: boolean
+                                type: object
                             cloud.provider:
                                 properties:
                                     enabled:
@@ -1259,6 +1388,10 @@ properties:
     read_buffer_size:
         description: ReadBufferSize for HTTP client. See http.Transport.ReadBufferSize. Default is 0.
         type: integer
+    refresh_interval:
+        description: Duration string (e.g., '1s', '5m', '1h')
+        pattern: ^[0-9]+(ns|us|µs|ms|s|m|h)$
+        type: string
     timeout:
         description: Duration string (e.g., '1s', '5m', '1h')
         pattern: ^[0-9]+(ns|us|µs|ms|s|m|h)$

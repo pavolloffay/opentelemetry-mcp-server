@@ -18,6 +18,8 @@ properties:
                 type: boolean
             include_log_record_original:
                 type: boolean
+            max_events_per_poll:
+                type: integer
             max_reads:
                 type: integer
             output:

@@ -184,6 +184,9 @@ properties:
             include_metadata:
                 description: IncludeMetadata propagates the client metadata from the incoming requests to the downstream consumers
                 type: boolean
+            include_span_events:
+                description: attach raw webhook event JSON as span events
+                type: boolean
             keep_alives_enabled:
                 description: KeepAlivesEnabled controls whether HTTP keep-alives are enabled. By default, keep-alives are always enabled. Only very resource-constrained environments should disable them.
                 type: boolean

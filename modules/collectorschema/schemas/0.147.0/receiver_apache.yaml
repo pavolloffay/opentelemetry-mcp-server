@@ -20,11 +20,6 @@ properties:
                 type: integer
         type: object
     cookies:
-        description: Cookies configures the cookie management of the HTTP client.
-        properties:
-            enabled:
-                description: Enabled if true, cookies from HTTP responses will be reused in further HTTP requests with the same server.
-                type: boolean
         type: object
     disable_keep_alives:
         description: 'DisableKeepAlives, if true, disables HTTP keep-alives and will only use the connection to the server for a single HTTP request. WARNING: enabling this option can result in significant overhead establishing a new HTTP(S) connection for every request. Before enabling this option please consider whether changes to idle connection settings can achieve your goal.'
@@ -76,66 +71,144 @@ properties:
                 properties:
                     apache.connections.async:
                         properties:
+                            aggregation_strategy:
+                                type: string
+                            attributes:
+                                items:
+                                    type: string
+                                type: array
                             enabled:
                                 type: boolean
                         type: object
                     apache.cpu.load:
                         properties:
+                            aggregation_strategy:
+                                type: string
+                            attributes:
+                                items:
+                                    type: string
+                                type: array
                             enabled:
                                 type: boolean
                         type: object
                     apache.cpu.time:
                         properties:
+                            aggregation_strategy:
+                                type: string
+                            attributes:
+                                items:
+                                    type: string
+                                type: array
                             enabled:
                                 type: boolean
                         type: object
                     apache.current_connections:
                         properties:
+                            aggregation_strategy:
+                                type: string
+                            attributes:
+                                items:
+                                    type: string
+                                type: array
                             enabled:
                                 type: boolean
                         type: object
                     apache.load.1:
                         properties:
+                            aggregation_strategy:
+                                type: string
+                            attributes:
+                                items:
+                                    type: string
+                                type: array
                             enabled:
                                 type: boolean
                         type: object
                     apache.load.5:
                         properties:
+                            aggregation_strategy:
+                                type: string
+                            attributes:
+                                items:
+                                    type: string
+                                type: array
                             enabled:
                                 type: boolean
                         type: object
                     apache.load.15:
                         properties:
+                            aggregation_strategy:
+                                type: string
+                            attributes:
+                                items:
+                                    type: string
+                                type: array
                             enabled:
                                 type: boolean
                         type: object
                     apache.request.time:
                         properties:
+                            aggregation_strategy:
+                                type: string
+                            attributes:
+                                items:
+                                    type: string
+                                type: array
                             enabled:
                                 type: boolean
                         type: object
                     apache.requests:
                         properties:
+                            aggregation_strategy:
+                                type: string
+                            attributes:
+                                items:
+                                    type: string
+                                type: array
                             enabled:
                                 type: boolean
                         type: object
                     apache.scoreboard:
                         properties:
+                            aggregation_strategy:
+                                type: string
+                            attributes:
+                                items:
+                                    type: string
+                                type: array
                             enabled:
                                 type: boolean
                         type: object
                     apache.traffic:
                         properties:
+                            aggregation_strategy:
+                                type: string
+                            attributes:
+                                items:
+                                    type: string
+                                type: array
                             enabled:
                                 type: boolean
                         type: object
                     apache.uptime:
                         properties:
+                            aggregation_strategy:
+                                type: string
+                            attributes:
+                                items:
+                                    type: string
+                                type: array
                             enabled:
                                 type: boolean
                         type: object
                     apache.workers:
                         properties:
+                            aggregation_strategy:
+                                type: string
+                            attributes:
+                                items:
+                                    type: string
+                                type: array
                             enabled:
                                 type: boolean
                         type: object

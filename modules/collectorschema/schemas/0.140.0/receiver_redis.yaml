@@ -43,6 +43,11 @@ properties:
                             enabled:
                                 type: boolean
                         type: object
+                    redis.cluster.cluster_enabled:
+                        properties:
+                            enabled:
+                                type: boolean
+                        type: object
                     redis.cluster.known_nodes:
                         properties:
                             enabled:
@@ -213,6 +218,16 @@ properties:
                             enabled:
                                 type: boolean
                         type: object
+                    redis.memory.used_memory_overhead:
+                        properties:
+                            enabled:
+                                type: boolean
+                        type: object
+                    redis.memory.used_memory_startup:
+                        properties:
+                            enabled:
+                                type: boolean
+                        type: object
                     redis.net.input:
                         properties:
                             enabled:
@@ -249,6 +264,11 @@ properties:
                                 type: boolean
                         type: object
                     redis.slaves.connected:
+                        properties:
+                            enabled:
+                                type: boolean
+                        type: object
+                    redis.tracking_total_keys:
                         properties:
                             enabled:
                                 type: boolean

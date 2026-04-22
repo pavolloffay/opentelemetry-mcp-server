@@ -1,11 +1,5 @@
 $schema: https://json-schema.org/draft/2020-12/schema
 properties:
-    attributes:
-        deprecated: true
-        description: 'Attributes is an allowlist of attributes to add. If a supplied attribute is not a valid attribute of a supplied detector it will be ignored. Deprecated: Please use detector''s resource_attributes config instead'
-        items:
-            type: string
-        type: array
     auth:
         properties:
             authenticator:
@@ -22,11 +16,6 @@ properties:
                 type: integer
         type: object
     cookies:
-        description: Cookies configures the cookie management of the HTTP client.
-        properties:
-            enabled:
-                description: Enabled if true, cookies from HTTP responses will be reused in further HTTP requests with the same server.
-                type: boolean
         type: object
     detectorconfig:
         description: DetectorConfig is a list of settings specific to all detectors
@@ -1259,6 +1248,10 @@ properties:
     read_buffer_size:
         description: ReadBufferSize for HTTP client. See http.Transport.ReadBufferSize. Default is 0.
         type: integer
+    refresh_interval:
+        description: Duration string (e.g., '1s', '5m', '1h')
+        pattern: ^[0-9]+(ns|us|µs|ms|s|m|h)$
+        type: string
     timeout:
         description: Duration string (e.g., '1s', '5m', '1h')
         pattern: ^[0-9]+(ns|us|µs|ms|s|m|h)$

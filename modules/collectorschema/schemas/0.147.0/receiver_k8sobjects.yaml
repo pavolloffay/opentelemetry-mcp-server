@@ -15,6 +15,15 @@ properties:
     objects:
         items:
             properties:
+                exclude_namespaces:
+                    items:
+                        properties:
+                            regexp:
+                                type: string
+                            strict:
+                                type: string
+                        type: object
+                    type: array
                 exclude_watch_type:
                     items:
                         type: string

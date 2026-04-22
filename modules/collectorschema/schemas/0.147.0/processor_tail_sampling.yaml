@@ -17,8 +17,18 @@ properties:
         description: Duration string (e.g., '1s', '5m', '1h')
         pattern: ^[0-9]+(ns|us|µs|ms|s|m|h)$
         type: string
+    decision_wait_after_root_received:
+        description: Duration string (e.g., '1s', '5m', '1h')
+        pattern: ^[0-9]+(ns|us|µs|ms|s|m|h)$
+        type: string
+    drop_pending_traces_on_shutdown:
+        description: DropPendingTracesOnShutdown will drop all traces that are part of batches that have not yet reached the decision wait when the processor is shutdown.
+        type: boolean
     expected_new_traces_per_sec:
         description: ExpectedNewTracesPerSec sets the expected number of new traces sending to the tail sampling processor per second. This helps with allocating data structures with closer to actual usage size.
+        type: integer
+    maximum_trace_size_bytes:
+        description: MaximumTraceSizeBytes is the largest size of a trace a decision will be made for. If the trace size exceeds this it will be dropped before the decision period to keep memory more predictable. A 0 value disables dropping large traces early.
         type: integer
     num_traces:
         description: NumTraces is the number of traces kept on memory. Typically most of the data of a trace is released after a sampling decision is taken.
@@ -74,6 +84,12 @@ properties:
                             items:
                                 type: object
                             type: array
+                    type: object
+                not:
+                    description: Configs for defining not policy
+                    properties:
+                        not_sub_policy:
+                            type: object
                     type: object
             type: object
         type: array

@@ -1,7 +1,7 @@
 $schema: https://json-schema.org/draft/2020-12/schema
 properties:
     api_version:
-        description: Docker client API version.
+        description: Docker client API version. If empty, the client will auto-negotiate the API version with the Docker daemon using version negotiation.
         type: string
     collection_interval:
         description: Duration string (e.g., '1s', '5m', '1h')

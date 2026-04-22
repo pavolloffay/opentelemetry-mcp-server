@@ -24,13 +24,17 @@ properties:
                 type: string
             file_prefix:
                 type: string
+            file_prefix_include_telemetry_type:
+                type: boolean
             region:
                 type: string
             s3_bucket:
                 type: string
             s3_force_path_style:
                 type: boolean
-            s3_partition:
+            s3_partition_format:
+                type: string
+            s3_partition_timezone:
                 type: string
             s3_prefix:
                 type: string

@@ -90,6 +90,9 @@ properties:
             enabled:
                 description: Enabled indicates whether to convert resource attributes to telemetry attributes. Default is `false`.
                 type: boolean
+            exclude_service_attributes:
+                description: ExcludeServiceAttributes indicates whether to exclude `service.name`, `service.instance.id` and `service.namespace` resource attributes from being converted to metric attributes. Default is `false`. When set to `true`, these attributes will not be added to metric labels since they are already mapped to Prometheus `job` and `instance` labels respectively.
+                type: boolean
         type: object
     response_headers:
         description: Additional headers attached to each HTTP response sent to the client. Header values are opaque since they may be sensitive.
@@ -105,7 +108,6 @@ properties:
         description: SendTimestamps will send the underlying scrape timestamp with the export
         type: boolean
     sending_queue:
-        description: QueueBatchConfig defines the queue configuration.
         properties:
             batch:
                 properties:
@@ -125,9 +127,6 @@ properties:
                 type: object
             block_on_overflow:
                 description: BlockOnOverflow determines the behavior when the component's TotalSize limit is reached. If true, the component will wait for space; otherwise, operations will immediately return a retryable error.
-                type: boolean
-            enabled:
-                description: Enabled indicates whether to not enqueue and batch before exporting.
                 type: boolean
             num_consumers:
                 description: NumConsumers is the maximum number of concurrent consumers from the queue. This applies across all different optional configurations from above (e.g. wait_for_result, block_on_overflow, storage, etc.).
@@ -211,6 +210,9 @@ properties:
     translation_strategy:
         description: TranslationStrategy controls how OTLP metric and attribute names are translated into Prometheus metric and label names. When set, this takes precedence over AddMetricSuffixes.
         type: string
+    without_scope_info:
+        description: WithoutScopeInfo controls the addition of labels for the instrumentation scope.
+        type: boolean
     write_timeout:
         description: Duration string (e.g., '1s', '5m', '1h')
         pattern: ^[0-9]+(ns|us|µs|ms|s|m|h)$

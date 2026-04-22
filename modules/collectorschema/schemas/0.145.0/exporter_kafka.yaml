@@ -225,7 +225,7 @@ properties:
                 description: Whether or not to allow automatic topic creation. (default enabled).
                 type: boolean
             compression:
-                description: 'Compression Codec used to produce messages https://pkg.go.dev/github.com/IBM/sarama@v1.30.0#CompressionCodec The options are: ''none'' (default), ''gzip'', ''snappy'', ''lz4'', and ''zstd'''
+                description: 'Compression Codec used to produce messages https://pkg.go.dev/github.com/twmb/franz-go/pkg/kgo#CompressionCodec The options are: ''none'' (default), ''gzip'', ''snappy'', ''lz4'', and ''zstd'''
                 type: string
             compression_params:
                 description: CompressionParams defines compression parameters for the producer.
@@ -234,8 +234,12 @@ properties:
                         type: integer
                 type: object
             flush_max_messages:
-                description: The maximum number of messages the producer will send in a single broker request. Defaults to 0 for unlimited. Similar to `queue.buffering.max.messages` in the JVM producer.
+                description: The maximum number of messages the producer will send in a single broker request. Defaults to 10000 (franz-go default). Similar to `queue.buffering.max.messages` in the JVM producer.
                 type: integer
+            linger:
+                description: Duration string (e.g., '1s', '5m', '1h')
+                pattern: ^[0-9]+(ns|us|µs|ms|s|m|h)$
+                type: string
             max_message_bytes:
                 description: Maximum message bytes the producer will accept to produce (default 1000000)
                 type: integer
@@ -288,9 +292,6 @@ properties:
                 type: object
             block_on_overflow:
                 description: BlockOnOverflow determines the behavior when the component's TotalSize limit is reached. If true, the component will wait for space; otherwise, operations will immediately return a retryable error.
-                type: boolean
-            enabled:
-                description: Enabled indicates whether to not enqueue and batch before exporting.
                 type: boolean
             num_consumers:
                 description: NumConsumers is the maximum number of concurrent consumers from the queue. This applies across all different optional configurations from above (e.g. wait_for_result, block_on_overflow, storage, etc.).
