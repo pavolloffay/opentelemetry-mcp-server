@@ -3,7 +3,7 @@ title: influxdb receiver configuration
 type: object
 properties:
     auth:
-        description: Auth configuration for outgoing HTTP calls.
+        description: Auth for this receiver
         type: object
         properties:
             authenticator:
@@ -131,7 +131,7 @@ properties:
             Header values are opaque since they may be sensitive.
         type: object
     tls:
-        description: TLS struct exposes TLS client configuration.
+        description: TLS struct exposes TLS server configuration.
         type: object
         properties:
             ca_file:

@@ -4,12 +4,25 @@ type: object
 properties:
     check_sftp:
         type: boolean
+    collection_interval:
+        description: |-
+            CollectionInterval sets how frequently the scraper
+            should be called and used as the context timeout
+            to ensure that scrapers don't exceed the interval.
+        type: string
+        pattern: ^(0|[-+]?((\d+(\.\d*)?|\.\d+)(ns|us|µs|μs|ms|s|m|h))+)$
     endpoint:
         description: Endpoint is always required
         type: string
     ignore_host_key:
         description: IgnoreHostKey provides an insecure path to quickstarts and testing
         type: boolean
+    initial_delay:
+        description: |-
+            InitialDelay sets the initial start delay for the scraper,
+            any non positive value is assumed to be immediately.
+        type: string
+        pattern: ^(0|[-+]?((\d+(\.\d*)?|\.\d+)(ns|us|µs|μs|ms|s|m|h))+)$
     key_file:
         type: string
     known_hosts:

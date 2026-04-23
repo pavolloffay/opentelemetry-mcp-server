@@ -33,6 +33,13 @@ properties:
         type: array
         items:
             type: string
+    collection_interval:
+        description: |-
+            CollectionInterval sets how frequently the scraper
+            should be called and used as the context timeout
+            to ensure that scrapers don't exceed the interval.
+        type: string
+        pattern: ^(0|[-+]?((\d+(\.\d*)?|\.\d+)(ns|us|µs|μs|ms|s|m|h))+)$
     curve_preferences:
         description: |-
             contains the elliptic curves that will be used in
@@ -74,6 +81,12 @@ properties:
             If true, load system CA certificates pool in addition to the certificates
             configured in this struct.
         type: boolean
+    initial_delay:
+        description: |-
+            InitialDelay sets the initial start delay for the scraper,
+            any non positive value is assumed to be immediately.
+        type: string
+        pattern: ^(0|[-+]?((\d+(\.\d*)?|\.\d+)(ns|us|µs|μs|ms|s|m|h))+)$
     insecure:
         description: |-
             In gRPC and HTTP when set to true, this is used to disable the client transport security.

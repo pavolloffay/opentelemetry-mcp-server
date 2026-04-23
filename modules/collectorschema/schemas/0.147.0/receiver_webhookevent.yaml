@@ -3,7 +3,7 @@ title: webhookevent receiver configuration
 type: object
 properties:
     auth:
-        description: Auth configuration for outgoing HTTP calls.
+        description: Auth for this receiver
         type: object
         properties:
             authenticator:
@@ -149,7 +149,7 @@ properties:
         description: optional setting to split logs into multiple log records
         type: boolean
     tls:
-        description: TLS struct exposes TLS client configuration.
+        description: TLS struct exposes TLS server configuration.
         type: object
         properties:
             ca_file:

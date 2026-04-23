@@ -2,6 +2,13 @@ $schema: https://json-schema.org/draft/2020-12/schema
 title: memcached receiver configuration
 type: object
 properties:
+    collection_interval:
+        description: |-
+            CollectionInterval sets how frequently the scraper
+            should be called and used as the context timeout
+            to ensure that scrapers don't exceed the interval.
+        type: string
+        pattern: ^(0|[-+]?((\d+(\.\d*)?|\.\d+)(ns|us|µs|μs|ms|s|m|h))+)$
     dialer:
         description: DialerConfig contains options for connecting to an address.
         type: object
@@ -21,6 +28,12 @@ properties:
             If the host is a literal IPv6 address it must be enclosed in square brackets, as in "[2001:db8::1]:80" or
             "[fe80::1%zone]:80". The zone specifies the scope of the literal IPv6 address as defined in RFC 4007.
         type: string
+    initial_delay:
+        description: |-
+            InitialDelay sets the initial start delay for the scraper,
+            any non positive value is assumed to be immediately.
+        type: string
+        pattern: ^(0|[-+]?((\d+(\.\d*)?|\.\d+)(ns|us|µs|μs|ms|s|m|h))+)$
     metrics:
         type: object
         properties:
@@ -91,6 +104,10 @@ properties:
                         type: boolean
                 additionalProperties: false
         additionalProperties: false
+    timeout:
+        description: Timeout is an optional value used to set scraper's context deadline.
+        type: string
+        pattern: ^(0|[-+]?((\d+(\.\d*)?|\.\d+)(ns|us|µs|μs|ms|s|m|h))+)$
     transport:
         description: |-
             Transport to use. Allowed protocols are "tcp", "tcp4" (IPv4-only), "tcp6" (IPv6-only), "udp", "udp4" (IPv4-only),

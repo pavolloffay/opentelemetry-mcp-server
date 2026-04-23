@@ -2,6 +2,19 @@ $schema: https://json-schema.org/draft/2020-12/schema
 title: httpcheck receiver configuration
 type: object
 properties:
+    collection_interval:
+        description: |-
+            CollectionInterval sets how frequently the scraper
+            should be called and used as the context timeout
+            to ensure that scrapers don't exceed the interval.
+        type: string
+        pattern: ^(0|[-+]?((\d+(\.\d*)?|\.\d+)(ns|us|µs|μs|ms|s|m|h))+)$
+    initial_delay:
+        description: |-
+            InitialDelay sets the initial start delay for the scraper,
+            any non positive value is assumed to be immediately.
+        type: string
+        pattern: ^(0|[-+]?((\d+(\.\d*)?|\.\d+)(ns|us|µs|μs|ms|s|m|h))+)$
     metrics:
         type: object
         properties:
@@ -84,7 +97,7 @@ properties:
             type: object
             properties:
                 auth:
-                    description: Auth configuration for outgoing HTTP calls.
+                    description: Auth for this receiver
                     type: object
                     properties:
                         authenticator:
@@ -205,7 +218,7 @@ properties:
                     type: string
                     pattern: ^(0|[-+]?((\d+(\.\d*)?|\.\d+)(ns|us|µs|μs|ms|s|m|h))+)$
                 tls:
-                    description: TLS struct exposes TLS client configuration.
+                    description: TLS struct exposes TLS server configuration.
                     type: object
                     properties:
                         ca_file:
@@ -330,4 +343,8 @@ properties:
                         Default is 0.
                     type: integer
             additionalProperties: false
+    timeout:
+        description: Timeout is an optional value used to set scraper's context deadline.
+        type: string
+        pattern: ^(0|[-+]?((\d+(\.\d*)?|\.\d+)(ns|us|µs|μs|ms|s|m|h))+)$
 additionalProperties: false

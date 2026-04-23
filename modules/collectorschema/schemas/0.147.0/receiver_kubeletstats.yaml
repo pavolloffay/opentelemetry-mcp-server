@@ -43,6 +43,13 @@ properties:
             pod:
                 type: boolean
         additionalProperties: false
+    collection_interval:
+        description: |-
+            CollectionInterval sets how frequently the scraper
+            should be called and used as the context timeout
+            to ensure that scrapers don't exceed the interval.
+        type: string
+        pattern: ^(0|[-+]?((\d+(\.\d*)?|\.\d+)(ns|us|µs|μs|ms|s|m|h))+)$
     context:
         description: When using auth_type `kubeConfig`, override the current context.
         type: string
@@ -87,6 +94,12 @@ properties:
             If true, load system CA certificates pool in addition to the certificates
             configured in this struct.
         type: boolean
+    initial_delay:
+        description: |-
+            InitialDelay sets the initial start delay for the scraper,
+            any non positive value is assumed to be immediately.
+        type: string
+        pattern: ^(0|[-+]?((\d+(\.\d*)?|\.\d+)(ns|us|µs|μs|ms|s|m|h))+)$
     insecure_skip_verify:
         description: |-
             InsecureSkipVerify controls whether the client verifies the server's
@@ -1001,6 +1014,10 @@ properties:
                             additionalProperties: false
                 additionalProperties: false
         additionalProperties: false
+    timeout:
+        description: Timeout is an optional value used to set scraper's context deadline.
+        type: string
+        pattern: ^(0|[-+]?((\d+(\.\d*)?|\.\d+)(ns|us|µs|μs|ms|s|m|h))+)$
     tpm:
         description: Trusted platform module configuration
         type: object

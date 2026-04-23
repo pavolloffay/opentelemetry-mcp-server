@@ -7,6 +7,13 @@ properties:
             Docker client API version. If empty, the client will auto-negotiate
             the API version with the Docker daemon using version negotiation.
         type: string
+    collection_interval:
+        description: |-
+            CollectionInterval sets how frequently the scraper
+            should be called and used as the context timeout
+            to ensure that scrapers don't exceed the interval.
+        type: string
+        pattern: ^(0|[-+]?((\d+(\.\d*)?|\.\d+)(ns|us|µs|μs|ms|s|m|h))+)$
     container_labels_to_metric_labels:
         description: |-
             A mapping of container label names to MetricDescriptor label keys.
@@ -38,6 +45,12 @@ properties:
         type: array
         items:
             type: string
+    initial_delay:
+        description: |-
+            InitialDelay sets the initial start delay for the scraper,
+            any non positive value is assumed to be immediately.
+        type: string
+        pattern: ^(0|[-+]?((\d+(\.\d*)?|\.\d+)(ns|us|µs|μs|ms|s|m|h))+)$
     metrics:
         type: object
         properties:
@@ -704,7 +717,7 @@ properties:
                 additionalProperties: false
         additionalProperties: false
     timeout:
-        description: The maximum amount of time to wait for docker API responses. Default is 5s
+        description: Timeout is an optional value used to set scraper's context deadline.
         type: string
         pattern: ^(0|[-+]?((\d+(\.\d*)?|\.\d+)(ns|us|µs|μs|ms|s|m|h))+)$
 additionalProperties: false

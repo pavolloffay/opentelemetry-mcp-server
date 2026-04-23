@@ -84,6 +84,12 @@ properties:
             If true, load system CA certificates pool in addition to the certificates
             configured in this struct.
         type: boolean
+    initial_delay:
+        description: |-
+            InitialDelay sets the initial start delay for the scraper,
+            any non positive value is assumed to be immediately.
+        type: string
+        pattern: ^(0|[-+]?((\d+(\.\d*)?|\.\d+)(ns|us|µs|μs|ms|s|m|h))+)$
     insecure:
         description: |-
             In gRPC and HTTP when set to true, this is used to disable the client transport security.
@@ -667,6 +673,10 @@ properties:
             This sets the ServerName in the TLSConfig. Please refer to
             https://godoc.org/crypto/tls#Config for more information. (optional)
         type: string
+    timeout:
+        description: Timeout is an optional value used to set scraper's context deadline.
+        type: string
+        pattern: ^(0|[-+]?((\d+(\.\d*)?|\.\d+)(ns|us|µs|μs|ms|s|m|h))+)$
     top_n_query:
         type: integer
     tpm:

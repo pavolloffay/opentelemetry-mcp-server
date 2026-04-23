@@ -25,6 +25,12 @@ properties:
                         type: boolean
                 additionalProperties: false
         additionalProperties: false
+    initial_delay:
+        description: |-
+            InitialDelay sets the initial start delay for the scraper,
+            any non positive value is assumed to be immediately.
+        type: string
+        pattern: ^(0|[-+]?((\d+(\.\d*)?|\.\d+)(ns|us|µs|μs|ms|s|m|h))+)$
     instance_name:
         type: string
     lookback_time:
@@ -774,6 +780,10 @@ properties:
         additionalProperties: false
     server:
         type: string
+    timeout:
+        description: Timeout is an optional value used to set scraper's context deadline.
+        type: string
+        pattern: ^(0|[-+]?((\d+(\.\d*)?|\.\d+)(ns|us|µs|μs|ms|s|m|h))+)$
     top_query_count:
         type: integer
     username:

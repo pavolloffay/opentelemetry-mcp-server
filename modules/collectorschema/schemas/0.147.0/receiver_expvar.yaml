@@ -3,13 +3,20 @@ title: expvar receiver configuration
 type: object
 properties:
     auth:
-        description: Auth configuration for outgoing HTTP calls.
+        description: Auth for this receiver
         type: object
         properties:
             authenticator:
                 description: AuthenticatorID specifies the name of the extension to use in order to authenticate the incoming data point.
                 type: string
         additionalProperties: false
+    collection_interval:
+        description: |-
+            CollectionInterval sets how frequently the scraper
+            should be called and used as the context timeout
+            to ensure that scrapers don't exceed the interval.
+        type: string
+        pattern: ^(0|[-+]?((\d+(\.\d*)?|\.\d+)(ns|us|µs|μs|ms|s|m|h))+)$
     compression:
         description: The compression key for supported compression types within collector.
         type: string
@@ -66,6 +73,12 @@ properties:
         description: |-
             IdleConnTimeout is the maximum amount of time a connection will remain open before closing itself.
             By default, it is set to 90 seconds.
+        type: string
+        pattern: ^(0|[-+]?((\d+(\.\d*)?|\.\d+)(ns|us|µs|μs|ms|s|m|h))+)$
+    initial_delay:
+        description: |-
+            InitialDelay sets the initial start delay for the scraper,
+            any non positive value is assumed to be immediately.
         type: string
         pattern: ^(0|[-+]?((\d+(\.\d*)?|\.\d+)(ns|us|µs|μs|ms|s|m|h))+)$
     max_conns_per_host:
@@ -245,7 +258,7 @@ properties:
         additionalProperties: false
     middlewares:
         description: |-
-            Middlewares are used to add custom functionality to the HTTP client.
+            Middlewares are used to add custom functionality to the HTTP server.
             Middleware handlers are called in the order they appear in this list,
             with the first middleware becoming the outermost handler.
         type: array
