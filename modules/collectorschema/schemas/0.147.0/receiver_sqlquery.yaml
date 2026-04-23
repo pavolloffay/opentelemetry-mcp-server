@@ -1,14 +1,10 @@
 $schema: https://json-schema.org/draft/2020-12/schema
+title: sqlquery receiver configuration
+type: object
 properties:
     additional_params:
-        additionalProperties:
-            additionalProperties: true
-            type: object
         type: object
-    collection_interval:
-        description: Duration string (e.g., '1s', '5m', '1h')
-        pattern: ^[0-9]+(ns|us|µs|ms|s|m|h)$
-        type: string
+        additionalProperties: {}
     database:
         type: string
     datasource:
@@ -16,10 +12,6 @@ properties:
     driver:
         type: string
     host:
-        type: string
-    initial_delay:
-        description: Duration string (e.g., '1s', '5m', '1h')
-        pattern: ^[0-9]+(ns|us|µs|ms|s|m|h)$
         type: string
     max_open_conn:
         description: The maximumn number of open connections to the sql server. <= 0 means unlimited
@@ -29,28 +21,33 @@ properties:
     port:
         type: integer
     queries:
+        type: array
         items:
+            type: object
             properties:
                 logs:
+                    type: array
                     items:
+                        type: object
                         properties:
                             attribute_columns:
+                                type: array
                                 items:
                                     type: string
-                                type: array
                             body_column:
                                 type: string
-                        type: object
-                    type: array
+                        additionalProperties: false
                 metrics:
+                    type: array
                     items:
+                        type: object
                         properties:
                             aggregation:
                                 type: string
                             attribute_columns:
+                                type: array
                                 items:
                                     type: string
-                                type: array
                             data_type:
                                 type: string
                             description:
@@ -62,9 +59,9 @@ properties:
                             start_ts_column:
                                 type: string
                             static_attributes:
+                                type: object
                                 additionalProperties:
                                     type: string
-                                type: object
                             ts_column:
                                 type: string
                             unit:
@@ -73,30 +70,26 @@ properties:
                                 type: string
                             value_type:
                                 type: string
-                        type: object
-                    type: array
+                        additionalProperties: false
                 sql:
                     type: string
                 tracking_column:
                     type: string
                 tracking_start_value:
                     type: string
-            type: object
-        type: array
+            additionalProperties: false
     storage:
-        type: object
+        type: string
     telemetry:
+        type: object
         properties:
             logs:
+                type: object
                 properties:
                     query:
                         type: boolean
-                type: object
-        type: object
-    timeout:
-        description: Duration string (e.g., '1s', '5m', '1h')
-        pattern: ^[0-9]+(ns|us|µs|ms|s|m|h)$
-        type: string
+                additionalProperties: false
+        additionalProperties: false
     username:
         type: string
-type: object
+additionalProperties: false

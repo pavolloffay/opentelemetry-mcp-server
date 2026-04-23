@@ -1,4 +1,6 @@
 $schema: https://json-schema.org/draft/2020-12/schema
+title: otlpjsonfile receiver configuration
+type: object
 properties:
     acquire_fs_lock:
         type: boolean
@@ -9,32 +11,35 @@ properties:
     encoding:
         type: string
     exclude:
+        type: array
         items:
             type: string
-        type: array
     exclude_older_than:
-        description: Duration string (e.g., '1s', '5m', '1h')
-        pattern: ^[0-9]+(ns|us|µs|ms|s|m|h)$
+        description: |-
+            ExcludeOlderThan allows excluding files whose modification time is older
+            than the specified age.
         type: string
+        pattern: ^(0|[-+]?((\d+(\.\d*)?|\.\d+)(ns|us|µs|μs|ms|s|m|h))+)$
     fingerprint_size:
         type: integer
     force_flush_period:
-        description: Duration string (e.g., '1s', '5m', '1h')
-        pattern: ^[0-9]+(ns|us|µs|ms|s|m|h)$
         type: string
+        pattern: ^(0|[-+]?((\d+(\.\d*)?|\.\d+)(ns|us|µs|μs|ms|s|m|h))+)$
     header:
+        type: object
         properties:
             metadata_operators:
+                type: array
                 items:
                     type: object
-                type: array
+                    additionalProperties: false
             pattern:
                 type: string
-        type: object
+        additionalProperties: false
     include:
+        type: array
         items:
             type: string
-        type: array
     include_file_name:
         type: boolean
     include_file_name_resolved:
@@ -60,6 +65,7 @@ properties:
     max_log_size:
         type: integer
     multiline:
+        type: object
         properties:
             line_end_pattern:
                 type: string
@@ -67,15 +73,18 @@ properties:
                 type: string
             omit_pattern:
                 type: boolean
-        type: object
+        additionalProperties: false
     ordering_criteria:
+        type: object
         properties:
             group_by:
                 type: string
             regex:
                 type: string
             sort_by:
+                type: array
                 items:
+                    type: object
                     properties:
                         ascending:
                             type: boolean
@@ -88,28 +97,23 @@ properties:
                             type: string
                         sort_type:
                             type: string
-                    type: object
-                type: array
+                    additionalProperties: false
             top_n:
                 type: integer
-        type: object
+        additionalProperties: false
     poll_interval:
-        description: Duration string (e.g., '1s', '5m', '1h')
-        pattern: ^[0-9]+(ns|us|µs|ms|s|m|h)$
         type: string
+        pattern: ^(0|[-+]?((\d+(\.\d*)?|\.\d+)(ns|us|µs|μs|ms|s|m|h))+)$
     polls_to_archive:
         type: integer
+    preserve_leading_whitespaces:
+        type: boolean
+    preserve_trailing_whitespaces:
+        type: boolean
     replay_file:
         type: boolean
     start_at:
         type: string
     storage:
-        type: object
-    trimconfig:
-        properties:
-            preserve_leading_whitespaces:
-                type: boolean
-            preserve_trailing_whitespaces:
-                type: boolean
-        type: object
-type: object
+        type: string
+additionalProperties: false

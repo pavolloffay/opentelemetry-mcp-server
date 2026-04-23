@@ -1,59 +1,37 @@
 $schema: https://json-schema.org/draft/2020-12/schema
+title: windowsperfcounters receiver configuration
+type: object
 properties:
-    collection_interval:
-        description: Duration string (e.g., '1s', '5m', '1h')
-        pattern: ^[0-9]+(ns|us|µs|ms|s|m|h)$
-        type: string
-    initial_delay:
-        description: Duration string (e.g., '1s', '5m', '1h')
-        pattern: ^[0-9]+(ns|us|µs|ms|s|m|h)$
-        type: string
     metrics:
-        additionalProperties:
-            properties:
-                description:
-                    type: string
-                gauge:
-                    type: object
-                sum:
-                    properties:
-                        aggregation:
-                            type: string
-                        monotonic:
-                            type: boolean
-                    type: object
-                unit:
-                    type: string
-            type: object
         type: object
+        additionalProperties:
+            type: object
     perfcounters:
+        type: array
         items:
+            type: object
             properties:
                 counters:
+                    type: array
                     items:
+                        type: object
                         properties:
                             attributes:
+                                type: object
                                 additionalProperties:
                                     type: string
-                                type: object
                             metric:
                                 type: string
                             name:
                                 type: string
                             recreate_query:
                                 type: boolean
-                        type: object
-                    type: array
+                        additionalProperties: false
                 instances:
+                    type: array
                     items:
                         type: string
-                    type: array
                 object:
                     type: string
-            type: object
-        type: array
-    timeout:
-        description: Duration string (e.g., '1s', '5m', '1h')
-        pattern: ^[0-9]+(ns|us|µs|ms|s|m|h)$
-        type: string
-type: object
+            additionalProperties: false
+additionalProperties: false

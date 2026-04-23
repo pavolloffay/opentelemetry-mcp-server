@@ -1,445 +1,480 @@
 $schema: https://json-schema.org/draft/2020-12/schema
+title: snowflake receiver configuration
+type: object
 properties:
     account:
         type: string
-    collection_interval:
-        description: Duration string (e.g., '1s', '5m', '1h')
-        pattern: ^[0-9]+(ns|us|µs|ms|s|m|h)$
-        type: string
     database:
         type: string
-    initial_delay:
-        description: Duration string (e.g., '1s', '5m', '1h')
-        pattern: ^[0-9]+(ns|us|µs|ms|s|m|h)$
-        type: string
     metrics:
+        type: object
         properties:
             snowflake.billing.cloud_service.total:
+                type: object
                 properties:
                     aggregation_strategy:
                         type: string
                     attributes:
+                        type: array
                         items:
                             type: string
-                        type: array
                     enabled:
                         type: boolean
-                type: object
+                additionalProperties: false
             snowflake.billing.total_credit.total:
+                type: object
                 properties:
                     aggregation_strategy:
                         type: string
                     attributes:
+                        type: array
                         items:
                             type: string
-                        type: array
                     enabled:
                         type: boolean
-                type: object
+                additionalProperties: false
             snowflake.billing.virtual_warehouse.total:
+                type: object
                 properties:
                     aggregation_strategy:
                         type: string
                     attributes:
+                        type: array
                         items:
                             type: string
-                        type: array
                     enabled:
                         type: boolean
-                type: object
+                additionalProperties: false
             snowflake.billing.warehouse.cloud_service.total:
+                type: object
                 properties:
                     aggregation_strategy:
                         type: string
                     attributes:
+                        type: array
                         items:
                             type: string
-                        type: array
                     enabled:
                         type: boolean
-                type: object
+                additionalProperties: false
             snowflake.billing.warehouse.total_credit.total:
+                type: object
                 properties:
                     aggregation_strategy:
                         type: string
                     attributes:
+                        type: array
                         items:
                             type: string
-                        type: array
                     enabled:
                         type: boolean
-                type: object
+                additionalProperties: false
             snowflake.billing.warehouse.virtual_warehouse.total:
+                type: object
                 properties:
                     aggregation_strategy:
                         type: string
                     attributes:
+                        type: array
                         items:
                             type: string
-                        type: array
                     enabled:
                         type: boolean
-                type: object
+                additionalProperties: false
             snowflake.database.bytes_scanned.avg:
+                type: object
                 properties:
                     aggregation_strategy:
                         type: string
                     attributes:
+                        type: array
                         items:
                             type: string
-                        type: array
                     enabled:
                         type: boolean
-                type: object
+                additionalProperties: false
             snowflake.database.query.count:
+                type: object
                 properties:
                     aggregation_strategy:
                         type: string
                     attributes:
+                        type: array
                         items:
                             type: string
-                        type: array
                     enabled:
                         type: boolean
-                type: object
+                additionalProperties: false
             snowflake.logins.total:
+                type: object
                 properties:
                     aggregation_strategy:
                         type: string
                     attributes:
+                        type: array
                         items:
                             type: string
-                        type: array
                     enabled:
                         type: boolean
-                type: object
+                additionalProperties: false
             snowflake.pipe.credits_used.total:
+                type: object
                 properties:
                     aggregation_strategy:
                         type: string
                     attributes:
+                        type: array
                         items:
                             type: string
-                        type: array
                     enabled:
                         type: boolean
-                type: object
+                additionalProperties: false
             snowflake.query.blocked:
+                type: object
                 properties:
                     aggregation_strategy:
                         type: string
                     attributes:
+                        type: array
                         items:
                             type: string
-                        type: array
                     enabled:
                         type: boolean
-                type: object
+                additionalProperties: false
             snowflake.query.bytes_deleted.avg:
+                type: object
                 properties:
                     aggregation_strategy:
                         type: string
                     attributes:
+                        type: array
                         items:
                             type: string
-                        type: array
                     enabled:
                         type: boolean
-                type: object
+                additionalProperties: false
             snowflake.query.bytes_spilled.local.avg:
+                type: object
                 properties:
                     aggregation_strategy:
                         type: string
                     attributes:
+                        type: array
                         items:
                             type: string
-                        type: array
                     enabled:
                         type: boolean
-                type: object
+                additionalProperties: false
             snowflake.query.bytes_spilled.remote.avg:
+                type: object
                 properties:
                     aggregation_strategy:
                         type: string
                     attributes:
+                        type: array
                         items:
                             type: string
-                        type: array
                     enabled:
                         type: boolean
-                type: object
+                additionalProperties: false
             snowflake.query.bytes_written.avg:
+                type: object
                 properties:
                     aggregation_strategy:
                         type: string
                     attributes:
+                        type: array
                         items:
                             type: string
-                        type: array
                     enabled:
                         type: boolean
-                type: object
+                additionalProperties: false
             snowflake.query.compilation_time.avg:
+                type: object
                 properties:
                     aggregation_strategy:
                         type: string
                     attributes:
+                        type: array
                         items:
                             type: string
-                        type: array
                     enabled:
                         type: boolean
-                type: object
+                additionalProperties: false
             snowflake.query.data_scanned_cache.avg:
+                type: object
                 properties:
                     aggregation_strategy:
                         type: string
                     attributes:
+                        type: array
                         items:
                             type: string
-                        type: array
                     enabled:
                         type: boolean
-                type: object
+                additionalProperties: false
             snowflake.query.executed:
+                type: object
                 properties:
                     aggregation_strategy:
                         type: string
                     attributes:
+                        type: array
                         items:
                             type: string
-                        type: array
                     enabled:
                         type: boolean
-                type: object
+                additionalProperties: false
             snowflake.query.execution_time.avg:
+                type: object
                 properties:
                     aggregation_strategy:
                         type: string
                     attributes:
+                        type: array
                         items:
                             type: string
-                        type: array
                     enabled:
                         type: boolean
-                type: object
+                additionalProperties: false
             snowflake.query.partitions_scanned.avg:
+                type: object
                 properties:
                     aggregation_strategy:
                         type: string
                     attributes:
+                        type: array
                         items:
                             type: string
-                        type: array
                     enabled:
                         type: boolean
-                type: object
+                additionalProperties: false
             snowflake.query.queued_overload:
+                type: object
                 properties:
                     aggregation_strategy:
                         type: string
                     attributes:
+                        type: array
                         items:
                             type: string
-                        type: array
                     enabled:
                         type: boolean
-                type: object
+                additionalProperties: false
             snowflake.query.queued_provision:
+                type: object
                 properties:
                     aggregation_strategy:
                         type: string
                     attributes:
+                        type: array
                         items:
                             type: string
-                        type: array
                     enabled:
                         type: boolean
-                type: object
+                additionalProperties: false
             snowflake.queued_overload_time.avg:
+                type: object
                 properties:
                     aggregation_strategy:
                         type: string
                     attributes:
+                        type: array
                         items:
                             type: string
-                        type: array
                     enabled:
                         type: boolean
-                type: object
+                additionalProperties: false
             snowflake.queued_provisioning_time.avg:
+                type: object
                 properties:
                     aggregation_strategy:
                         type: string
                     attributes:
+                        type: array
                         items:
                             type: string
-                        type: array
                     enabled:
                         type: boolean
-                type: object
+                additionalProperties: false
             snowflake.queued_repair_time.avg:
+                type: object
                 properties:
                     aggregation_strategy:
                         type: string
                     attributes:
+                        type: array
                         items:
                             type: string
-                        type: array
                     enabled:
                         type: boolean
-                type: object
+                additionalProperties: false
             snowflake.rows_deleted.avg:
+                type: object
                 properties:
                     aggregation_strategy:
                         type: string
                     attributes:
+                        type: array
                         items:
                             type: string
-                        type: array
                     enabled:
                         type: boolean
-                type: object
+                additionalProperties: false
             snowflake.rows_inserted.avg:
+                type: object
                 properties:
                     aggregation_strategy:
                         type: string
                     attributes:
+                        type: array
                         items:
                             type: string
-                        type: array
                     enabled:
                         type: boolean
-                type: object
+                additionalProperties: false
             snowflake.rows_produced.avg:
+                type: object
                 properties:
                     aggregation_strategy:
                         type: string
                     attributes:
+                        type: array
                         items:
                             type: string
-                        type: array
                     enabled:
                         type: boolean
-                type: object
+                additionalProperties: false
             snowflake.rows_unloaded.avg:
+                type: object
                 properties:
                     aggregation_strategy:
                         type: string
                     attributes:
+                        type: array
                         items:
                             type: string
-                        type: array
                     enabled:
                         type: boolean
-                type: object
+                additionalProperties: false
             snowflake.rows_updated.avg:
+                type: object
                 properties:
                     aggregation_strategy:
                         type: string
                     attributes:
+                        type: array
                         items:
                             type: string
-                        type: array
                     enabled:
                         type: boolean
-                type: object
+                additionalProperties: false
             snowflake.session_id.count:
+                type: object
                 properties:
                     aggregation_strategy:
                         type: string
                     attributes:
+                        type: array
                         items:
                             type: string
-                        type: array
                     enabled:
                         type: boolean
-                type: object
+                additionalProperties: false
             snowflake.storage.failsafe_bytes.total:
+                type: object
                 properties:
                     aggregation_strategy:
                         type: string
                     attributes:
+                        type: array
                         items:
                             type: string
-                        type: array
                     enabled:
                         type: boolean
-                type: object
+                additionalProperties: false
             snowflake.storage.stage_bytes.total:
+                type: object
                 properties:
                     aggregation_strategy:
                         type: string
                     attributes:
+                        type: array
                         items:
                             type: string
-                        type: array
                     enabled:
                         type: boolean
-                type: object
+                additionalProperties: false
             snowflake.storage.storage_bytes.total:
+                type: object
                 properties:
                     aggregation_strategy:
                         type: string
                     attributes:
+                        type: array
                         items:
                             type: string
-                        type: array
                     enabled:
                         type: boolean
-                type: object
+                additionalProperties: false
             snowflake.total_elapsed_time.avg:
+                type: object
                 properties:
                     aggregation_strategy:
                         type: string
                     attributes:
+                        type: array
                         items:
                             type: string
-                        type: array
                     enabled:
                         type: boolean
-                type: object
-        type: object
+                additionalProperties: false
+        additionalProperties: false
     password:
         type: string
     resource_attributes:
+        type: object
         properties:
             snowflake.account.name:
+                type: object
                 properties:
                     enabled:
                         type: boolean
                     metrics_exclude:
-                        description: 'Experimental: MetricsExclude defines a list of filters for attribute values. If the list is not empty, metrics with matching resource attribute values will not be emitted. MetricsInclude has higher priority than MetricsExclude.'
+                        description: |-
+                            Experimental: MetricsExclude defines a list of filters for attribute values.
+                            If the list is not empty, metrics with matching resource attribute values will not be emitted.
+                            MetricsInclude has higher priority than MetricsExclude.
+                        type: array
                         items:
+                            type: object
                             properties:
                                 regexp:
                                     type: string
                                 strict:
                                     type: string
-                            type: object
-                        type: array
+                            additionalProperties: false
                     metrics_include:
-                        description: 'Experimental: MetricsInclude defines a list of filters for attribute values. If the list is not empty, only metrics with matching resource attribute values will be emitted.'
+                        description: |-
+                            Experimental: MetricsInclude defines a list of filters for attribute values.
+                            If the list is not empty, only metrics with matching resource attribute values will be emitted.
+                        type: array
                         items:
+                            type: object
                             properties:
                                 regexp:
                                     type: string
                                 strict:
                                     type: string
-                            type: object
-                        type: array
-                type: object
-        type: object
+                            additionalProperties: false
+                additionalProperties: false
+        additionalProperties: false
     role:
         type: string
     schema:
-        type: string
-    timeout:
-        description: Duration string (e.g., '1s', '5m', '1h')
-        pattern: ^[0-9]+(ns|us|µs|ms|s|m|h)$
         type: string
     username:
         type: string
     warehouse:
         type: string
-type: object
+additionalProperties: false

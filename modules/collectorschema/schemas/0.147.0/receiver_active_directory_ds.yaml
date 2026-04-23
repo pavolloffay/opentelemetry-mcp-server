@@ -1,108 +1,117 @@
 $schema: https://json-schema.org/draft/2020-12/schema
+title: active_directory_ds receiver configuration
+type: object
 properties:
-    collection_interval:
-        description: Duration string (e.g., '1s', '5m', '1h')
-        pattern: ^[0-9]+(ns|us|µs|ms|s|m|h)$
-        type: string
-    initial_delay:
-        description: Duration string (e.g., '1s', '5m', '1h')
-        pattern: ^[0-9]+(ns|us|µs|ms|s|m|h)$
-        type: string
     metrics:
+        type: object
         properties:
             active_directory.ds.bind.rate:
+                type: object
                 properties:
                     enabled:
                         type: boolean
-                type: object
+                additionalProperties: false
             active_directory.ds.ldap.bind.last_successful.time:
+                type: object
                 properties:
                     enabled:
                         type: boolean
-                type: object
+                additionalProperties: false
             active_directory.ds.ldap.bind.rate:
+                type: object
                 properties:
                     enabled:
                         type: boolean
-                type: object
+                additionalProperties: false
             active_directory.ds.ldap.client.session.count:
+                type: object
                 properties:
                     enabled:
                         type: boolean
-                type: object
+                additionalProperties: false
             active_directory.ds.ldap.search.rate:
+                type: object
                 properties:
                     enabled:
                         type: boolean
-                type: object
+                additionalProperties: false
             active_directory.ds.name_cache.hit_rate:
+                type: object
                 properties:
                     enabled:
                         type: boolean
-                type: object
+                additionalProperties: false
             active_directory.ds.notification.queued:
+                type: object
                 properties:
                     enabled:
                         type: boolean
-                type: object
+                additionalProperties: false
             active_directory.ds.operation.rate:
+                type: object
                 properties:
                     enabled:
                         type: boolean
-                type: object
+                additionalProperties: false
             active_directory.ds.replication.network.io:
+                type: object
                 properties:
                     enabled:
                         type: boolean
-                type: object
+                additionalProperties: false
             active_directory.ds.replication.object.rate:
+                type: object
                 properties:
                     enabled:
                         type: boolean
-                type: object
+                additionalProperties: false
             active_directory.ds.replication.operation.pending:
+                type: object
                 properties:
                     enabled:
                         type: boolean
-                type: object
+                additionalProperties: false
             active_directory.ds.replication.property.rate:
+                type: object
                 properties:
                     enabled:
                         type: boolean
-                type: object
+                additionalProperties: false
             active_directory.ds.replication.sync.object.pending:
+                type: object
                 properties:
                     enabled:
                         type: boolean
-                type: object
+                additionalProperties: false
             active_directory.ds.replication.sync.request.count:
+                type: object
                 properties:
                     enabled:
                         type: boolean
-                type: object
+                additionalProperties: false
             active_directory.ds.replication.value.rate:
+                type: object
                 properties:
                     enabled:
                         type: boolean
-                type: object
+                additionalProperties: false
             active_directory.ds.security_descriptor_propagations_event.queued:
+                type: object
                 properties:
                     enabled:
                         type: boolean
-                type: object
+                additionalProperties: false
             active_directory.ds.suboperation.rate:
+                type: object
                 properties:
                     enabled:
                         type: boolean
-                type: object
+                additionalProperties: false
             active_directory.ds.thread.count:
+                type: object
                 properties:
                     enabled:
                         type: boolean
-                type: object
-        type: object
-    timeout:
-        description: Duration string (e.g., '1s', '5m', '1h')
-        pattern: ^[0-9]+(ns|us|µs|ms|s|m|h)$
-        type: string
-type: object
+                additionalProperties: false
+        additionalProperties: false
+additionalProperties: false

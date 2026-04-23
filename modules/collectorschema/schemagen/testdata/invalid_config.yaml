@@ -1,0 +1,9 @@
+database:
+    host: localhost
+    port: "not_a_number"
+    username: testuser
+    password: secret
+    timeout: 30s
+collection_interval: 1m
+batch_size: "should_be_integer"
+enable_tracing: "not_a_boolean"

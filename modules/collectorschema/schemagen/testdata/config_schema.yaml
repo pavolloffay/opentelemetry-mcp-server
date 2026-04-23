@@ -1,0 +1,64 @@
+$schema: https://json-schema.org/draft/2020-12/schema
+title: test receiver configuration
+type: object
+properties:
+    batch_size:
+        description: BatchSize is the number of items to process in each batch.
+        type: integer
+    collection_interval:
+        description: CollectionInterval is how often to collect data.
+        type: string
+        pattern: ^(0|[-+]?((\d+(\.\d*)?|\.\d+)(ns|us|µs|μs|ms|s|m|h))+)$
+    database:
+        description: Database contains database connection settings.
+        type: object
+        properties:
+            host:
+                description: Host is the database host address.
+                type: string
+            password:
+                description: Password is the database password.
+                type: string
+            port:
+                description: Port is the database port number.
+                type: integer
+            timeout:
+                description: Timeout is the connection timeout.
+                type: string
+                pattern: ^(0|[-+]?((\d+(\.\d*)?|\.\d+)(ns|us|µs|μs|ms|s|m|h))+)$
+            username:
+                description: Username is the database username.
+                type: string
+        additionalProperties: false
+    enable_tracing:
+        description: EnableTracing enables trace collection.
+        type: boolean
+    http_server:
+        description: HTTPServer is an optional HTTP server configuration.
+        type: object
+        properties:
+            endpoint:
+                description: Endpoint is the server address.
+                type: string
+            read_timeout:
+                description: ReadTimeout is the read timeout.
+                type: string
+                pattern: ^(0|[-+]?((\d+(\.\d*)?|\.\d+)(ns|us|µs|μs|ms|s|m|h))+)$
+        additionalProperties: false
+    include_tables:
+        description: IncludeTables is the list of tables to include.
+        type: array
+        items:
+            type: string
+    log_level:
+        description: LogLevel is the logging level.
+        type: string
+    old_endpoint:
+        description: OldEndpoint is deprecated, use Database.Host instead.
+        type: string
+    table_aliases:
+        description: TableAliases maps table aliases to full table names.
+        type: object
+        additionalProperties:
+            type: string
+additionalProperties: false

@@ -1,0 +1,16 @@
+database:
+    host: localhost
+    port: 5432
+    username: testuser
+    password: secret
+    timeout: 30s
+collection_interval: 1m
+batch_size: 100
+enable_tracing: true
+log_level: info
+include_tables:
+    - users
+    - orders
+table_aliases:
+    u: users
+    o: orders

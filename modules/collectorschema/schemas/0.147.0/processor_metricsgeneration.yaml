@@ -1,8 +1,12 @@
 $schema: https://json-schema.org/draft/2020-12/schema
+title: metricsgeneration processor configuration
+type: object
 properties:
     rules:
         description: Set of rules for generating new metrics
+        type: array
         items:
+            type: object
             properties:
                 metric1:
                     description: First operand metric to use in the calculation. This is a required field.
@@ -25,6 +29,5 @@ properties:
                 unit:
                     description: Unit for the new metric being generated.
                     type: string
-            type: object
-        type: array
-type: object
+            additionalProperties: false
+additionalProperties: false

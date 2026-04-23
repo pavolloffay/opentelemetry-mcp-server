@@ -1,52 +1,74 @@
 $schema: https://json-schema.org/draft/2020-12/schema
+title: metricstransform processor configuration
+type: object
 properties:
     transforms:
         description: transform specifies a list of transforms on metrics with each transform focusing on one metric.
+        type: array
         items:
+            type: object
             properties:
                 action:
-                    description: Action specifies the action performed on the matched metric. Action specifies if the operations (specified below) are performed on metrics in place (update), on an inserted clone (insert), or on a new combined metric that includes all data points from the set of matching metrics (combine). REQUIRED
+                    description: |-
+                        Action specifies the action performed on the matched metric. Action specifies
+                        if the operations (specified below) are performed on metrics in place (update),
+                        on an inserted clone (insert), or on a new combined metric that includes all
+                        data points from the set of matching metrics (combine).
+                        REQUIRED
                     type: string
                 aggregation_type:
-                    description: AggregationType specifies how to aggregate. REQUIRED only if Action is COMBINE.
+                    description: |-
+                        AggregationType specifies how to aggregate.
+                        REQUIRED only if Action is COMBINE.
                     type: string
-                group_resource_labels:
+                experimental_match_labels:
+                    description: |-
+                        MatchLabels specifies the label set against which the metric filter will work.
+                        This field is optional.
+                    type: object
                     additionalProperties:
                         type: string
-                    description: GroupResourceLabels specifies resource labels that will be appended to this group's new ResourceMetrics message REQUIRED only if Action is GROUP
+                group_resource_labels:
+                    description: |-
+                        GroupResourceLabels specifies resource labels that will be appended to this group's new ResourceMetrics message
+                        REQUIRED only if Action is GROUP
                     type: object
-                metricincludefilter:
-                    description: MetricIncludeFilter is used to select the metric(s) to operate on. REQUIRED
-                    properties:
-                        experimental_match_labels:
-                            additionalProperties:
-                                type: string
-                            description: MatchLabels specifies the label set against which the metric filter will work. This field is optional.
-                            type: object
-                        include:
-                            description: Include specifies the metric(s) to operate on.
-                            type: string
-                        match_type:
-                            description: 'MatchType determines how the Include string is matched: <strict|regexp>.'
-                            type: string
-                    type: object
+                    additionalProperties:
+                        type: string
+                include:
+                    description: Include specifies the metric(s) to operate on.
+                    type: string
+                match_type:
+                    description: 'MatchType determines how the Include string is matched: <strict|regexp>.'
+                    type: string
                 new_name:
-                    description: NewName specifies the name of the new metric when inserting or updating. REQUIRED only if Action is INSERT.
+                    description: |-
+                        NewName specifies the name of the new metric when inserting or updating.
+                        REQUIRED only if Action is INSERT.
                     type: string
                 operations:
                     description: Operations contains a list of operations that will be performed on the resulting metric(s).
+                    type: array
                     items:
+                        type: object
                         properties:
                             action:
-                                description: Action specifies the action performed for this operation. REQUIRED
+                                description: |-
+                                    Action specifies the action performed on the matched metric. Action specifies
+                                    if the operations (specified below) are performed on metrics in place (update),
+                                    on an inserted clone (insert), or on a new combined metric that includes all
+                                    data points from the set of matching metrics (combine).
+                                    REQUIRED
                                 type: string
                             aggregated_values:
                                 description: AggregatedValues is a list of label values to aggregate away.
+                                type: array
                                 items:
                                     type: string
-                                type: array
                             aggregation_type:
-                                description: AggregationType specifies how to aggregate.
+                                description: |-
+                                    AggregationType specifies how to aggregate.
+                                    REQUIRED only if Action is COMBINE.
                                 type: string
                             experimental_scale:
                                 description: Scale is a scalar to multiply the values with.
@@ -56,9 +78,9 @@ properties:
                                 type: string
                             label_set:
                                 description: LabelSet is a list of labels to keep. All other labels are aggregated based on the AggregationType.
+                                type: array
                                 items:
                                     type: string
-                                type: array
                             label_value:
                                 description: LabelValue identifies the exact label value to operate on
                                 type: string
@@ -70,21 +92,20 @@ properties:
                                 type: string
                             value_actions:
                                 description: ValueActions is a list of renaming actions for label values.
+                                type: array
                                 items:
+                                    type: object
                                     properties:
                                         new_value:
-                                            description: NewValue specifies the label value to rename to.
+                                            description: NewValue is used to set a new label value either when the operation is `AggregatedValues` or `addLabel`.
                                             type: string
                                         value:
                                             description: Value specifies the current label value.
                                             type: string
-                                    type: object
-                                type: array
-                        type: object
-                    type: array
+                                    additionalProperties: false
+                        additionalProperties: false
                 submatch_case:
                     description: SubmatchCase specifies what case to use for label values created from regexp submatches.
                     type: string
-            type: object
-        type: array
-type: object
+            additionalProperties: false
+additionalProperties: false

@@ -1,8 +1,12 @@
 $schema: https://json-schema.org/draft/2020-12/schema
+title: pulsar receiver configuration
+type: object
 properties:
     auth:
+        type: object
         properties:
             athenz:
+                type: object
                 properties:
                     key_id:
                         type: string
@@ -18,8 +22,9 @@ properties:
                         type: string
                     zts_url:
                         type: string
-                type: object
+                additionalProperties: false
             oauth2:
+                type: object
                 properties:
                     audience:
                         type: string
@@ -31,20 +36,22 @@ properties:
                         type: string
                     scope:
                         type: string
-                type: object
+                additionalProperties: false
             tls:
+                type: object
                 properties:
                     cert_file:
                         type: string
                     key_file:
                         type: string
-                type: object
+                additionalProperties: false
             token:
+                type: object
                 properties:
                     token:
                         type: string
-                type: object
-        type: object
+                additionalProperties: false
+        additionalProperties: false
     consumer_name:
         description: Name specifies the consumer name.
         type: string
@@ -64,6 +71,8 @@ properties:
         description: Set the path to the trusted TLS certificate file
         type: string
     topic:
-        description: The topic of pulsar to consume logs,metrics,traces. (default = "otlp_traces" for traces, "otlp_metrics" for metrics, "otlp_logs" for logs)
+        description: |-
+            The topic of pulsar to consume logs,metrics,traces. (default = "otlp_traces" for traces,
+            "otlp_metrics" for metrics, "otlp_logs" for logs)
         type: string
-type: object
+additionalProperties: false

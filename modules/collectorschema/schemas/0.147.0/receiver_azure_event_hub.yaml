@@ -1,12 +1,15 @@
 $schema: https://json-schema.org/draft/2020-12/schema
+title: azure_event_hub receiver configuration
+type: object
 properties:
     apply_semantic_conventions:
         type: boolean
     auth:
-        type: object
+        type: string
     connection:
         type: string
     event_hub:
+        type: object
         properties:
             name:
                 description: Name is the name of the Event Hub.
@@ -14,7 +17,7 @@ properties:
             namespace:
                 description: Namespace is the fully qualified namespace of the Event Hub.
                 type: string
-        type: object
+        additionalProperties: false
     format:
         type: string
     group:
@@ -31,20 +34,21 @@ properties:
         description: azeventhub lib specific
         type: integer
     storage:
-        type: object
+        type: string
     time_formats:
+        type: object
         properties:
             logs:
+                type: array
                 items:
                     type: string
-                type: array
             metrics:
+                type: array
                 items:
                     type: string
-                type: array
             traces:
+                type: array
                 items:
                     type: string
-                type: array
-        type: object
-type: object
+        additionalProperties: false
+additionalProperties: false

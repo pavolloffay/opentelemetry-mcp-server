@@ -1,9 +1,13 @@
 $schema: https://json-schema.org/draft/2020-12/schema
+title: headers_setter extension configuration
+type: object
 properties:
     additional_auth:
-        type: object
+        type: string
     headers:
+        type: array
         items:
+            type: object
             properties:
                 action:
                     type: string
@@ -17,6 +21,5 @@ properties:
                     type: string
                 value:
                     type: string
-            type: object
-        type: array
-type: object
+            additionalProperties: false
+additionalProperties: false

@@ -1,129 +1,29 @@
 $schema: https://json-schema.org/draft/2020-12/schema
+title: count connector configuration
+type: object
 properties:
     datapoints:
-        additionalProperties:
-            properties:
-                attributes:
-                    items:
-                        properties:
-                            default_value:
-                                additionalProperties: true
-                                type: object
-                            key:
-                                type: string
-                        type: object
-                    type: array
-                conditions:
-                    items:
-                        type: string
-                    type: array
-                description:
-                    type: string
-            type: object
         type: object
+        additionalProperties:
+            type: object
     logs:
-        additionalProperties:
-            properties:
-                attributes:
-                    items:
-                        properties:
-                            default_value:
-                                additionalProperties: true
-                                type: object
-                            key:
-                                type: string
-                        type: object
-                    type: array
-                conditions:
-                    items:
-                        type: string
-                    type: array
-                description:
-                    type: string
-            type: object
         type: object
+        additionalProperties:
+            type: object
     metrics:
-        additionalProperties:
-            properties:
-                attributes:
-                    items:
-                        properties:
-                            default_value:
-                                additionalProperties: true
-                                type: object
-                            key:
-                                type: string
-                        type: object
-                    type: array
-                conditions:
-                    items:
-                        type: string
-                    type: array
-                description:
-                    type: string
-            type: object
         type: object
+        additionalProperties:
+            type: object
     profiles:
-        additionalProperties:
-            properties:
-                attributes:
-                    items:
-                        properties:
-                            default_value:
-                                additionalProperties: true
-                                type: object
-                            key:
-                                type: string
-                        type: object
-                    type: array
-                conditions:
-                    items:
-                        type: string
-                    type: array
-                description:
-                    type: string
-            type: object
         type: object
+        additionalProperties:
+            type: object
     spanevents:
-        additionalProperties:
-            properties:
-                attributes:
-                    items:
-                        properties:
-                            default_value:
-                                additionalProperties: true
-                                type: object
-                            key:
-                                type: string
-                        type: object
-                    type: array
-                conditions:
-                    items:
-                        type: string
-                    type: array
-                description:
-                    type: string
-            type: object
         type: object
+        additionalProperties:
+            type: object
     spans:
-        additionalProperties:
-            properties:
-                attributes:
-                    items:
-                        properties:
-                            default_value:
-                                additionalProperties: true
-                                type: object
-                            key:
-                                type: string
-                        type: object
-                    type: array
-                conditions:
-                    items:
-                        type: string
-                    type: array
-                description:
-                    type: string
-            type: object
         type: object
-type: object
+        additionalProperties:
+            type: object
+additionalProperties: false

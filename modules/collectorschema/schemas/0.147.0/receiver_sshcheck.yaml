@@ -1,97 +1,103 @@
 $schema: https://json-schema.org/draft/2020-12/schema
+title: sshcheck receiver configuration
+type: object
 properties:
     check_sftp:
         type: boolean
-    collection_interval:
-        description: Duration string (e.g., '1s', '5m', '1h')
-        pattern: ^[0-9]+(ns|us|µs|ms|s|m|h)$
-        type: string
     endpoint:
         description: Endpoint is always required
         type: string
     ignore_host_key:
         description: IgnoreHostKey provides an insecure path to quickstarts and testing
         type: boolean
-    initial_delay:
-        description: Duration string (e.g., '1s', '5m', '1h')
-        pattern: ^[0-9]+(ns|us|µs|ms|s|m|h)$
-        type: string
     key_file:
         type: string
     known_hosts:
         description: file path to the known_hosts
         type: string
-    metricsbuilderconfig:
-        properties:
-            metrics:
-                properties:
-                    sshcheck.duration:
-                        properties:
-                            enabled:
-                                type: boolean
-                        type: object
-                    sshcheck.error:
-                        properties:
-                            enabled:
-                                type: boolean
-                        type: object
-                    sshcheck.sftp_duration:
-                        properties:
-                            enabled:
-                                type: boolean
-                        type: object
-                    sshcheck.sftp_error:
-                        properties:
-                            enabled:
-                                type: boolean
-                        type: object
-                    sshcheck.sftp_status:
-                        properties:
-                            enabled:
-                                type: boolean
-                        type: object
-                    sshcheck.status:
-                        properties:
-                            enabled:
-                                type: boolean
-                        type: object
-                type: object
-            resource_attributes:
-                properties:
-                    ssh.endpoint:
-                        properties:
-                            enabled:
-                                type: boolean
-                            metrics_exclude:
-                                description: 'Experimental: MetricsExclude defines a list of filters for attribute values. If the list is not empty, metrics with matching resource attribute values will not be emitted. MetricsInclude has higher priority than MetricsExclude.'
-                                items:
-                                    properties:
-                                        regexp:
-                                            type: string
-                                        strict:
-                                            type: string
-                                    type: object
-                                type: array
-                            metrics_include:
-                                description: 'Experimental: MetricsInclude defines a list of filters for attribute values. If the list is not empty, only metrics with matching resource attribute values will be emitted.'
-                                items:
-                                    properties:
-                                        regexp:
-                                            type: string
-                                        strict:
-                                            type: string
-                                    type: object
-                                type: array
-                        type: object
-                type: object
+    metrics:
         type: object
+        properties:
+            sshcheck.duration:
+                type: object
+                properties:
+                    enabled:
+                        type: boolean
+                additionalProperties: false
+            sshcheck.error:
+                type: object
+                properties:
+                    enabled:
+                        type: boolean
+                additionalProperties: false
+            sshcheck.sftp_duration:
+                type: object
+                properties:
+                    enabled:
+                        type: boolean
+                additionalProperties: false
+            sshcheck.sftp_error:
+                type: object
+                properties:
+                    enabled:
+                        type: boolean
+                additionalProperties: false
+            sshcheck.sftp_status:
+                type: object
+                properties:
+                    enabled:
+                        type: boolean
+                additionalProperties: false
+            sshcheck.status:
+                type: object
+                properties:
+                    enabled:
+                        type: boolean
+                additionalProperties: false
+        additionalProperties: false
     password:
         type: string
+    resource_attributes:
+        type: object
+        properties:
+            ssh.endpoint:
+                type: object
+                properties:
+                    enabled:
+                        type: boolean
+                    metrics_exclude:
+                        description: |-
+                            Experimental: MetricsExclude defines a list of filters for attribute values.
+                            If the list is not empty, metrics with matching resource attribute values will not be emitted.
+                            MetricsInclude has higher priority than MetricsExclude.
+                        type: array
+                        items:
+                            type: object
+                            properties:
+                                regexp:
+                                    type: string
+                                strict:
+                                    type: string
+                            additionalProperties: false
+                    metrics_include:
+                        description: |-
+                            Experimental: MetricsInclude defines a list of filters for attribute values.
+                            If the list is not empty, only metrics with matching resource attribute values will be emitted.
+                        type: array
+                        items:
+                            type: object
+                            properties:
+                                regexp:
+                                    type: string
+                                strict:
+                                    type: string
+                            additionalProperties: false
+                additionalProperties: false
+        additionalProperties: false
     timeout:
-        description: Duration string (e.g., '1s', '5m', '1h')
-        pattern: ^[0-9]+(ns|us|µs|ms|s|m|h)$
         type: string
+        pattern: ^(0|[-+]?((\d+(\.\d*)?|\.\d+)(ns|us|µs|μs|ms|s|m|h))+)$
     username:
         description: authentication requires a Username and either a Password or KeyFile
         type: string
-type: object
+additionalProperties: false

@@ -1,55 +1,56 @@
 $schema: https://json-schema.org/draft/2020-12/schema
+title: ntp receiver configuration
+type: object
 properties:
-    collection_interval:
-        description: Duration string (e.g., '1s', '5m', '1h')
-        pattern: ^[0-9]+(ns|us|µs|ms|s|m|h)$
-        type: string
     endpoint:
         type: string
-    initial_delay:
-        description: Duration string (e.g., '1s', '5m', '1h')
-        pattern: ^[0-9]+(ns|us|µs|ms|s|m|h)$
-        type: string
     metrics:
+        type: object
         properties:
             ntp.offset:
+                type: object
                 properties:
                     enabled:
                         type: boolean
-                type: object
-        type: object
+                additionalProperties: false
+        additionalProperties: false
     resource_attributes:
+        type: object
         properties:
             ntp.host:
+                type: object
                 properties:
                     enabled:
                         type: boolean
                     metrics_exclude:
-                        description: 'Experimental: MetricsExclude defines a list of filters for attribute values. If the list is not empty, metrics with matching resource attribute values will not be emitted. MetricsInclude has higher priority than MetricsExclude.'
+                        description: |-
+                            Experimental: MetricsExclude defines a list of filters for attribute values.
+                            If the list is not empty, metrics with matching resource attribute values will not be emitted.
+                            MetricsInclude has higher priority than MetricsExclude.
+                        type: array
                         items:
+                            type: object
                             properties:
                                 regexp:
                                     type: string
                                 strict:
                                     type: string
-                            type: object
-                        type: array
+                            additionalProperties: false
                     metrics_include:
-                        description: 'Experimental: MetricsInclude defines a list of filters for attribute values. If the list is not empty, only metrics with matching resource attribute values will be emitted.'
+                        description: |-
+                            Experimental: MetricsInclude defines a list of filters for attribute values.
+                            If the list is not empty, only metrics with matching resource attribute values will be emitted.
+                        type: array
                         items:
+                            type: object
                             properties:
                                 regexp:
                                     type: string
                                 strict:
                                     type: string
-                            type: object
-                        type: array
-                type: object
-        type: object
-    timeout:
-        description: Duration string (e.g., '1s', '5m', '1h')
-        pattern: ^[0-9]+(ns|us|µs|ms|s|m|h)$
-        type: string
+                            additionalProperties: false
+                additionalProperties: false
+        additionalProperties: false
     version:
         type: integer
-type: object
+additionalProperties: false

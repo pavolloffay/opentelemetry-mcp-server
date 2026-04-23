@@ -1,185 +1,220 @@
 $schema: https://json-schema.org/draft/2020-12/schema
+title: podman_stats receiver configuration
+type: object
 properties:
     api_version:
-        type: string
-    collection_interval:
-        description: Duration string (e.g., '1s', '5m', '1h')
-        pattern: ^[0-9]+(ns|us|µs|ms|s|m|h)$
         type: string
     endpoint:
         description: The URL of the podman server.  Default is "unix:///run/podman/podman.sock"
         type: string
-    initial_delay:
-        description: Duration string (e.g., '1s', '5m', '1h')
-        pattern: ^[0-9]+(ns|us|µs|ms|s|m|h)$
-        type: string
     metrics:
+        type: object
         properties:
             container.blockio.io_service_bytes_recursive.read:
+                type: object
                 properties:
                     enabled:
                         type: boolean
-                type: object
+                additionalProperties: false
             container.blockio.io_service_bytes_recursive.write:
+                type: object
                 properties:
                     enabled:
                         type: boolean
-                type: object
+                additionalProperties: false
             container.cpu.percent:
+                type: object
                 properties:
                     enabled:
                         type: boolean
-                type: object
+                additionalProperties: false
             container.cpu.usage.percpu:
+                type: object
                 properties:
                     enabled:
                         type: boolean
-                type: object
+                additionalProperties: false
             container.cpu.usage.system:
+                type: object
                 properties:
                     enabled:
                         type: boolean
-                type: object
+                additionalProperties: false
             container.cpu.usage.total:
+                type: object
                 properties:
                     enabled:
                         type: boolean
-                type: object
+                additionalProperties: false
             container.memory.percent:
+                type: object
                 properties:
                     enabled:
                         type: boolean
-                type: object
+                additionalProperties: false
             container.memory.usage.limit:
+                type: object
                 properties:
                     enabled:
                         type: boolean
-                type: object
+                additionalProperties: false
             container.memory.usage.total:
+                type: object
                 properties:
                     enabled:
                         type: boolean
-                type: object
+                additionalProperties: false
             container.network.io.usage.rx_bytes:
+                type: object
                 properties:
                     enabled:
                         type: boolean
-                type: object
+                additionalProperties: false
             container.network.io.usage.tx_bytes:
+                type: object
                 properties:
                     enabled:
                         type: boolean
-                type: object
-        type: object
+                additionalProperties: false
+        additionalProperties: false
     resource_attributes:
+        type: object
         properties:
             container.id:
+                type: object
                 properties:
                     enabled:
                         type: boolean
                     metrics_exclude:
-                        description: 'Experimental: MetricsExclude defines a list of filters for attribute values. If the list is not empty, metrics with matching resource attribute values will not be emitted. MetricsInclude has higher priority than MetricsExclude.'
+                        description: |-
+                            Experimental: MetricsExclude defines a list of filters for attribute values.
+                            If the list is not empty, metrics with matching resource attribute values will not be emitted.
+                            MetricsInclude has higher priority than MetricsExclude.
+                        type: array
                         items:
+                            type: object
                             properties:
                                 regexp:
                                     type: string
                                 strict:
                                     type: string
-                            type: object
-                        type: array
+                            additionalProperties: false
                     metrics_include:
-                        description: 'Experimental: MetricsInclude defines a list of filters for attribute values. If the list is not empty, only metrics with matching resource attribute values will be emitted.'
+                        description: |-
+                            Experimental: MetricsInclude defines a list of filters for attribute values.
+                            If the list is not empty, only metrics with matching resource attribute values will be emitted.
+                        type: array
                         items:
+                            type: object
                             properties:
                                 regexp:
                                     type: string
                                 strict:
                                     type: string
-                            type: object
-                        type: array
-                type: object
+                            additionalProperties: false
+                additionalProperties: false
             container.image.name:
+                type: object
                 properties:
                     enabled:
                         type: boolean
                     metrics_exclude:
-                        description: 'Experimental: MetricsExclude defines a list of filters for attribute values. If the list is not empty, metrics with matching resource attribute values will not be emitted. MetricsInclude has higher priority than MetricsExclude.'
+                        description: |-
+                            Experimental: MetricsExclude defines a list of filters for attribute values.
+                            If the list is not empty, metrics with matching resource attribute values will not be emitted.
+                            MetricsInclude has higher priority than MetricsExclude.
+                        type: array
                         items:
+                            type: object
                             properties:
                                 regexp:
                                     type: string
                                 strict:
                                     type: string
-                            type: object
-                        type: array
+                            additionalProperties: false
                     metrics_include:
-                        description: 'Experimental: MetricsInclude defines a list of filters for attribute values. If the list is not empty, only metrics with matching resource attribute values will be emitted.'
+                        description: |-
+                            Experimental: MetricsInclude defines a list of filters for attribute values.
+                            If the list is not empty, only metrics with matching resource attribute values will be emitted.
+                        type: array
                         items:
+                            type: object
                             properties:
                                 regexp:
                                     type: string
                                 strict:
                                     type: string
-                            type: object
-                        type: array
-                type: object
+                            additionalProperties: false
+                additionalProperties: false
             container.name:
+                type: object
                 properties:
                     enabled:
                         type: boolean
                     metrics_exclude:
-                        description: 'Experimental: MetricsExclude defines a list of filters for attribute values. If the list is not empty, metrics with matching resource attribute values will not be emitted. MetricsInclude has higher priority than MetricsExclude.'
+                        description: |-
+                            Experimental: MetricsExclude defines a list of filters for attribute values.
+                            If the list is not empty, metrics with matching resource attribute values will not be emitted.
+                            MetricsInclude has higher priority than MetricsExclude.
+                        type: array
                         items:
+                            type: object
                             properties:
                                 regexp:
                                     type: string
                                 strict:
                                     type: string
-                            type: object
-                        type: array
+                            additionalProperties: false
                     metrics_include:
-                        description: 'Experimental: MetricsInclude defines a list of filters for attribute values. If the list is not empty, only metrics with matching resource attribute values will be emitted.'
+                        description: |-
+                            Experimental: MetricsInclude defines a list of filters for attribute values.
+                            If the list is not empty, only metrics with matching resource attribute values will be emitted.
+                        type: array
                         items:
+                            type: object
                             properties:
                                 regexp:
                                     type: string
                                 strict:
                                     type: string
-                            type: object
-                        type: array
-                type: object
+                            additionalProperties: false
+                additionalProperties: false
             container.runtime:
+                type: object
                 properties:
                     enabled:
                         type: boolean
                     metrics_exclude:
-                        description: 'Experimental: MetricsExclude defines a list of filters for attribute values. If the list is not empty, metrics with matching resource attribute values will not be emitted. MetricsInclude has higher priority than MetricsExclude.'
+                        description: |-
+                            Experimental: MetricsExclude defines a list of filters for attribute values.
+                            If the list is not empty, metrics with matching resource attribute values will not be emitted.
+                            MetricsInclude has higher priority than MetricsExclude.
+                        type: array
                         items:
+                            type: object
                             properties:
                                 regexp:
                                     type: string
                                 strict:
                                     type: string
-                            type: object
-                        type: array
+                            additionalProperties: false
                     metrics_include:
-                        description: 'Experimental: MetricsInclude defines a list of filters for attribute values. If the list is not empty, only metrics with matching resource attribute values will be emitted.'
+                        description: |-
+                            Experimental: MetricsInclude defines a list of filters for attribute values.
+                            If the list is not empty, only metrics with matching resource attribute values will be emitted.
+                        type: array
                         items:
+                            type: object
                             properties:
                                 regexp:
                                     type: string
                                 strict:
                                     type: string
-                            type: object
-                        type: array
-                type: object
-        type: object
+                            additionalProperties: false
+                additionalProperties: false
+        additionalProperties: false
     ssh_key:
         type: string
     ssh_passphrase:
         type: string
-    timeout:
-        description: Duration string (e.g., '1s', '5m', '1h')
-        pattern: ^[0-9]+(ns|us|µs|ms|s|m|h)$
-        type: string
-type: object
+additionalProperties: false

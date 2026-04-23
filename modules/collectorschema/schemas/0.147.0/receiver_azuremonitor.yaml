@@ -1,16 +1,25 @@
 $schema: https://json-schema.org/draft/2020-12/schema
+title: azuremonitor receiver configuration
+type: object
 properties:
     append_tags_as_attributes:
+        type: array
         items:
             type: string
-        type: array
     auth:
-        description: Authentication accepts the component azureauthextension, and uses it to get an access token to make requests. Using this, `credentials` and any related fields become useless.
+        description: |-
+            Authentication accepts the component azureauthextension,
+            and uses it to get an access token to make requests.
+            Using this, `credentials` and any related fields become
+            useless.
+        type: object
         properties:
             authenticator:
-                description: AuthenticatorID specifies the name of the azure extension to authenticate the requests to azure monitor.
-                type: object
-        type: object
+                description: |-
+                    AuthenticatorID specifies the name of the azure extension to authenticate the
+                    requests to azure monitor.
+                type: string
+        additionalProperties: false
     cache_resources:
         type: number
     cache_resources_definitions:
@@ -21,31 +30,20 @@ properties:
         type: string
     cloud:
         type: string
-    collection_interval:
-        description: Duration string (e.g., '1s', '5m', '1h')
-        pattern: ^[0-9]+(ns|us|µs|ms|s|m|h)$
-        type: string
     credentials:
-        deprecated: true
         description: 'Deprecated: Credentials is deprecated.'
         type: string
     dimensions:
+        type: object
         properties:
             enabled:
                 type: boolean
             overrides:
-                additionalProperties:
-                    additionalProperties: true
-                    type: object
                 type: object
-        type: object
+        additionalProperties: false
     discover_subscriptions:
         type: boolean
     federated_token_file:
-        type: string
-    initial_delay:
-        description: Duration string (e.g., '1s', '5m', '1h')
-        pattern: ^[0-9]+(ns|us|µs|ms|s|m|h)$
         type: string
     maximum_number_of_metrics_in_a_call:
         type: integer
@@ -54,49 +52,43 @@ properties:
     maximum_resources_per_batch:
         type: integer
     metrics:
-        additionalProperties:
-            additionalProperties: true
-            type: object
         type: object
-    metricsbuilderconfig:
+    resource_attributes:
+        type: object
         properties:
-            resource_attributes:
-                properties:
-                    azuremonitor.subscription:
-                        properties:
-                            enabled:
-                                type: boolean
-                        type: object
-                    azuremonitor.subscription_id:
-                        properties:
-                            enabled:
-                                type: boolean
-                        type: object
-                    azuremonitor.tenant_id:
-                        properties:
-                            enabled:
-                                type: boolean
-                        type: object
+            azuremonitor.subscription:
                 type: object
-        type: object
+                properties:
+                    enabled:
+                        type: boolean
+                additionalProperties: false
+            azuremonitor.subscription_id:
+                type: object
+                properties:
+                    enabled:
+                        type: boolean
+                additionalProperties: false
+            azuremonitor.tenant_id:
+                type: object
+                properties:
+                    enabled:
+                        type: boolean
+                additionalProperties: false
+        additionalProperties: false
     resource_groups:
+        type: array
         items:
             type: string
-        type: array
     services:
+        type: array
         items:
             type: string
-        type: array
     subscription_ids:
+        type: array
         items:
             type: string
-        type: array
     tenant_id:
-        type: string
-    timeout:
-        description: Duration string (e.g., '1s', '5m', '1h')
-        pattern: ^[0-9]+(ns|us|µs|ms|s|m|h)$
         type: string
     use_batch_api:
         type: boolean
-type: object
+additionalProperties: false

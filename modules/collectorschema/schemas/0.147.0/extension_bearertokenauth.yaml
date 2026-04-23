@@ -1,4 +1,6 @@
 $schema: https://json-schema.org/draft/2020-12/schema
+title: bearertokenauth extension configuration
+type: object
 properties:
     filename:
         description: Filename points to a file that contains the bearer token(s) to use for every RPC.
@@ -14,7 +16,5 @@ properties:
         type: string
     tokens:
         description: Tokens specifies multiple bearer tokens to use for every RPC.
-        items:
-            type: string
-        type: array
-type: object
+        type: string
+additionalProperties: false

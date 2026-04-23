@@ -1,22 +1,27 @@
 $schema: https://json-schema.org/draft/2020-12/schema
+title: awss3 receiver configuration
+type: object
 properties:
     encodings:
+        type: array
         items:
+            type: object
             properties:
                 extension:
-                    type: object
+                    type: string
                 suffix:
                     type: string
-            type: object
-        type: array
+            additionalProperties: false
     endtime:
         type: string
     notifications:
+        type: object
         properties:
             opampextension:
-                type: object
-        type: object
+                type: string
+        additionalProperties: false
     s3downloader:
+        type: object
         properties:
             endpoint:
                 type: string
@@ -38,26 +43,29 @@ properties:
                 type: string
             s3_prefix:
                 type: string
-        type: object
+        additionalProperties: false
     sqs:
         description: SQS configures receiving S3 object change notifications via an SQS queue.
+        type: object
         properties:
             endpoint:
-                description: Endpoint is the optional custom endpoint for SQS (useful for testing).
                 type: string
             max_number_of_messages:
-                description: 'MaxNumberOfMessages specifies the maximum number of messages to receive in a single poll. Valid values: 1-10. Default is 10.'
+                description: |-
+                    MaxNumberOfMessages specifies the maximum number of messages to receive in a single poll.
+                    Valid values: 1-10. Default is 10.
                 type: integer
             queue_url:
                 description: QueueURL is the URL of the SQS queue to receive S3 notifications.
                 type: string
             region:
-                description: Region specifies the AWS region of the SQS queue.
                 type: string
             wait_time_seconds:
-                description: WaitTimeSeconds specifies the duration (in seconds) for long polling SQS messages. Maximum is 20 seconds. Default is 20 seconds.
+                description: |-
+                    WaitTimeSeconds specifies the duration (in seconds) for long polling SQS messages.
+                    Maximum is 20 seconds. Default is 20 seconds.
                 type: integer
-        type: object
+        additionalProperties: false
     starttime:
         type: string
-type: object
+additionalProperties: false

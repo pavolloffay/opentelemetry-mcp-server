@@ -1,22 +1,17 @@
 $schema: https://json-schema.org/draft/2020-12/schema
+title: hostmetrics receiver configuration
+type: object
 properties:
-    collection_interval:
-        description: Duration string (e.g., '1s', '5m', '1h')
-        pattern: ^[0-9]+(ns|us|µs|ms|s|m|h)$
-        type: string
-    initial_delay:
-        description: Duration string (e.g., '1s', '5m', '1h')
-        pattern: ^[0-9]+(ns|us|µs|ms|s|m|h)$
-        type: string
     metadata_collection_interval:
-        description: Duration string (e.g., '1s', '5m', '1h')
-        pattern: ^[0-9]+(ns|us|µs|ms|s|m|h)$
+        description: |-
+            Collection interval for metadata.
+            Metadata of the particular entity is collected when the entity changes.
+            In addition metadata of all entities is collected periodically even if no changes happen.
+            Setting the duration to 0 will disable periodic collection (however will not impact
+            metadata collection on changes).
         type: string
+        pattern: ^(0|[-+]?((\d+(\.\d*)?|\.\d+)(ns|us|µs|μs|ms|s|m|h))+)$
     root_path:
         description: RootPath is the host's root directory (linux only).
         type: string
-    timeout:
-        description: Duration string (e.g., '1s', '5m', '1h')
-        pattern: ^[0-9]+(ns|us|µs|ms|s|m|h)$
-        type: string
-type: object
+additionalProperties: false

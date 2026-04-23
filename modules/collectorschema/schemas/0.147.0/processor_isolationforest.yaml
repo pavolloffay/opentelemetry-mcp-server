@@ -1,7 +1,10 @@
 $schema: https://json-schema.org/draft/2020-12/schema
+title: isolationforest processor configuration
+type: object
 properties:
     adaptive_window:
         description: Adaptive window sizing configuration
+        type: object
         properties:
             adaptation_rate:
                 description: Adjustment speed (0.0-1.0)
@@ -24,26 +27,27 @@ properties:
             velocity_threshold:
                 description: Optional parameters with defaults
                 type: number
-        type: object
+        additionalProperties: false
     classification_attribute:
         type: string
     contamination_rate:
         type: number
     features:
+        type: object
         properties:
             logs:
+                type: array
                 items:
                     type: string
-                type: array
             metrics:
+                type: array
                 items:
                     type: string
-                type: array
             traces:
+                type: array
                 items:
                     type: string
-                type: array
-        type: object
+        additionalProperties: false
     forest_size:
         type: integer
     min_samples:
@@ -51,29 +55,31 @@ properties:
     mode:
         type: string
     models:
+        type: array
         items:
+            type: object
             properties:
                 contamination_rate:
                     type: number
                 features:
+                    type: array
                     items:
                         type: string
-                    type: array
                 forest_size:
                     type: integer
                 name:
                     type: string
                 selector:
+                    type: object
                     additionalProperties:
                         type: string
-                    type: object
                 subsample_size:
                     type: integer
                 threshold:
                     type: number
-            type: object
-        type: array
+            additionalProperties: false
     performance:
+        type: object
         properties:
             batch_size:
                 type: integer
@@ -81,7 +87,7 @@ properties:
                 type: integer
             parallel_workers:
                 type: integer
-        type: object
+        additionalProperties: false
     score_attribute:
         type: string
     subsample_size:
@@ -92,4 +98,4 @@ properties:
         type: string
     update_frequency:
         type: string
-type: object
+additionalProperties: false

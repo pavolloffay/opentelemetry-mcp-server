@@ -5,10 +5,6 @@ import (
 	"os"
 	"path/filepath"
 	"testing"
-
-	"go.opentelemetry.io/collector/component"
-	"go.opentelemetry.io/collector/exporter"
-	"go.opentelemetry.io/collector/receiver"
 )
 
 // TestGenerateAllSchemas tests the schema generator by generating YAML schemas for all components
@@ -74,7 +70,7 @@ func verifyGeneratedSchemas(t *testing.T, schemaOutputDir string) error {
 	return nil
 }
 
-// TestSchemaGeneratorIndividualComponent tests schema generation for a single component
+// TestSchemaGeneratorIndividualComponent tests schema generation for a single component via module path
 func TestSchemaGeneratorIndividualComponent(t *testing.T) {
 	// Get component factories
 	factories, err := components()
@@ -83,7 +79,7 @@ func TestSchemaGeneratorIndividualComponent(t *testing.T) {
 	}
 
 	// Create a temporary directory for this test
-	tmpDir := "test_schemas"
+	tmpDir := "test_schemas_individual"
 	if err := os.MkdirAll(tmpDir, 0755); err != nil {
 		t.Fatalf("Failed to create temp directory: %v", err)
 	}
@@ -92,91 +88,25 @@ func TestSchemaGeneratorIndividualComponent(t *testing.T) {
 	// Create schema generator
 	generator := NewSchemaGenerator(tmpDir)
 
-	// Test with OTLP receiver (should exist in all builds)
-	var otlpType component.Type
-	var otlpFactory receiver.Factory
-	found := false
-
-	// Find the OTLP receiver type from factories
-	for ctype, factory := range factories.Receivers {
+	// Test with OTLP receiver using the module path approach
+	for ctype, modulePath := range factories.ReceiverModules {
 		if ctype.String() == "otlp" {
-			otlpType = ctype
-			otlpFactory = factory
-			found = true
-			break
+			if err := generator.generateSchemaForModule("receiver", ctype, modulePath); err != nil {
+				t.Fatalf("Failed to generate schema for OTLP receiver: %v", err)
+			}
+
+			// Verify file was created
+			expectedFile := filepath.Join(tmpDir, "receiver_otlp.yaml")
+			if _, err := os.Stat(expectedFile); os.IsNotExist(err) {
+				t.Fatalf("Schema file was not created: %s", expectedFile)
+			}
+
+			t.Logf("Successfully generated schema for OTLP receiver")
+			return
 		}
 	}
 
-	if found {
-		if err := generator.generateSchemaForComponent("receiver", otlpType, otlpFactory); err != nil {
-			t.Fatalf("Failed to generate schema for OTLP receiver: %v", err)
-		}
-
-		// Verify file was created
-		expectedFile := filepath.Join(tmpDir, "receiver_otlp.yaml")
-		if _, err := os.Stat(expectedFile); os.IsNotExist(err) {
-			t.Fatalf("Schema file was not created: %s", expectedFile)
-		}
-
-		t.Logf("Successfully generated schema for OTLP receiver")
-	} else {
-		t.Skip("OTLP receiver not found in factories")
-	}
-}
-
-// TestSchemaFormat tests that generated schemas have the correct format
-func TestSchemaFormat(t *testing.T) {
-	// Get component factories
-	factories, err := components()
-	if err != nil {
-		t.Fatalf("Failed to get component factories: %v", err)
-	}
-
-	// Create schema generator
-	generator := NewSchemaGenerator("test_format")
-	defer os.RemoveAll("test_format")
-
-	// Test with debug exporter (should exist in all builds)
-	var debugFactory exporter.Factory
-	debugFound := false
-
-	// Find the debug exporter type from factories
-	for ctype, factory := range factories.Exporters {
-		if ctype.String() == "debug" {
-			debugFactory = factory
-			debugFound = true
-			break
-		}
-	}
-
-	if debugFound {
-		defaultConfig := debugFactory.CreateDefaultConfig()
-		if defaultConfig == nil {
-			t.Fatalf("Factory returned nil config")
-		}
-
-		schema, err := generator.generateYAMLSchema(defaultConfig)
-		if err != nil {
-			t.Fatalf("Failed to generate YAML schema: %v", err)
-		}
-
-		// Verify required schema fields
-		if schema["$schema"] == nil {
-			t.Error("Schema missing $schema field")
-		}
-
-		if schema["type"] != "object" {
-			t.Error("Schema type should be 'object'")
-		}
-
-		if schema["properties"] == nil {
-			t.Error("Schema missing properties field")
-		}
-
-		t.Logf("Schema validation passed for debug exporter")
-	} else {
-		t.Skip("Debug exporter not found in factories")
-	}
+	t.Skip("OTLP receiver not found in factories")
 }
 
 // BenchmarkSchemaGeneration benchmarks the schema generation process

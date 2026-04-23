@@ -1,56 +1,61 @@
 $schema: https://json-schema.org/draft/2020-12/schema
+title: chrony receiver configuration
+type: object
 properties:
-    collection_interval:
-        description: Duration string (e.g., '1s', '5m', '1h')
-        pattern: ^[0-9]+(ns|us|µs|ms|s|m|h)$
-        type: string
     endpoint:
-        description: 'Endpoint is the published address or unix socket that allows clients to connect to: The allowed format is: unix:///path/to/chronyd/unix.sock udp://localhost:323 The default value is unix:///var/run/chrony/chronyd.sock'
-        type: string
-    initial_delay:
-        description: Duration string (e.g., '1s', '5m', '1h')
-        pattern: ^[0-9]+(ns|us|µs|ms|s|m|h)$
+        description: |-
+            Endpoint is the published address or unix socket
+            that allows clients to connect to:
+            The allowed format is:
+              unix:///path/to/chronyd/unix.sock
+              udp://localhost:323
+
+            The default value is unix:///var/run/chrony/chronyd.sock
         type: string
     metrics:
+        type: object
         properties:
             ntp.frequency.offset:
+                type: object
                 properties:
                     enabled:
                         type: boolean
-                type: object
+                additionalProperties: false
             ntp.skew:
+                type: object
                 properties:
                     enabled:
                         type: boolean
-                type: object
+                additionalProperties: false
             ntp.stratum:
+                type: object
                 properties:
                     enabled:
                         type: boolean
-                type: object
+                additionalProperties: false
             ntp.time.correction:
+                type: object
                 properties:
                     enabled:
                         type: boolean
-                type: object
+                additionalProperties: false
             ntp.time.last_offset:
+                type: object
                 properties:
                     enabled:
                         type: boolean
-                type: object
+                additionalProperties: false
             ntp.time.rms_offset:
+                type: object
                 properties:
                     enabled:
                         type: boolean
-                type: object
+                additionalProperties: false
             ntp.time.root_delay:
+                type: object
                 properties:
                     enabled:
                         type: boolean
-                type: object
-        type: object
-    timeout:
-        description: Duration string (e.g., '1s', '5m', '1h')
-        pattern: ^[0-9]+(ns|us|µs|ms|s|m|h)$
-        type: string
-type: object
+                additionalProperties: false
+        additionalProperties: false
+additionalProperties: false
