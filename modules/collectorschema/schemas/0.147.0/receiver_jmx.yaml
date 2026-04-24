@@ -66,9 +66,7 @@ properties:
         type: object
         properties:
             endpoint:
-                description: |-
-                    The Service URL or host:port for the target coerced to one of form: service:jmx:rmi:///jndi/rmi://<host>:<port>/jmxrmi.
-                    Supported by: jmx-scraper and jmx-metric-gatherer
+                description: The OTLP Receiver endpoint to send metrics to ("0.0.0.0:<random open port>" by default).
                 type: string
             headers:
                 description: The headers to include in OTLP metric submission requests.

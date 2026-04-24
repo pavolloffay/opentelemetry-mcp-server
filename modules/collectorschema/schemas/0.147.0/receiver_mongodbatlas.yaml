@@ -19,6 +19,7 @@ properties:
                 type: string
                 pattern: ^(0|[-+]?((\d+(\.\d*)?|\.\d+)(ns|us|µs|μs|ms|s|m|h))+)$
             projects:
+                description: these parameters are only relevant in retrieval mode
                 type: array
                 items:
                     type: object

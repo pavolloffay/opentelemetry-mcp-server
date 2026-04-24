@@ -19,7 +19,7 @@ properties:
                     additionalProperties: false
             additionalProperties: false
     auth:
-        description: Auth for this receiver
+        description: Auth configuration for outgoing HTTP calls.
         type: object
         properties:
             authenticator:
@@ -150,11 +150,9 @@ properties:
                         type: string
                         pattern: ^(0|[-+]?((\d+(\.\d*)?|\.\d+)(ns|us|µs|μs|ms|s|m|h))+)$
                     clients:
-                        description: Clients represents the list of clients metrics
                         type: string
                         pattern: ^(0|[-+]?((\d+(\.\d*)?|\.\d+)(ns|us|µs|μs|ms|s|m|h))+)$
                     usage:
-                        description: Usage represents the list of usage to query
                         type: string
                         pattern: ^(0|[-+]?((\d+(\.\d*)?|\.\d+)(ns|us|µs|μs|ms|s|m|h))+)$
                 additionalProperties: false
@@ -166,7 +164,7 @@ properties:
         type: string
         pattern: ^(0|[-+]?((\d+(\.\d*)?|\.\d+)(ns|us|µs|μs|ms|s|m|h))+)$
     tls:
-        description: TLS struct exposes TLS server configuration.
+        description: TLS struct exposes TLS client configuration.
         type: object
         properties:
             ca_file:

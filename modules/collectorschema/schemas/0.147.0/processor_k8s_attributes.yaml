@@ -226,10 +226,14 @@ properties:
                     additionalProperties: false
             labels:
                 description: |-
-                    Labels allows extracting data from pod labels and record it
-                    as resource attributes.
-                    It is a list of FieldExtractConfig type. See FieldExtractConfig
-                    documentation for more details.
+                    Labels allows to filter pods by generic k8s pod labels.
+                    Only the following operations are supported:
+                       - equals
+                       - not-equals
+                       - exists
+                       - not-exists
+
+                    Check FieldFilterConfig for more details.
                 type: array
                 items:
                     type: object

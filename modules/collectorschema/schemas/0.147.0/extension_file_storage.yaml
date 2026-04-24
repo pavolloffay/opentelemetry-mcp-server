@@ -16,6 +16,7 @@ properties:
                     temp files will be left if a previous run of the process is killed while compacting.
                 type: boolean
             directory:
+                description: Directory specifies where the temporary files for compaction will be stored
                 type: string
             max_transaction_size:
                 description: MaxTransactionSize specifies the maximum number of items that might be present in single compaction iteration

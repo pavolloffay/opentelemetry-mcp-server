@@ -49,6 +49,7 @@ properties:
         type: object
         properties:
             endpoint:
+                description: Endpoint is the optional custom endpoint for SQS (useful for testing).
                 type: string
             max_number_of_messages:
                 description: |-
@@ -59,6 +60,7 @@ properties:
                 description: QueueURL is the URL of the SQS queue to receive S3 notifications.
                 type: string
             region:
+                description: Region specifies the AWS region of the SQS queue.
                 type: string
             wait_time_seconds:
                 description: |-

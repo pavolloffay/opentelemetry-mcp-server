@@ -19,7 +19,6 @@ properties:
             client_certificate_path:
                 type: string
             client_id:
-                description: if left empty, then it is system managed
                 type: string
             client_secret:
                 type: string
@@ -32,7 +31,6 @@ properties:
         type: object
         properties:
             client_id:
-                description: if left empty, then it is system managed
                 type: string
             federated_token_file:
                 type: string

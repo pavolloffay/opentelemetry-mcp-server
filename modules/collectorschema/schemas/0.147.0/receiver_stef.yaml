@@ -6,7 +6,7 @@ properties:
         type: string
         pattern: ^(0|[-+]?((\d+(\.\d*)?|\.\d+)(ns|us|µs|μs|ms|s|m|h))+)$
     auth:
-        description: Auth configuration for outgoing RPCs.
+        description: Auth for this receiver
         type: object
         properties:
             authenticator:
@@ -36,9 +36,7 @@ properties:
         description: Include propagates the incoming connection's metadata to downstream consumers.
         type: boolean
     keepalive:
-        description: |-
-            The keepalive parameters for gRPC client. See grpc.WithKeepaliveParams.
-            (https://godoc.org/google.golang.org/grpc#WithKeepaliveParams).
+        description: Keepalive anchor for all the settings related to keepalive.
         type: object
         properties:
             enforcement_policy:
@@ -79,7 +77,7 @@ properties:
         description: MaxRecvMsgSizeMiB sets the maximum size (in MiB) of messages accepted by the server.
         type: integer
     middlewares:
-        description: Middlewares for the gRPC client.
+        description: Middlewares for the gRPC server.
         type: array
         items:
             type: object
@@ -90,11 +88,13 @@ properties:
             additionalProperties: false
     read_buffer_size:
         description: |-
-            ReadBufferSize for gRPC client. See grpc.WithReadBufferSize.
-            (https://godoc.org/google.golang.org/grpc#WithReadBufferSize).
+            ReadBufferSize for gRPC server. See grpc.ReadBufferSize.
+            (https://godoc.org/google.golang.org/grpc#ReadBufferSize).
         type: integer
     tls:
-        description: TLS struct exposes TLS client configuration.
+        description: |-
+            Configures the protocol to use TLS.
+            The default value is nil, which will cause the protocol to not use TLS.
         type: object
         properties:
             ca_file:
@@ -190,7 +190,7 @@ properties:
         type: string
     write_buffer_size:
         description: |-
-            WriteBufferSize for gRPC gRPC. See grpc.WithWriteBufferSize.
-            (https://godoc.org/google.golang.org/grpc#WithWriteBufferSize).
+            WriteBufferSize for gRPC server. See grpc.WriteBufferSize.
+            (https://godoc.org/google.golang.org/grpc#WriteBufferSize).
         type: integer
 additionalProperties: false

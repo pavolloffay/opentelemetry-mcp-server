@@ -504,7 +504,7 @@ properties:
         type: string
         pattern: ^(0|[-+]?((\d+(\.\d*)?|\.\d+)(ns|us|µs|μs|ms|s|m|h))+)$
     tls:
-        description: TLS struct exposes TLS server configuration.
+        description: TLS struct exposes TLS client configuration.
         type: object
         properties:
             ca_file:

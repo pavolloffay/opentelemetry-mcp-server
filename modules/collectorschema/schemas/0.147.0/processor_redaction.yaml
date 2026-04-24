@@ -46,8 +46,8 @@ properties:
                 properties:
                     attributes:
                         description: |-
-                            Attributes specifies which attribute keys to apply SQL sanitization to.
-                            If empty, SQL sanitization is applied to all string values in log bodies
+                            Attributes specifies which attribute keys to apply Elasticsearch sanitization to.
+                            If empty, Elasticsearch sanitization is applied to all string values in log bodies
                             but not to span/metric attributes
                         type: array
                         items:
@@ -60,8 +60,8 @@ properties:
                 properties:
                     attributes:
                         description: |-
-                            Attributes specifies which attribute keys to apply SQL sanitization to.
-                            If empty, SQL sanitization is applied to all string values in log bodies
+                            Attributes specifies which attribute keys to apply Memcached sanitization to.
+                            If empty, Memcached sanitization is applied to all string values in log bodies
                             but not to span/metric attributes
                         type: array
                         items:
@@ -74,8 +74,8 @@ properties:
                 properties:
                     attributes:
                         description: |-
-                            Attributes specifies which attribute keys to apply SQL sanitization to.
-                            If empty, SQL sanitization is applied to all string values in log bodies
+                            Attributes specifies which attribute keys to apply MongoDB sanitization to.
+                            If empty, MongoDB sanitization is applied to all string values in log bodies
                             but not to span/metric attributes
                         type: array
                         items:
@@ -88,8 +88,8 @@ properties:
                 properties:
                     attributes:
                         description: |-
-                            Attributes specifies which attribute keys to apply SQL sanitization to.
-                            If empty, SQL sanitization is applied to all string values in log bodies
+                            Attributes specifies which attribute keys to apply OpenSearch sanitization to.
+                            If empty, OpenSearch sanitization is applied to all string values in log bodies
                             but not to span/metric attributes
                         type: array
                         items:
@@ -102,8 +102,8 @@ properties:
                 properties:
                     attributes:
                         description: |-
-                            Attributes specifies which attribute keys to apply SQL sanitization to.
-                            If empty, SQL sanitization is applied to all string values in log bodies
+                            Attributes specifies which attribute keys to apply Redis sanitization to.
+                            If empty, Redis sanitization is applied to all string values in log bodies
                             but not to span/metric attributes
                         type: array
                         items:
@@ -132,8 +132,8 @@ properties:
                 properties:
                     attributes:
                         description: |-
-                            Attributes specifies which attribute keys to apply SQL sanitization to.
-                            If empty, SQL sanitization is applied to all string values in log bodies
+                            Attributes specifies which attribute keys to apply Valkey sanitization to.
+                            If empty, Valkey sanitization is applied to all string values in log bodies
                             but not to span/metric attributes
                         type: array
                         items:

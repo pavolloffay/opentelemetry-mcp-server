@@ -18,8 +18,8 @@ properties:
         additionalProperties: false
     resource_attributes:
         description: |-
-            ResourceAttributes is a map of resource attributes to add to just this receiver's resource metrics.
-            It can contain expr expressions for endpoint env value expansion
+            ResourceAttributes is a map of default resource attributes to add to each resource
+            object received by this receiver from dynamically created receivers.
         type: object
     watch_observers:
         description: WatchObservers are the extensions to listen to endpoints from.

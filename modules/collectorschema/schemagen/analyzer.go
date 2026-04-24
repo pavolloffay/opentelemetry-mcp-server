@@ -120,7 +120,7 @@ func (a *PackageAnalyzer) AnalyzeConfig(configTypeName, configPkgPath string) (*
 	}
 
 	// Extract fields
-	fields := a.extractFields(analyzePkg, structType)
+	fields := a.extractFields(analyzePkg, structType, configTypeName)
 
 	return &StructInfo{
 		Name:    configTypeName,
@@ -130,14 +130,15 @@ func (a *PackageAnalyzer) AnalyzeConfig(configTypeName, configPkgPath string) (*
 }
 
 // extractFields extracts field information from a struct type.
-func (a *PackageAnalyzer) extractFields(pkg *packages.Package, st *types.Struct) []FieldInfo {
+// structTypeName is the name of the struct type (e.g., "ClientConfig") for doc lookup.
+func (a *PackageAnalyzer) extractFields(pkg *packages.Package, st *types.Struct, structTypeName string) []FieldInfo {
 	var fields []FieldInfo
 
 	for i := 0; i < st.NumFields(); i++ {
 		field := st.Field(i)
 		tag := st.Tag(i)
 
-		fieldInfo := a.extractFieldInfo(pkg, field, tag)
+		fieldInfo := a.extractFieldInfo(pkg, field, tag, structTypeName)
 		if fieldInfo != nil {
 			fields = append(fields, *fieldInfo)
 		}
@@ -147,7 +148,8 @@ func (a *PackageAnalyzer) extractFields(pkg *packages.Package, st *types.Struct)
 }
 
 // extractFieldInfo extracts information about a single field.
-func (a *PackageAnalyzer) extractFieldInfo(pkg *packages.Package, field *types.Var, tag string) *FieldInfo {
+// structTypeName is the name of the containing struct for doc lookup.
+func (a *PackageAnalyzer) extractFieldInfo(pkg *packages.Package, field *types.Var, tag string, structTypeName string) *FieldInfo {
 	// Skip unexported fields
 	if !field.Exported() {
 		return nil
@@ -166,7 +168,7 @@ func (a *PackageAnalyzer) extractFieldInfo(pkg *packages.Package, field *types.V
 	embedded := field.Embedded() || squash
 
 	// Get field doc comment
-	fieldDoc := a.findFieldDoc(pkg, field)
+	fieldDoc := a.findFieldDoc(pkg, field, structTypeName)
 
 	typeStr := resolveTypeAlias(field.Type())
 
@@ -180,7 +182,9 @@ func (a *PackageAnalyzer) extractFieldInfo(pkg *packages.Package, field *types.V
 
 	// For embedded structs or struct fields, extract nested fields
 	if st := getUnderlyingStruct(field.Type()); st != nil {
-		info.Fields = a.extractFields(pkg, st)
+		// Get the nested struct's type name for doc lookup
+		nestedTypeName := getTypeName(field.Type())
+		info.Fields = a.extractFields(pkg, st, nestedTypeName)
 	}
 
 	return info
@@ -188,7 +192,8 @@ func (a *PackageAnalyzer) extractFieldInfo(pkg *packages.Package, field *types.V
 
 // findFieldDoc finds the documentation comment for a struct field.
 // It searches in the field's originating package, using fast source file parsing for external packages.
-func (a *PackageAnalyzer) findFieldDoc(pkg *packages.Package, field *types.Var) string {
+// structTypeName is the name of the struct containing this field (e.g., "ClientConfig").
+func (a *PackageAnalyzer) findFieldDoc(pkg *packages.Package, field *types.Var, structTypeName string) string {
 	pos := field.Pos()
 	if !pos.IsValid() {
 		return ""
@@ -202,15 +207,43 @@ func (a *PackageAnalyzer) findFieldDoc(pkg *packages.Package, field *types.Var) 
 
 	// For current package, use already-loaded AST
 	if fieldPkg.Path() == pkg.PkgPath {
-		return a.findFieldDocInPackage(pkg, field)
+		return a.findFieldDocInPackage(pkg, field, structTypeName)
 	}
 
 	// For external packages, use fast source parsing (no type checking)
-	return a.findFieldDocFromSource(fieldPkg.Path(), field.Name())
+	return a.findFieldDocFromSource(fieldPkg.Path(), structTypeName, field.Name())
+}
+
+// getTypeName extracts the type name from a types.Type (e.g., "ClientConfig" from "confighttp.ClientConfig").
+func getTypeName(t types.Type) string {
+	// Handle pointer types
+	if ptr, ok := t.(*types.Pointer); ok {
+		return getTypeName(ptr.Elem())
+	}
+
+	// Handle type aliases
+	if alias, ok := t.(*types.Alias); ok {
+		return getTypeName(alias.Rhs())
+	}
+
+	// Handle named types
+	if named, ok := t.(*types.Named); ok {
+		// Check if this is an Optional[T] generic and unwrap T
+		if isOptionalType(t) {
+			typeArgs := named.TypeArgs()
+			if typeArgs != nil && typeArgs.Len() > 0 {
+				return getTypeName(typeArgs.At(0))
+			}
+		}
+		return named.Obj().Name()
+	}
+
+	return ""
 }
 
 // findFieldDocFromSource parses source files to find field documentation without full package loading.
-func (a *PackageAnalyzer) findFieldDocFromSource(pkgPath, fieldName string) string {
+// structTypeName is the name of the struct containing the field (e.g., "ClientConfig").
+func (a *PackageAnalyzer) findFieldDocFromSource(pkgPath, structTypeName, fieldName string) string {
 	// Try to find the package source directory using go list
 	dir, err := a.findPackageDir(pkgPath)
 	if err != nil || dir == "" {
@@ -229,7 +262,7 @@ func (a *PackageAnalyzer) findFieldDocFromSource(pkgPath, fieldName string) stri
 	// Search for field doc in all parsed files
 	for _, pkg := range pkgs {
 		for _, file := range pkg.Files {
-			if doc := a.findFieldDocInAST(file, fieldName); doc != "" {
+			if doc := a.findFieldDocInAST(file, structTypeName, fieldName); doc != "" {
 				return doc
 			}
 		}
@@ -258,7 +291,9 @@ func (a *PackageAnalyzer) findPackageDir(pkgPath string) (string, error) {
 }
 
 // findFieldDocInAST searches for a field's documentation in an AST file.
-func (a *PackageAnalyzer) findFieldDocInAST(file *ast.File, fieldName string) string {
+// structTypeName is the name of the struct to search in (e.g., "ClientConfig").
+// If structTypeName is empty, searches all structs (legacy behavior).
+func (a *PackageAnalyzer) findFieldDocInAST(file *ast.File, structTypeName, fieldName string) string {
 	for _, decl := range file.Decls {
 		genDecl, ok := decl.(*ast.GenDecl)
 		if !ok {
@@ -267,6 +302,10 @@ func (a *PackageAnalyzer) findFieldDocInAST(file *ast.File, fieldName string) st
 		for _, spec := range genDecl.Specs {
 			typeSpec, ok := spec.(*ast.TypeSpec)
 			if !ok {
+				continue
+			}
+			// Check if this is the struct we're looking for
+			if structTypeName != "" && typeSpec.Name.Name != structTypeName {
 				continue
 			}
 			st, ok := typeSpec.Type.(*ast.StructType)
@@ -319,7 +358,8 @@ func (a *PackageAnalyzer) loadPackage(pkgPath string) (*packages.Package, error)
 }
 
 // findFieldDocInPackage searches for a field's documentation in a specific package's AST.
-func (a *PackageAnalyzer) findFieldDocInPackage(pkg *packages.Package, field *types.Var) string {
+// structTypeName is the name of the struct containing the field (e.g., "ClientConfig").
+func (a *PackageAnalyzer) findFieldDocInPackage(pkg *packages.Package, field *types.Var, structTypeName string) string {
 	if pkg == nil || pkg.Syntax == nil {
 		return ""
 	}
@@ -333,6 +373,10 @@ func (a *PackageAnalyzer) findFieldDocInPackage(pkg *packages.Package, field *ty
 			for _, spec := range genDecl.Specs {
 				typeSpec, ok := spec.(*ast.TypeSpec)
 				if !ok {
+					continue
+				}
+				// Check if this is the struct we're looking for
+				if structTypeName != "" && typeSpec.Name.Name != structTypeName {
 					continue
 				}
 				st, ok := typeSpec.Type.(*ast.StructType)

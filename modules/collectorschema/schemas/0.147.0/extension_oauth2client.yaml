@@ -36,6 +36,7 @@ properties:
             See https://datatracker.ietf.org/doc/html/rfc6749#section-2.2
         type: string
     client_id_file:
+        description: ClientIDFile is the file path to read the application's ID from.
         type: string
     client_secret:
         description: |-
@@ -43,11 +44,13 @@ properties:
             See https://datatracker.ietf.org/doc/html/rfc6749#section-2.3.1
         type: string
     client_secret_file:
+        description: ClientSecretFile is the file pathg to read the application's secret from.
         type: string
     endpoint_params:
         description: EndpointParams specifies additional parameters for requests to the token endpoint.
         type: object
     expiry_buffer:
+        description: ExpiryBuffer specifies the time buffer before token expiry to refresh it.
         type: string
         pattern: ^(0|[-+]?((\d+(\.\d*)?|\.\d+)(ns|us|µs|μs|ms|s|m|h))+)$
     grant_type:

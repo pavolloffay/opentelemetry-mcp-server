@@ -484,7 +484,7 @@ properties:
         additionalProperties: false
     middlewares:
         description: |-
-            Middlewares are used to add custom functionality to the HTTP server.
+            Middlewares are used to add custom functionality to the HTTP client.
             Middleware handlers are called in the order they appear in this list,
             with the first middleware becoming the outermost handler.
         type: array
@@ -712,7 +712,7 @@ properties:
         type: string
         pattern: ^(0|[-+]?((\d+(\.\d*)?|\.\d+)(ns|us|µs|μs|ms|s|m|h))+)$
     tls:
-        description: TLS struct exposes TLS server configuration.
+        description: TLS struct exposes TLS client configuration.
         type: object
         properties:
             ca_file:

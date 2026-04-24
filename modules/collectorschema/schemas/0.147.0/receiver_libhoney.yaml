@@ -135,7 +135,7 @@ properties:
                 type: integer
             middlewares:
                 description: |-
-                    Middlewares are used to add custom functionality to the HTTP client.
+                    Middlewares are used to add custom functionality to the HTTP server.
                     Middleware handlers are called in the order they appear in this list,
                     with the first middleware becoming the outermost handler.
                 type: array
@@ -174,7 +174,7 @@ properties:
                     Header values are opaque since they may be sensitive.
                 type: object
             tls:
-                description: TLS struct exposes TLS client configuration.
+                description: TLS struct exposes TLS server configuration.
                 type: object
                 properties:
                     ca_file:

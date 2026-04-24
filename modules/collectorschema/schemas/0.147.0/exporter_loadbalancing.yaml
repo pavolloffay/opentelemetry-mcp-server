@@ -158,7 +158,8 @@ properties:
                                         additionalProperties: false
                                     sizer:
                                         description: |-
-                                            Sizer determines the type of size measurement used by this component.
+                                            Sizer determines the type of size measurement used by the batch.
+                                            If not configured, use the same configuration as the queue.
                                             It accepts "requests", "items", or "bytes".
                                         type: object
                                 additionalProperties: false
@@ -420,7 +421,8 @@ properties:
                         additionalProperties: false
                     sizer:
                         description: |-
-                            Sizer determines the type of size measurement used by this component.
+                            Sizer determines the type of size measurement used by the batch.
+                            If not configured, use the same configuration as the queue.
                             It accepts "requests", "items", or "bytes".
                         type: object
                 additionalProperties: false

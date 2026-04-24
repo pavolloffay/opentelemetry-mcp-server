@@ -6,7 +6,7 @@ properties:
         description: AccessTokenPassthrough indicates whether to associate datapoints with an organization access token received in request.
         type: boolean
     auth:
-        description: Auth configuration for outgoing HTTP calls.
+        description: Auth for this receiver
         type: object
         properties:
             authenticator:
@@ -118,7 +118,7 @@ properties:
         type: integer
     middlewares:
         description: |-
-            Middlewares are used to add custom functionality to the HTTP client.
+            Middlewares are used to add custom functionality to the HTTP server.
             Middleware handlers are called in the order they appear in this list,
             with the first middleware becoming the outermost handler.
         type: array
@@ -166,7 +166,7 @@ properties:
         description: Splitting defines the splitting strategy used by the receiver when ingesting raw events. Can be set to "line" or "none". Default is "line".
         type: string
     tls:
-        description: TLS struct exposes TLS client configuration.
+        description: TLS struct exposes TLS server configuration.
         type: object
         properties:
             ca_file:

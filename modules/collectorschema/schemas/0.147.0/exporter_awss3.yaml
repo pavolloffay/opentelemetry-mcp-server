@@ -13,10 +13,10 @@ properties:
         type: object
         properties:
             s3_bucket:
-                description: S3Bucket is the bucket name to be uploaded to.
+                description: S3Bucket indicates the mapping of the bucket name used for uploading to a specific resource attribute value.
                 type: string
             s3_prefix:
-                description: S3Prefix is the key (directory) prefix to write to inside the bucket. Appended to S3BasePrefix if provided.
+                description: S3Prefix indicates the mapping of the key (directory) prefix used for writing into the bucket to a specific resource attribute value.
                 type: string
         additionalProperties: false
     s3uploader:
@@ -126,7 +126,8 @@ properties:
                         additionalProperties: false
                     sizer:
                         description: |-
-                            Sizer determines the type of size measurement used by this component.
+                            Sizer determines the type of size measurement used by the batch.
+                            If not configured, use the same configuration as the queue.
                             It accepts "requests", "items", or "bytes".
                         type: object
                 additionalProperties: false

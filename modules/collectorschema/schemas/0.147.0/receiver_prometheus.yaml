@@ -550,7 +550,6 @@ properties:
                                                 secret.
                                             type: string
                                         endpointparams:
-                                            description: EndpointParams specifies additional parameters for requests to the token endpoint.
                                             type: object
                                             additionalProperties:
                                                 type: string
@@ -619,7 +618,6 @@ properties:
                                                     type: object
                                             additionalProperties: false
                                         scopes:
-                                            description: Scopes optionally specifies a list of requested permission scopes.
                                             type: array
                                             items:
                                                 type: string
@@ -679,7 +677,6 @@ properties:
                                                     type: string
                                             additionalProperties: false
                                         tokenurl:
-                                            description: TokenURL is the endpoint required to complete the 2-legged JWT flow.
                                             type: string
                                     additionalProperties: false
                                 proxyconnectheader:
@@ -732,6 +729,7 @@ properties:
                                             type: object
                                     additionalProperties: false
                                 tlsconfig:
+                                    description: TLSConfig to use to connect to the targets.
                                     type: object
                                     properties:
                                         ca:
@@ -853,15 +851,13 @@ properties:
                                     type: object
                                     properties:
                                         clientid:
-                                            description: ClientID is the clientId of the managed identity that is being used to authenticate.
+                                            description: ClientID is the clientId of the azure active directory application that is being used to authenticate.
                                             type: string
                                         clientsecret:
                                             description: ClientSecret is the clientSecret of the azure active directory application that is being used to authenticate.
                                             type: string
                                         tenantid:
-                                            description: |-
-                                                TenantID is the tenantId of the Microsoft Entra application or user-assigned managed identity.
-                                                This should match the tenant ID where your application or managed identity is registered.
+                                            description: TenantID is the tenantId of the azure active directory application that is being used to authenticate.
                                             type: string
                                     additionalProperties: false
                                 scope:
@@ -872,9 +868,7 @@ properties:
                                     type: object
                                     properties:
                                         tenantid:
-                                            description: |-
-                                                TenantID is the tenantId of the Microsoft Entra application or user-assigned managed identity.
-                                                This should match the tenant ID where your application or managed identity is registered.
+                                            description: TenantID is the tenantId of the azure active directory application that is being used to authenticate.
                                             type: string
                                     additionalProperties: false
                                 workloadidentity:
@@ -882,7 +876,7 @@ properties:
                                     type: object
                                     properties:
                                         clientid:
-                                            description: ClientID is the clientId of the managed identity that is being used to authenticate.
+                                            description: ClientID is the clientId of the Microsoft Entra application or user-assigned managed identity.
                                             type: string
                                         tenantid:
                                             description: |-
@@ -1018,7 +1012,6 @@ properties:
                                                 secret.
                                             type: string
                                         endpointparams:
-                                            description: EndpointParams specifies additional parameters for requests to the token endpoint.
                                             type: object
                                             additionalProperties:
                                                 type: string
@@ -1087,7 +1080,6 @@ properties:
                                                     type: object
                                             additionalProperties: false
                                         scopes:
-                                            description: Scopes optionally specifies a list of requested permission scopes.
                                             type: array
                                             items:
                                                 type: string
@@ -1147,7 +1139,6 @@ properties:
                                                     type: string
                                             additionalProperties: false
                                         tokenurl:
-                                            description: TokenURL is the endpoint required to complete the 2-legged JWT flow.
                                             type: string
                                     additionalProperties: false
                                 proxyconnectheader:
@@ -1200,6 +1191,7 @@ properties:
                                             type: object
                                     additionalProperties: false
                                 tlsconfig:
+                                    description: TLSConfig to use to connect to the targets.
                                     type: object
                                     properties:
                                         ca:
@@ -1556,7 +1548,6 @@ properties:
                                                 secret.
                                             type: string
                                         endpointparams:
-                                            description: EndpointParams specifies additional parameters for requests to the token endpoint.
                                             type: object
                                             additionalProperties:
                                                 type: string
@@ -1625,7 +1616,6 @@ properties:
                                                     type: object
                                             additionalProperties: false
                                         scopes:
-                                            description: Scopes optionally specifies a list of requested permission scopes.
                                             type: array
                                             items:
                                                 type: string
@@ -1685,7 +1675,6 @@ properties:
                                                     type: string
                                             additionalProperties: false
                                         tokenurl:
-                                            description: TokenURL is the endpoint required to complete the 2-legged JWT flow.
                                             type: string
                                     additionalProperties: false
                                 proxyconnectheader:
@@ -1738,6 +1727,7 @@ properties:
                                             type: object
                                     additionalProperties: false
                                 tlsconfig:
+                                    description: TLSConfig to use to connect to the targets.
                                     type: object
                                     properties:
                                         ca:
@@ -2076,7 +2066,7 @@ properties:
         type: object
         properties:
             auth:
-                description: Auth for this receiver
+                description: Auth configuration for outgoing HTTP calls.
                 type: object
                 properties:
                     authenticator:
@@ -2126,7 +2116,6 @@ properties:
                 type: object
                 properties:
                     authorization:
-                        description: The HTTP authorization credentials for the targets.
                         type: object
                         properties:
                             credentials:
@@ -2140,7 +2129,6 @@ properties:
                                 type: string
                         additionalProperties: false
                     basicauth:
-                        description: The HTTP basic authentication credentials for the targets.
                         type: object
                         properties:
                             password:
@@ -2159,31 +2147,14 @@ properties:
                                 type: string
                         additionalProperties: false
                     bearertoken:
-                        description: |-
-                            The bearer token for the targets. Deprecated in favour of
-                            Authorization.Credentials.
                         type: string
                     bearertokenfile:
-                        description: |-
-                            The bearer token file for the targets. Deprecated in favour of
-                            Authorization.CredentialsFile.
                         type: string
                     enablehttp2:
-                        description: |-
-                            EnableHTTP2 specifies whether the client should configure HTTP2.
-                            The omitempty flag is not set, because it would be hidden from the
-                            marshalled configuration when set to false.
                         type: boolean
                     followredirects:
-                        description: |-
-                            FollowRedirects specifies whether the client should follow HTTP 3xx redirects.
-                            The omitempty flag is not set, because it would be hidden from the
-                            marshalled configuration when set to false.
                         type: boolean
                     httpheaders:
-                        description: |-
-                            HTTPHeaders specify headers to inject in the requests. Those headers
-                            could be marshalled back to the users.
                         type: object
                         properties:
                             headers:
@@ -2195,7 +2166,6 @@ properties:
                         description: NoProxy contains addresses that should not use a proxy.
                         type: string
                     oauth2:
-                        description: The OAuth2 client credentials used to fetch a token for the targets.
                         type: object
                         properties:
                             audience:
@@ -2234,7 +2204,6 @@ properties:
                                     secret.
                                 type: string
                             endpointparams:
-                                description: EndpointParams specifies additional parameters for requests to the token endpoint.
                                 type: object
                                 additionalProperties:
                                     type: string
@@ -2303,7 +2272,6 @@ properties:
                                         type: object
                                 additionalProperties: false
                             scopes:
-                                description: Scopes optionally specifies a list of requested permission scopes.
                                 type: array
                                 items:
                                     type: string
@@ -2363,7 +2331,6 @@ properties:
                                         type: string
                                 additionalProperties: false
                             tokenurl:
-                                description: TokenURL is the endpoint required to complete the 2-legged JWT flow.
                                 type: string
                         additionalProperties: false
                     proxyconnectheader:
@@ -2580,7 +2547,6 @@ properties:
                                             secret.
                                         type: string
                                     endpointparams:
-                                        description: EndpointParams specifies additional parameters for requests to the token endpoint.
                                         type: object
                                         additionalProperties:
                                             type: string
@@ -2649,7 +2615,6 @@ properties:
                                                 type: object
                                         additionalProperties: false
                                     scopes:
-                                        description: Scopes optionally specifies a list of requested permission scopes.
                                         type: array
                                         items:
                                             type: string
@@ -2709,7 +2674,6 @@ properties:
                                                 type: string
                                         additionalProperties: false
                                     tokenurl:
-                                        description: TokenURL is the endpoint required to complete the 2-legged JWT flow.
                                         type: string
                                 additionalProperties: false
                             proxyconnectheader:
@@ -2762,6 +2726,7 @@ properties:
                                         type: object
                                 additionalProperties: false
                             tlsconfig:
+                                description: TLSConfig to use to connect to the targets.
                                 type: object
                                 properties:
                                     ca:
@@ -2883,7 +2848,7 @@ properties:
                 type: string
                 pattern: ^(0|[-+]?((\d+(\.\d*)?|\.\d+)(ns|us|µs|μs|ms|s|m|h))+)$
             tls:
-                description: TLS struct exposes TLS server configuration.
+                description: TLS struct exposes TLS client configuration.
                 type: object
                 properties:
                     ca_file:

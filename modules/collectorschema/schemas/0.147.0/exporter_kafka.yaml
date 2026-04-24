@@ -55,8 +55,10 @@ properties:
                         description: 'SASL Mechanism to be used, possible values are: (PLAIN, AWS_MSK_IAM_OAUTHBEARER, SCRAM-SHA-256 or SCRAM-SHA-512).'
                         type: string
                     password:
+                        description: Password to be used on authentication
                         type: string
                     username:
+                        description: Username to be used on authentication
                         type: string
                     version:
                         description: 'SASL Protocol Version to be used, possible values are: (0, 1). Defaults to 0.'
@@ -64,10 +66,10 @@ properties:
                 additionalProperties: false
             tls:
                 description: |-
-                    TLS holds TLS-related configuration for connecting to Kafka brokers.
+                    TLS holds TLS configuration for connecting to Kafka brokers.
 
-                    By default the client will use an insecure connection unless
-                    SASL/AWS_MSK_IAM_OAUTHBEARER auth is configured.
+                    Deprecated [v0.124.0]: use ClientConfig.TLS instead. This will
+                    be used only if ClientConfig.TLS is not set.
                 type: object
                 properties:
                     ca_file:
@@ -203,21 +205,20 @@ properties:
         properties:
             encoding:
                 description: |-
-                    Encoding holds the encoding of Kafka message values.
+                    Encoding holds the encoding of messages for the signal type.
 
-                    Encoding has no default. If explicitly specified, it will take precedence over
-                    the default values of logs::encoding, metrics::encoding, and traces::encoding.
-
-                    Deprecated [v0.124.0]: use logs::encoding, metrics::encoding, and traces::encoding instead.
+                    Defaults to "otlp_proto".
                 type: string
             topic:
                 description: |-
-                    Topic holds the name of the Kafka topic to which data should be exported.
+                    Topic holds the name of the Kafka topic to which messages of the
+                    signal type should be produced.
 
-                    Topic has no default. If explicitly specified, it will take precedence over
-                    the default values of logs::topic, metrics::topic, and traces::topic.
-
-                    Deprecated [v0.124.0]: use logs::topic, metrics::topic, and traces::topic instead.
+                    The default depends on the signal type:
+                     - "otlp_spans" for traces
+                     - "otlp_metrics" for metrics
+                     - "otlp_logs" for logs
+                     - "otlp_profiles" for profiles
                 type: string
             topic_from_metadata_key:
                 description: |-
@@ -281,21 +282,20 @@ properties:
         properties:
             encoding:
                 description: |-
-                    Encoding holds the encoding of Kafka message values.
+                    Encoding holds the encoding of messages for the signal type.
 
-                    Encoding has no default. If explicitly specified, it will take precedence over
-                    the default values of logs::encoding, metrics::encoding, and traces::encoding.
-
-                    Deprecated [v0.124.0]: use logs::encoding, metrics::encoding, and traces::encoding instead.
+                    Defaults to "otlp_proto".
                 type: string
             topic:
                 description: |-
-                    Topic holds the name of the Kafka topic to which data should be exported.
+                    Topic holds the name of the Kafka topic to which messages of the
+                    signal type should be produced.
 
-                    Topic has no default. If explicitly specified, it will take precedence over
-                    the default values of logs::topic, metrics::topic, and traces::topic.
-
-                    Deprecated [v0.124.0]: use logs::topic, metrics::topic, and traces::topic instead.
+                    The default depends on the signal type:
+                     - "otlp_spans" for traces
+                     - "otlp_metrics" for metrics
+                     - "otlp_logs" for logs
+                     - "otlp_profiles" for profiles
                 type: string
             topic_from_metadata_key:
                 description: |-
@@ -391,21 +391,20 @@ properties:
         properties:
             encoding:
                 description: |-
-                    Encoding holds the encoding of Kafka message values.
+                    Encoding holds the encoding of messages for the signal type.
 
-                    Encoding has no default. If explicitly specified, it will take precedence over
-                    the default values of logs::encoding, metrics::encoding, and traces::encoding.
-
-                    Deprecated [v0.124.0]: use logs::encoding, metrics::encoding, and traces::encoding instead.
+                    Defaults to "otlp_proto".
                 type: string
             topic:
                 description: |-
-                    Topic holds the name of the Kafka topic to which data should be exported.
+                    Topic holds the name of the Kafka topic to which messages of the
+                    signal type should be produced.
 
-                    Topic has no default. If explicitly specified, it will take precedence over
-                    the default values of logs::topic, metrics::topic, and traces::topic.
-
-                    Deprecated [v0.124.0]: use logs::topic, metrics::topic, and traces::topic instead.
+                    The default depends on the signal type:
+                     - "otlp_spans" for traces
+                     - "otlp_metrics" for metrics
+                     - "otlp_logs" for logs
+                     - "otlp_profiles" for profiles
                 type: string
             topic_from_metadata_key:
                 description: |-
@@ -474,7 +473,8 @@ properties:
                         additionalProperties: false
                     sizer:
                         description: |-
-                            Sizer determines the type of size measurement used by this component.
+                            Sizer determines the type of size measurement used by the batch.
+                            If not configured, use the same configuration as the queue.
                             It accepts "requests", "items", or "bytes".
                         type: object
                 additionalProperties: false
@@ -632,21 +632,20 @@ properties:
         properties:
             encoding:
                 description: |-
-                    Encoding holds the encoding of Kafka message values.
+                    Encoding holds the encoding of messages for the signal type.
 
-                    Encoding has no default. If explicitly specified, it will take precedence over
-                    the default values of logs::encoding, metrics::encoding, and traces::encoding.
-
-                    Deprecated [v0.124.0]: use logs::encoding, metrics::encoding, and traces::encoding instead.
+                    Defaults to "otlp_proto".
                 type: string
             topic:
                 description: |-
-                    Topic holds the name of the Kafka topic to which data should be exported.
+                    Topic holds the name of the Kafka topic to which messages of the
+                    signal type should be produced.
 
-                    Topic has no default. If explicitly specified, it will take precedence over
-                    the default values of logs::topic, metrics::topic, and traces::topic.
-
-                    Deprecated [v0.124.0]: use logs::topic, metrics::topic, and traces::topic instead.
+                    The default depends on the signal type:
+                     - "otlp_spans" for traces
+                     - "otlp_metrics" for metrics
+                     - "otlp_logs" for logs
+                     - "otlp_profiles" for profiles
                 type: string
             topic_from_metadata_key:
                 description: |-

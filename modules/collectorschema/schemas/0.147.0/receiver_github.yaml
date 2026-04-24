@@ -161,7 +161,7 @@ properties:
         type: object
         properties:
             auth:
-                description: Auth configuration for outgoing HTTP calls.
+                description: Auth for this receiver
                 type: object
                 properties:
                     authenticator:

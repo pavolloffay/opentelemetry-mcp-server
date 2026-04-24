@@ -3,7 +3,7 @@ title: doris exporter configuration
 type: object
 properties:
     auth:
-        description: Auth for this receiver
+        description: Auth configuration for outgoing HTTP calls.
         type: object
         properties:
             authenticator:
@@ -133,7 +133,7 @@ properties:
         type: string
     middlewares:
         description: |-
-            Middlewares are used to add custom functionality to the HTTP server.
+            Middlewares are used to add custom functionality to the HTTP client.
             Middleware handlers are called in the order they appear in this list,
             with the first middleware becoming the outermost handler.
         type: array
@@ -206,7 +206,8 @@ properties:
                         additionalProperties: false
                     sizer:
                         description: |-
-                            Sizer determines the type of size measurement used by this component.
+                            Sizer determines the type of size measurement used by the batch.
+                            If not configured, use the same configuration as the queue.
                             It accepts "requests", "items", or "bytes".
                         type: object
                 additionalProperties: false
@@ -251,7 +252,7 @@ properties:
         description: Timezone is the timezone of the doris.
         type: string
     tls:
-        description: TLS struct exposes TLS server configuration.
+        description: TLS struct exposes TLS client configuration.
         type: object
         properties:
             ca_file:

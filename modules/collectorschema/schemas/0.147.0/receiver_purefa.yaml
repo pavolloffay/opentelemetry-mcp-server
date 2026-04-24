@@ -19,7 +19,7 @@ properties:
                     additionalProperties: false
             additionalProperties: false
     auth:
-        description: Auth for this receiver
+        description: Auth configuration for outgoing HTTP calls.
         type: object
         properties:
             authenticator:
@@ -139,7 +139,7 @@ properties:
         type: integer
     middlewares:
         description: |-
-            Middlewares are used to add custom functionality to the HTTP server.
+            Middlewares are used to add custom functionality to the HTTP client.
             Middleware handlers are called in the order they appear in this list,
             with the first middleware becoming the outermost handler.
         type: array
@@ -185,23 +185,18 @@ properties:
                 type: object
                 properties:
                     array:
-                        description: Array represents the list of arrays to query
                         type: string
                         pattern: ^(0|[-+]?((\d+(\.\d*)?|\.\d+)(ns|us|µs|μs|ms|s|m|h))+)$
                     directories:
-                        description: Directories represents the list of directories to query
                         type: string
                         pattern: ^(0|[-+]?((\d+(\.\d*)?|\.\d+)(ns|us|µs|μs|ms|s|m|h))+)$
                     hosts:
-                        description: Hosts represents the list of hosts to query
                         type: string
                         pattern: ^(0|[-+]?((\d+(\.\d*)?|\.\d+)(ns|us|µs|μs|ms|s|m|h))+)$
                     pods:
-                        description: Pods represents the list of pods to query
                         type: string
                         pattern: ^(0|[-+]?((\d+(\.\d*)?|\.\d+)(ns|us|µs|μs|ms|s|m|h))+)$
                     volumes:
-                        description: Volumes represents the list of volumes to query
                         type: string
                         pattern: ^(0|[-+]?((\d+(\.\d*)?|\.\d+)(ns|us|µs|μs|ms|s|m|h))+)$
                 additionalProperties: false

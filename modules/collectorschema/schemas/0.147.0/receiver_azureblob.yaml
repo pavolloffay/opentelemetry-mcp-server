@@ -51,7 +51,7 @@ properties:
         type: object
         properties:
             container_name:
-                description: Name of the blob container with the logs (default = "logs")
+                description: Name of the blob container with the traces (default = "traces")
                 type: string
         additionalProperties: false
 additionalProperties: false

@@ -6,7 +6,7 @@ properties:
         description: Your Logz.io Account Token, can be found at https://app.logz.io/#/dashboard/settings/general
         type: string
     auth:
-        description: Auth for this receiver
+        description: Auth configuration for outgoing HTTP calls.
         type: object
         properties:
             authenticator:
@@ -187,7 +187,8 @@ properties:
                         additionalProperties: false
                     sizer:
                         description: |-
-                            Sizer determines the type of size measurement used by this component.
+                            Sizer determines the type of size measurement used by the batch.
+                            If not configured, use the same configuration as the queue.
                             It accepts "requests", "items", or "bytes".
                         type: object
                 additionalProperties: false

@@ -3,7 +3,7 @@ title: expvar receiver configuration
 type: object
 properties:
     auth:
-        description: Auth for this receiver
+        description: Auth configuration for outgoing HTTP calls.
         type: object
         properties:
             authenticator:
@@ -258,7 +258,7 @@ properties:
         additionalProperties: false
     middlewares:
         description: |-
-            Middlewares are used to add custom functionality to the HTTP server.
+            Middlewares are used to add custom functionality to the HTTP client.
             Middleware handlers are called in the order they appear in this list,
             with the first middleware becoming the outermost handler.
         type: array

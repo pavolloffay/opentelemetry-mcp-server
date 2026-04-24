@@ -42,9 +42,8 @@ properties:
             resource_filters:
                 description: |-
                     ResourceFilters, if provided, provides a list of resource filters.
-                    Resource attributes matching any filter will be included in metric labels.
-                    Defaults to empty, which won't include any additional resource labels. Note that the
-                    service_resource_labels option operates independently from resource_filters.
+                    Resource attributes matching any filter will be included in LogEntry labels.
+                    Defaults to empty, which won't include any additional resource labels.
                 type: array
                 items:
                     type: object
@@ -58,10 +57,8 @@ properties:
             service_resource_labels:
                 description: |-
                     ServiceResourceLabels, if true, causes the exporter to copy OTel's
-                    service.name, service.namespace, and service.instance.id resource attributes into the GCM timeseries metric labels. This
-                    option is recommended to avoid writing duplicate timeseries against the same monitored
-                    resource. Disabling this option does not prevent resource_filters from adding those
-                    labels. Default is true.
+                    service.name, service.namespace, and service.instance.id resource attributes into the Cloud Logging LogEntry labels.
+                    Disabling this option does not prevent resource_filters from adding those labels. Default is true.
                 type: boolean
             use_insecure:
                 description: Only has effect if Endpoint is not ""
@@ -202,7 +199,8 @@ properties:
                         additionalProperties: false
                     sizer:
                         description: |-
-                            Sizer determines the type of size measurement used by this component.
+                            Sizer determines the type of size measurement used by the batch.
+                            If not configured, use the same configuration as the queue.
                             It accepts "requests", "items", or "bytes".
                         type: object
                 additionalProperties: false

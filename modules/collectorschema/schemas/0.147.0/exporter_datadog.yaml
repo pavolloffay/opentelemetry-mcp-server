@@ -180,8 +180,8 @@ properties:
             endpoint:
                 description: |-
                     Endpoint configures the address for this network connection.
-                    For TCP and UDP networks, the address has the form "host:port". The host must be a literal IP address,
-                    or a host name that can be resolved to IP addresses. The port must be a literal port number or a service name.
+                    The address has the form "host:port". The host must be a literal IP address, or a host name that can be
+                    resolved to IP addresses. The port must be a literal port number or a service name.
                     If the host is a literal IPv6 address it must be enclosed in square brackets, as in "[2001:db8::1]:80" or
                     "[fe80::1%zone]:80". The zone specifies the scope of the literal IPv6 address as defined in RFC 4007.
                 type: string
@@ -241,8 +241,8 @@ properties:
             endpoint:
                 description: |-
                     Endpoint configures the address for this network connection.
-                    For TCP and UDP networks, the address has the form "host:port". The host must be a literal IP address,
-                    or a host name that can be resolved to IP addresses. The port must be a literal port number or a service name.
+                    The address has the form "host:port". The host must be a literal IP address, or a host name that can be
+                    resolved to IP addresses. The port must be a literal port number or a service name.
                     If the host is a literal IPv6 address it must be enclosed in square brackets, as in "[2001:db8::1]:80" or
                     "[fe80::1%zone]:80". The zone specifies the scope of the literal IPv6 address as defined in RFC 4007.
                 type: string
@@ -289,13 +289,13 @@ properties:
                 properties:
                     mode:
                         description: |-
-                            Mode for exporting histograms. Valid values are 'distributions', 'counters' or 'nobuckets'.
-                             - 'distributions' sends histograms as Datadog distributions (recommended).
-                             - 'counters' sends histograms as Datadog counts, one metric per bucket.
-                             - 'nobuckets' sends no bucket histogram metrics. Aggregation metrics will still be sent
-                               if `send_aggregation_metrics` is enabled.
+                            Mode is the mode for exporting OTLP Summaries.
+                            Valid values are 'noquantiles' or 'gauges'.
+                             - 'noquantiles' sends no `.quantile` metrics. `.sum` and `.count` metrics will still be sent.
+                             - 'gauges' sends `.quantile` metrics as gauges tagged by the quantile.
 
-                            The current default is 'distributions'.
+                            The default is 'gauges'.
+                            See https://docs.datadoghq.com/metrics/otlp/?tab=summary#mapping for details and examples.
                         type: string
                 additionalProperties: false
             sums:
@@ -321,7 +321,7 @@ properties:
         additionalProperties: false
     middlewares:
         description: |-
-            Middlewares are used to add custom functionality to the HTTP server.
+            Middlewares are used to add custom functionality to the HTTP client.
             Middleware handlers are called in the order they appear in this list,
             with the first middleware becoming the outermost handler.
         type: array
@@ -360,13 +360,13 @@ properties:
                         pattern: ^(0|[-+]?((\d+(\.\d*)?|\.\d+)(ns|us|µs|μs|ms|s|m|h))+)$
                 additionalProperties: false
             enabled:
-                description: Enabled enables the host metadata functionality.
+                description: Enabled enables the orchestrator explorer.
                 type: boolean
             endpoint:
                 description: |-
                     Endpoint configures the address for this network connection.
-                    For TCP and UDP networks, the address has the form "host:port". The host must be a literal IP address,
-                    or a host name that can be resolved to IP addresses. The port must be a literal port number or a service name.
+                    The address has the form "host:port". The host must be a literal IP address, or a host name that can be
+                    resolved to IP addresses. The port must be a literal port number or a service name.
                     If the host is a literal IPv6 address it must be enclosed in square brackets, as in "[2001:db8::1]:80" or
                     "[fe80::1%zone]:80". The zone specifies the scope of the literal IPv6 address as defined in RFC 4007.
                 type: string
@@ -421,7 +421,8 @@ properties:
                         additionalProperties: false
                     sizer:
                         description: |-
-                            Sizer determines the type of size measurement used by this component.
+                            Sizer determines the type of size measurement used by the batch.
+                            If not configured, use the same configuration as the queue.
                             It accepts "requests", "items", or "bytes".
                         type: object
                 additionalProperties: false
@@ -463,7 +464,7 @@ properties:
         type: string
         pattern: ^(0|[-+]?((\d+(\.\d*)?|\.\d+)(ns|us|µs|μs|ms|s|m|h))+)$
     tls:
-        description: TLS struct exposes TLS server configuration.
+        description: TLS struct exposes TLS client configuration.
         type: object
         properties:
             ca_file:
@@ -591,8 +592,8 @@ properties:
             endpoint:
                 description: |-
                     Endpoint configures the address for this network connection.
-                    For TCP and UDP networks, the address has the form "host:port". The host must be a literal IP address,
-                    or a host name that can be resolved to IP addresses. The port must be a literal port number or a service name.
+                    The address has the form "host:port". The host must be a literal IP address, or a host name that can be
+                    resolved to IP addresses. The port must be a literal port number or a service name.
                     If the host is a literal IPv6 address it must be enclosed in square brackets, as in "[2001:db8::1]:80" or
                     "[fe80::1%zone]:80". The zone specifies the scope of the literal IPv6 address as defined in RFC 4007.
                 type: string

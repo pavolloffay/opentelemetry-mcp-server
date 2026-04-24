@@ -9,7 +9,7 @@ properties:
             https://www.elastic.co/guide/en/elasticsearch/reference/current/security-api-create-api-key.html
         type: string
     auth:
-        description: Auth for this receiver
+        description: Auth configuration for outgoing HTTP calls.
         type: object
         properties:
             authenticator:
@@ -90,8 +90,11 @@ properties:
                 type: integer
             interval:
                 description: |-
-                    Interval instructs the exporter to renew the list of Elasticsearch URLs
-                    with the given interval. URLs will not be updated if Interval is <=0.
+                    Interval configures the max age of a document in the send buffer.
+                    Interval is now deprecated. Use `sending-queue::batch::flush_timeout` instead.
+
+                    If this config option is defined then it will be used to configure `sending_queue::batch::flush_timeout`
+                    provided it is not explcitly defined.
                 type: string
                 pattern: ^(0|[-+]?((\d+(\.\d*)?|\.\d+)(ns|us|µs|μs|ms|s|m|h))+)$
         additionalProperties: false
@@ -164,6 +167,10 @@ properties:
         type: object
         properties:
             enabled:
+                description: |-
+                    Enabled enables dynamic index routing.
+
+                    Deprecated: [v0.122.0] This config is now ignored. Dynamic index routing is always done by default.
                 type: boolean
         additionalProperties: false
     logs_dynamic_pipeline:
@@ -246,6 +253,10 @@ properties:
         type: object
         properties:
             enabled:
+                description: |-
+                    Enabled enables dynamic index routing.
+
+                    Deprecated: [v0.122.0] This config is now ignored. Dynamic index routing is always done by default.
                 type: boolean
         additionalProperties: false
     metrics_index:
@@ -296,6 +307,7 @@ properties:
         type: object
         properties:
             enabled:
+                description: Enabled allows users to disable retry without having to comment out all settings.
                 type: boolean
             initial_interval:
                 description: InitialInterval configures the initial waiting time if a request failed.
@@ -361,7 +373,8 @@ properties:
                         additionalProperties: false
                     sizer:
                         description: |-
-                            Sizer determines the type of size measurement used by this component.
+                            Sizer determines the type of size measurement used by the batch.
+                            If not configured, use the same configuration as the queue.
                             It accepts "requests", "items", or "bytes".
                         type: object
                 additionalProperties: false
@@ -508,6 +521,10 @@ properties:
         type: object
         properties:
             enabled:
+                description: |-
+                    Enabled enables dynamic index routing.
+
+                    Deprecated: [v0.122.0] This config is now ignored. Dynamic index routing is always done by default.
                 type: boolean
         additionalProperties: false
     traces_index:

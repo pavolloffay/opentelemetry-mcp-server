@@ -53,15 +53,7 @@ properties:
         type: object
         properties:
             dimensions:
-                description: |-
-                    Dimensions defines the list of additional dimensions on top of the provided:
-                    - service.name
-                    - span.kind
-                    - span.kind
-                    - status.code
-                    - collector.instance.id This dimensions never added unless enable feature-gate connector.spanmetrics.includeCollectorInstanceID
-                    The dimensions will be fetched from the span's attributes. Examples of some conventionally used attributes:
-                    https://github.com/open-telemetry/opentelemetry-collector/blob/main/model/semconv/opentelemetry.go.
+                description: Dimensions defines the list of dimensions to add to the events metric.
                 type: array
                 items:
                     type: object
@@ -72,6 +64,7 @@ properties:
                             type: string
                     additionalProperties: false
             enabled:
+                description: Enabled is a flag to enable events.
                 type: boolean
         additionalProperties: false
     exclude_dimensions:
@@ -91,15 +84,6 @@ properties:
         type: object
         properties:
             dimensions:
-                description: |-
-                    Dimensions defines the list of additional dimensions on top of the provided:
-                    - service.name
-                    - span.kind
-                    - span.kind
-                    - status.code
-                    - collector.instance.id This dimensions never added unless enable feature-gate connector.spanmetrics.includeCollectorInstanceID
-                    The dimensions will be fetched from the span's attributes. Examples of some conventionally used attributes:
-                    https://github.com/open-telemetry/opentelemetry-collector/blob/main/model/semconv/opentelemetry.go.
                 type: array
                 items:
                     type: object
