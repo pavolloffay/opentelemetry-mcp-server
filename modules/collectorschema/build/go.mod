@@ -2,7 +2,7 @@
 
 module github.com/open-telemetry/opentelemetry-collector-releases/contrib
 
-go 1.25.1
+go 1.25.0
 
 require (
 	github.com/open-telemetry/opentelemetry-collector-contrib/confmap/provider/aesprovider v0.150.0

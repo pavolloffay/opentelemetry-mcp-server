@@ -1,6 +1,6 @@
 module github.com/pavolloffay/opentelemetry-mcp-server/modules/collectorschema
 
-go 1.25.1
+go 1.25.0
 
 require (
 	github.com/philippgille/chromem-go v0.7.0
