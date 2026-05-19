@@ -86,6 +86,18 @@ func NewSchemaManagerFromDir(schemaDir string) (*SchemaManager, error) {
 	}, nil
 }
 
+// NewSchemaManagerFromFS creates a new schema manager using schemas from the provided filesystem.
+// This allows using an embed.FS or any other fs.FS implementation.
+// The basePath should be the path within the filesystem where version subdirectories are located
+// (e.g., "schemas" if the structure is schemas/0.139.0/receivers/...).
+func NewSchemaManagerFromFS(filesystem fs.FS, basePath string) *SchemaManager {
+	return &SchemaManager{
+		cache:          make(map[string]*ComponentSchema),
+		schemaFS:       filesystem,
+		schemaBasePath: basePath,
+	}
+}
+
 // versionPath returns the filesystem path for a specific version
 func (sm *SchemaManager) versionPath(version string) string {
 	if sm.schemaBasePath == "." {
