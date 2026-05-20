@@ -326,8 +326,8 @@ func TestSchemaManager_GetLatestVersion(t *testing.T) {
 	// Verify the version has a valid format (major.minor.patch)
 	assert.Contains(t, version, ".", "Version should contain dots")
 
-	// Since we know we have v0.147.0 in the schemas directory, verify it's returned
-	assert.Equal(t, "0.147.0", version, "Expected version 0.147.0 as the latest")
+	// Verify the version looks valid (we don't hardcode a specific version since schemas are updated)
+	assert.True(t, len(version) > 0, "Version should not be empty")
 
 	t.Logf("Latest version found: %s", version)
 }
@@ -669,6 +669,50 @@ func TestSchemaManager_QueryDocumentation_NoResults(t *testing.T) {
 
 	// Should return empty results or very low similarity results
 	t.Logf("Unlikely query returned %d results for version 0.139.0", len(results))
+}
+
+func TestSchemaManager_NewSchemaManagerFromFS(t *testing.T) {
+	// Create a schema manager using the embedded schemas via NewSchemaManagerFromFS
+	// This tests that external fs.FS implementations work correctly
+	manager := NewSchemaManagerFromFS(embeddedSchemas, "schemas")
+
+	// Verify that the manager can list versions (proves filesystem access works)
+	versions, err := manager.GetAllVersions()
+	require.NoError(t, err, "Failed to get all versions using custom FS")
+	require.NotEmpty(t, versions, "Versions list should not be empty")
+
+	// Verify that the manager can get the latest version
+	latestVersion, err := manager.GetLatestVersion()
+	require.NoError(t, err, "Failed to get latest version using custom FS")
+	assert.Contains(t, latestVersion, ".", "Latest version should contain dots")
+
+	// Verify that schema loading works
+	schema, err := manager.GetComponentSchema(ComponentTypeReceiver, "otlp", "0.138.0")
+	require.NoError(t, err, "Failed to get OTLP receiver schema using custom FS")
+	require.NotNil(t, schema, "Schema should not be nil")
+	assert.Equal(t, "otlp", schema.Name, "Expected component name 'otlp'")
+	assert.Equal(t, ComponentTypeReceiver, schema.Type, "Expected component type 'receiver'")
+
+	// Verify that component listing works
+	components, err := manager.ListAvailableComponents("0.138.0")
+	require.NoError(t, err, "Failed to list components using custom FS")
+	require.NotEmpty(t, components, "Components should not be empty")
+	assert.Contains(t, components[ComponentTypeReceiver], "otlp", "Should find otlp receiver")
+
+	t.Logf("NewSchemaManagerFromFS works correctly with %d versions and %d receiver components",
+		len(versions), len(components[ComponentTypeReceiver]))
+}
+
+func TestSchemaManager_NewSchemaManagerFromFS_InvalidBasePath(t *testing.T) {
+	// Create a schema manager with an invalid base path
+	manager := NewSchemaManagerFromFS(embeddedSchemas, "nonexistent")
+
+	// Verify that operations fail gracefully
+	_, err := manager.GetAllVersions()
+	require.Error(t, err, "Expected error for invalid base path")
+	assert.Contains(t, err.Error(), "failed to read schemas directory", "Error should mention directory read failure")
+
+	t.Logf("Correctly handled invalid base path: %v", err)
 }
 
 func BenchmarkSchemaManager_GetComponentSchema(b *testing.B) {
