@@ -1,7 +1,7 @@
 // Copyright The OpenTelemetry Authors
 // SPDX-License-Identifier: Apache-2.0
 
-package schemagen
+package generator
 
 // Schema represents a JSON Schema document (draft-07).
 type Schema struct {
