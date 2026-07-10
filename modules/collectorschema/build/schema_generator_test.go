@@ -4,7 +4,7 @@ import (
 	"os"
 	"testing"
 
-	"github.com/pavolloffay/opentelemetry-mcp-server/modules/schemagen"
+	"github.com/pavolloffay/opentelemetry-mcp-server/modules/schemagen/generator"
 )
 
 // TestGenerateAllSchemas tests the schema generator by generating YAML schemas for all components
@@ -19,7 +19,7 @@ func TestGenerateAllSchemas(t *testing.T) {
 		t.Fatalf("Failed to get components: %v", err)
 	}
 
-	generator := schemagen.NewCollectorSchemaGenerator(schemaOutputDir, "vendor")
+	generator := generator.NewCollectorSchemaGenerator(schemaOutputDir, "vendor")
 
 	if err := generator.GenerateFromFactories(factories); err != nil {
 		t.Fatalf("Failed to generate schemas: %v", err)
