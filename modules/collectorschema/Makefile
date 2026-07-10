@@ -13,11 +13,6 @@ install-ocb:
 .PHONY: build-collector
 build-collector: install-ocb
 	./.bin/builder --config manifest-$(OCB_VERSION).yaml --skip-compilation
-	@# Add collectorschema dependency (OCB regenerates go.mod, removing our additions)
-	@cd build && \
-		echo 'require github.com/pavolloffay/opentelemetry-mcp-server/modules/collectorschema v0.0.0' >> go.mod && \
-		echo 'replace github.com/pavolloffay/opentelemetry-mcp-server/modules/collectorschema => ../' >> go.mod && \
-		go mod tidy
 
 # Schema output directory (can be overridden)
 SCHEMA_OUTPUT_DIR ?= ../schemas/$(OCB_VERSION)
@@ -56,7 +51,7 @@ generate-schemas:
 #	OCB_VERSION=0.149.0 make build-collector
 #	cd build && go mod vendor && SCHEMA_OUTPUT_DIR=../schemas/0.149.0 go test -run TestGenerateAllSchemas -v
 	OCB_VERSION=0.150.0 make build-collector
-	cd build && go mod vendor && SCHEMA_OUTPUT_DIR=../schemas/0.150.0 go test -run TestGenerateAllSchemas -v
+	cd build && go mod vendor && SCHEMA_OUTPUT_DIR=../schemas/0.150.0 go test -gcflags='all=-N -l' -run TestGenerateAllSchemas -v
 
 .PHONY: changelogs
 changelogs:

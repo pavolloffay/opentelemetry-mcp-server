@@ -4,7 +4,7 @@ import (
 	"os"
 	"testing"
 
-	"github.com/pavolloffay/opentelemetry-mcp-server/modules/collectorschema/schemagen"
+	"github.com/pavolloffay/opentelemetry-mcp-server/modules/schemagen"
 )
 
 // TestGenerateAllSchemas tests the schema generator by generating YAML schemas for all components

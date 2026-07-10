@@ -236,7 +236,7 @@ require (
 	github.com/open-telemetry/opentelemetry-collector-contrib/receiver/yanggrpcreceiver v0.150.0
 	github.com/open-telemetry/opentelemetry-collector-contrib/receiver/zipkinreceiver v0.150.0
 	github.com/open-telemetry/opentelemetry-collector-contrib/receiver/zookeeperreceiver v0.150.0
-	github.com/pavolloffay/opentelemetry-mcp-server/modules/collectorschema v0.0.0
+	github.com/pavolloffay/opentelemetry-mcp-server/modules/schemagen v0.0.0-00010101000000-000000000000
 	go.opentelemetry.io/collector/component v1.56.0
 	go.opentelemetry.io/collector/confmap v1.56.0
 	go.opentelemetry.io/collector/confmap/provider/envprovider v1.56.0
@@ -1064,4 +1064,4 @@ require (
 	software.sslmate.com/src/go-pkcs12 v0.7.0 // indirect
 )
 
-replace github.com/pavolloffay/opentelemetry-mcp-server/modules/collectorschema => ../
+replace github.com/pavolloffay/opentelemetry-mcp-server/modules/schemagen => ../../schemagen
