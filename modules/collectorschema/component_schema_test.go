@@ -6,6 +6,7 @@ import (
 	"strings"
 	"testing"
 
+	"github.com/pavolloffay/opentelemetry-mcp-server/modules/schemagen"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )
@@ -14,7 +15,7 @@ func TestSchemaManager_GetComponentSchema(t *testing.T) {
 	manager := NewSchemaManager()
 
 	// Test getting OTLP receiver schema
-	schema, err := manager.GetComponentSchema(ComponentTypeReceiver, "otlp", "0.138.0")
+	schema, err := manager.GetComponentSchema(schemagen.ComponentTypeReceiver, "otlp", "0.138.0")
 	if err != nil {
 		t.Fatalf("Failed to get OTLP receiver schema: %v", err)
 	}
@@ -27,7 +28,7 @@ func TestSchemaManager_GetComponentSchema(t *testing.T) {
 		t.Errorf("Expected component name 'otlp', got '%s'", schema.Name)
 	}
 
-	if schema.Type != ComponentTypeReceiver {
+	if schema.Type != schemagen.ComponentTypeReceiver {
 		t.Errorf("Expected component type 'receiver', got '%s'", schema.Type)
 	}
 
@@ -45,7 +46,7 @@ func TestSchemaManager_GetComponentSchemaJSON(t *testing.T) {
 	manager := NewSchemaManager()
 
 	// Test getting JSON for debug exporter
-	jsonData, err := manager.GetComponentSchemaJSON(ComponentTypeExporter, "debug", "0.138.0")
+	jsonData, err := manager.GetComponentSchemaJSON(schemagen.ComponentTypeExporter, "debug", "0.138.0")
 	if err != nil {
 		t.Fatalf("Failed to get debug exporter schema JSON: %v", err)
 	}
@@ -67,7 +68,7 @@ func TestSchemaManager_NonExistentComponent(t *testing.T) {
 	manager := NewSchemaManager()
 
 	// Test getting schema for non-existent component
-	_, err := manager.GetComponentSchema(ComponentTypeReceiver, "nonexistent", "0.138.0")
+	_, err := manager.GetComponentSchema(schemagen.ComponentTypeReceiver, "nonexistent", "0.138.0")
 	if err == nil {
 		t.Fatal("Expected error for non-existent component, got nil")
 	}
@@ -91,12 +92,12 @@ func TestSchemaManager_ListAvailableComponents(t *testing.T) {
 	}
 
 	// Verify we have expected component types
-	expectedTypes := []ComponentType{
-		ComponentTypeReceiver,
-		ComponentTypeProcessor,
-		ComponentTypeExporter,
-		ComponentTypeExtension,
-		ComponentTypeConnector,
+	expectedTypes := []schemagen.ComponentType{
+		schemagen.ComponentTypeReceiver,
+		schemagen.ComponentTypeProcessor,
+		schemagen.ComponentTypeExporter,
+		schemagen.ComponentTypeExtension,
+		schemagen.ComponentTypeConnector,
 	}
 
 	for _, expectedType := range expectedTypes {
@@ -110,7 +111,7 @@ func TestSchemaManager_ListAvailableComponents(t *testing.T) {
 	}
 
 	// Verify specific components exist
-	if receivers, exists := components[ComponentTypeReceiver]; exists {
+	if receivers, exists := components[schemagen.ComponentTypeReceiver]; exists {
 		found := false
 		for _, name := range receivers {
 			if name == "otlp" {
@@ -128,12 +129,12 @@ func TestSchemaManager_Caching(t *testing.T) {
 	manager := NewSchemaManager()
 
 	// Get the same schema twice
-	schema1, err := manager.GetComponentSchema(ComponentTypeProcessor, "batch", "0.138.0")
+	schema1, err := manager.GetComponentSchema(schemagen.ComponentTypeProcessor, "batch", "0.138.0")
 	if err != nil {
 		t.Fatalf("Failed to get batch processor schema (first call): %v", err)
 	}
 
-	schema2, err := manager.GetComponentSchema(ComponentTypeProcessor, "batch", "0.138.0")
+	schema2, err := manager.GetComponentSchema(schemagen.ComponentTypeProcessor, "batch", "0.138.0")
 	if err != nil {
 		t.Fatalf("Failed to get batch processor schema (second call): %v", err)
 	}
@@ -150,7 +151,7 @@ func TestSchemaManager_WithVersion(t *testing.T) {
 	manager := NewSchemaManager()
 
 	// Test getting schema with version 0.138.0
-	schema, err := manager.GetComponentSchema(ComponentTypeReceiver, "otlp", "0.138.0")
+	schema, err := manager.GetComponentSchema(schemagen.ComponentTypeReceiver, "otlp", "0.138.0")
 	if err != nil {
 		t.Fatalf("Failed to get OTLP receiver schema with version: %v", err)
 	}
@@ -161,7 +162,7 @@ func TestSchemaManager_WithVersion(t *testing.T) {
 
 	// Test that different versions are cached separately (this would fail for versions we don't have schemas for)
 	// For now, test with the same version to ensure caching works
-	schema2, err := manager.GetComponentSchema(ComponentTypeReceiver, "otlp", "0.138.0")
+	schema2, err := manager.GetComponentSchema(schemagen.ComponentTypeReceiver, "otlp", "0.138.0")
 	if err != nil {
 		t.Fatalf("Failed to get OTLP receiver schema with same version: %v", err)
 	}
@@ -193,7 +194,7 @@ func TestSchemaManager_ValidateComponentJSON(t *testing.T) {
 		}
 	}`)
 
-	result, err := manager.ValidateComponentJSON(ComponentTypeReceiver, "otlp", "0.138.0", validJSON)
+	result, err := manager.ValidateComponentJSON(schemagen.ComponentTypeReceiver, "otlp", "0.138.0", validJSON)
 	require.NoError(t, err, "Failed to validate valid OTLP receiver JSON")
 	require.NotNil(t, result, "Validation result should not be nil")
 
@@ -222,7 +223,7 @@ func TestSchemaManager_ValidateComponentJSON_Invalid(t *testing.T) {
 		}
 	}`)
 
-	result, err := manager.ValidateComponentJSON(ComponentTypeReceiver, "otlp", "0.138.0", invalidJSON)
+	result, err := manager.ValidateComponentJSON(schemagen.ComponentTypeReceiver, "otlp", "0.138.0", invalidJSON)
 	require.NoError(t, err, "Failed to validate invalid OTLP receiver JSON")
 	require.NotNil(t, result, "Validation result should not be nil")
 
@@ -248,7 +249,7 @@ func TestSchemaManager_ValidateComponentJSON_MalformedJSON(t *testing.T) {
 			}
 		// Missing closing braces`)
 
-	result, err := manager.ValidateComponentJSON(ComponentTypeReceiver, "otlp", "0.138.0", malformedJSON)
+	result, err := manager.ValidateComponentJSON(schemagen.ComponentTypeReceiver, "otlp", "0.138.0", malformedJSON)
 	if err != nil {
 		// This should fail at the validation level, not the JSON parsing level
 		t.Logf("Expected error for malformed JSON: %v", err)
@@ -265,7 +266,7 @@ func TestSchemaManager_ValidateComponentJSON_NonExistentComponent(t *testing.T) 
 
 	validJSON := []byte(`{"some": "config"}`)
 
-	_, err := manager.ValidateComponentJSON(ComponentTypeReceiver, "nonexistent", "0.138.0", validJSON)
+	_, err := manager.ValidateComponentJSON(schemagen.ComponentTypeReceiver, "nonexistent", "0.138.0", validJSON)
 	require.Error(t, err, "Expected error for non-existent component")
 
 	expectedError := "failed to get schema for receiver nonexistent v0.138.0"
@@ -280,7 +281,7 @@ func TestSchemaManager_ValidateComponentJSON_EmptyJSON(t *testing.T) {
 	// Test empty JSON object
 	emptyJSON := []byte(`{}`)
 
-	result, err := manager.ValidateComponentJSON(ComponentTypeReceiver, "otlp", "0.138.0", emptyJSON)
+	result, err := manager.ValidateComponentJSON(schemagen.ComponentTypeReceiver, "otlp", "0.138.0", emptyJSON)
 	require.NoError(t, err, "Failed to validate empty JSON")
 	require.NotNil(t, result, "Validation result should not be nil")
 
@@ -297,7 +298,7 @@ func TestSchemaManager_ValidateComponentJSON_DifferentComponents(t *testing.T) {
 		"verbosity": "normal"
 	}`)
 
-	result, err := manager.ValidateComponentJSON(ComponentTypeExporter, "debug", "0.138.0", debugExporterJSON)
+	result, err := manager.ValidateComponentJSON(schemagen.ComponentTypeExporter, "debug", "0.138.0", debugExporterJSON)
 	require.NoError(t, err, "Failed to validate debug exporter JSON")
 	require.NotNil(t, result, "Validation result should not be nil")
 
@@ -309,7 +310,7 @@ func TestSchemaManager_ValidateComponentJSON_DifferentComponents(t *testing.T) {
 		"send_batch_size": 1024
 	}`)
 
-	result, err = manager.ValidateComponentJSON(ComponentTypeProcessor, "batch", "0.138.0", batchProcessorJSON)
+	result, err = manager.ValidateComponentJSON(schemagen.ComponentTypeProcessor, "batch", "0.138.0", batchProcessorJSON)
 	require.NoError(t, err, "Failed to validate batch processor JSON")
 	require.NotNil(t, result, "Validation result should not be nil")
 
@@ -358,7 +359,7 @@ func TestSchemaManager_GetDeprecatedFields(t *testing.T) {
 	manager := NewSchemaManager()
 
 	// Test getting deprecated fields for kafka exporter which has known deprecated fields
-	deprecatedFields, err := manager.GetDeprecatedFields(ComponentTypeExporter, "kafka", "0.138.0")
+	deprecatedFields, err := manager.GetDeprecatedFields(schemagen.ComponentTypeExporter, "kafka", "0.138.0")
 	require.NoError(t, err, "Failed to get deprecated fields for kafka exporter")
 
 	// Assert that we found deprecated fields in kafka exporter
@@ -390,7 +391,7 @@ func TestSchemaManager_GetDeprecatedFields(t *testing.T) {
 	}
 
 	// Test with a component that doesn't exist
-	_, err = manager.GetDeprecatedFields(ComponentTypeExporter, "nonexistent", "0.138.0")
+	_, err = manager.GetDeprecatedFields(schemagen.ComponentTypeExporter, "nonexistent", "0.138.0")
 	require.Error(t, err, "Expected error for non-existent component")
 	assert.Contains(t, err.Error(), "failed to get schema", "Error should mention schema retrieval failure")
 
@@ -401,7 +402,7 @@ func TestSchemaManager_GetComponentNames(t *testing.T) {
 	manager := NewSchemaManager()
 
 	// Test getting receiver component names
-	receiverNames, err := manager.GetComponentNames(ComponentTypeReceiver, "0.138.0")
+	receiverNames, err := manager.GetComponentNames(schemagen.ComponentTypeReceiver, "0.138.0")
 	require.NoError(t, err, "Failed to get receiver component names")
 	require.NotEmpty(t, receiverNames, "Receiver names list should not be empty")
 
@@ -412,7 +413,7 @@ func TestSchemaManager_GetComponentNames(t *testing.T) {
 	t.Logf("Found %d receiver components: %v", len(receiverNames), receiverNames[:minInt(5, len(receiverNames))])
 
 	// Test getting processor component names
-	processorNames, err := manager.GetComponentNames(ComponentTypeProcessor, "0.138.0")
+	processorNames, err := manager.GetComponentNames(schemagen.ComponentTypeProcessor, "0.138.0")
 	require.NoError(t, err, "Failed to get processor component names")
 	require.NotEmpty(t, processorNames, "Processor names list should not be empty")
 
@@ -423,7 +424,7 @@ func TestSchemaManager_GetComponentNames(t *testing.T) {
 	t.Logf("Found %d processor components: %v", len(processorNames), processorNames[:minInt(5, len(processorNames))])
 
 	// Test getting exporter component names
-	exporterNames, err := manager.GetComponentNames(ComponentTypeExporter, "0.138.0")
+	exporterNames, err := manager.GetComponentNames(schemagen.ComponentTypeExporter, "0.138.0")
 	require.NoError(t, err, "Failed to get exporter component names")
 	require.NotEmpty(t, exporterNames, "Exporter names list should not be empty")
 
@@ -449,7 +450,7 @@ func TestSchemaManager_GetComponentNames_InvalidVersion(t *testing.T) {
 	manager := NewSchemaManager()
 
 	// Test with non-existent version
-	_, err := manager.GetComponentNames(ComponentTypeReceiver, "999.999.999")
+	_, err := manager.GetComponentNames(schemagen.ComponentTypeReceiver, "999.999.999")
 	require.Error(t, err, "Expected error for non-existent version")
 	assert.Contains(t, err.Error(), "failed to read schema directory", "Error should mention directory read failure")
 
@@ -498,7 +499,7 @@ protocols:
     endpoint: "0.0.0.0:4318"
 `)
 
-	result, err := manager.ValidateComponentYAML(ComponentTypeReceiver, "otlp", "0.138.0", validYAML)
+	result, err := manager.ValidateComponentYAML(schemagen.ComponentTypeReceiver, "otlp", "0.138.0", validYAML)
 	require.NoError(t, err, "Failed to validate valid OTLP receiver YAML")
 	require.NotNil(t, result, "Validation result should not be nil")
 
@@ -524,7 +525,7 @@ grpc:
       max_connection_idle: "invalid_duration_format"
 `)
 
-	result, err := manager.ValidateComponentYAML(ComponentTypeReceiver, "otlp", "0.138.0", invalidYAML)
+	result, err := manager.ValidateComponentYAML(schemagen.ComponentTypeReceiver, "otlp", "0.138.0", invalidYAML)
 	require.NoError(t, err, "Failed to validate invalid OTLP receiver YAML")
 	require.NotNil(t, result, "Validation result should not be nil")
 
@@ -553,7 +554,7 @@ protocols:
 endpoint: "invalid"
 `)
 
-	_, err := manager.ValidateComponentYAML(ComponentTypeReceiver, "otlp", "0.138.0", malformedYAML)
+	_, err := manager.ValidateComponentYAML(schemagen.ComponentTypeReceiver, "otlp", "0.138.0", malformedYAML)
 	if err != nil {
 		t.Logf("Expected error for malformed YAML: %v", err)
 		assert.Contains(t, err.Error(), "failed to parse YAML data", "Error should mention YAML parsing failure")
@@ -674,7 +675,7 @@ func TestSchemaManager_QueryDocumentation_NoResults(t *testing.T) {
 func TestSchemaManager_NewSchemaManagerFromFS(t *testing.T) {
 	// Create a schema manager using the embedded schemas via NewSchemaManagerFromFS
 	// This tests that external fs.FS implementations work correctly
-	manager := NewSchemaManagerFromFS(embeddedSchemas, "schemas")
+	manager := schemagen.NewSchemaManagerFromFS(embeddedSchemas, "schemas")
 
 	// Verify that the manager can list versions (proves filesystem access works)
 	versions, err := manager.GetAllVersions()
@@ -687,25 +688,25 @@ func TestSchemaManager_NewSchemaManagerFromFS(t *testing.T) {
 	assert.Contains(t, latestVersion, ".", "Latest version should contain dots")
 
 	// Verify that schema loading works
-	schema, err := manager.GetComponentSchema(ComponentTypeReceiver, "otlp", "0.138.0")
+	schema, err := manager.GetComponentSchema(schemagen.ComponentTypeReceiver, "otlp", "0.138.0")
 	require.NoError(t, err, "Failed to get OTLP receiver schema using custom FS")
 	require.NotNil(t, schema, "Schema should not be nil")
 	assert.Equal(t, "otlp", schema.Name, "Expected component name 'otlp'")
-	assert.Equal(t, ComponentTypeReceiver, schema.Type, "Expected component type 'receiver'")
+	assert.Equal(t, schemagen.ComponentTypeReceiver, schema.Type, "Expected component type 'receiver'")
 
 	// Verify that component listing works
 	components, err := manager.ListAvailableComponents("0.138.0")
 	require.NoError(t, err, "Failed to list components using custom FS")
 	require.NotEmpty(t, components, "Components should not be empty")
-	assert.Contains(t, components[ComponentTypeReceiver], "otlp", "Should find otlp receiver")
+	assert.Contains(t, components[schemagen.ComponentTypeReceiver], "otlp", "Should find otlp receiver")
 
 	t.Logf("NewSchemaManagerFromFS works correctly with %d versions and %d receiver components",
-		len(versions), len(components[ComponentTypeReceiver]))
+		len(versions), len(components[schemagen.ComponentTypeReceiver]))
 }
 
 func TestSchemaManager_NewSchemaManagerFromFS_InvalidBasePath(t *testing.T) {
 	// Create a schema manager with an invalid base path
-	manager := NewSchemaManagerFromFS(embeddedSchemas, "nonexistent")
+	manager := schemagen.NewSchemaManagerFromFS(embeddedSchemas, "nonexistent")
 
 	// Verify that operations fail gracefully
 	_, err := manager.GetAllVersions()
@@ -719,11 +720,11 @@ func BenchmarkSchemaManager_GetComponentSchema(b *testing.B) {
 	manager := NewSchemaManager()
 
 	// Pre-load one schema to test caching performance
-	_, _ = manager.GetComponentSchema(ComponentTypeReceiver, "otlp", "0.138.0")
+	_, _ = manager.GetComponentSchema(schemagen.ComponentTypeReceiver, "otlp", "0.138.0")
 
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
-		_, err := manager.GetComponentSchema(ComponentTypeReceiver, "otlp", "0.138.0")
+		_, err := manager.GetComponentSchema(schemagen.ComponentTypeReceiver, "otlp", "0.138.0")
 		if err != nil {
 			b.Fatalf("Failed to get schema: %v", err)
 		}

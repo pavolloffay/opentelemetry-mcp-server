@@ -6,4 +6,4 @@ build/otelcol-contrib
 build/test-schemas
 build/test_output/
 build/vendor/
-build/contrim
+build/contrib

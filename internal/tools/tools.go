@@ -6,6 +6,7 @@ import (
 
 	"github.com/mark3labs/mcp-go/mcp"
 	"github.com/pavolloffay/opentelemetry-mcp-server/modules/collectorschema"
+	"github.com/pavolloffay/opentelemetry-mcp-server/modules/schemagen"
 )
 
 // Tool represents an MCP tool with its handler
@@ -37,7 +38,7 @@ func GetAllTools() ([]Tool, error) {
 }
 
 // getCollectorVersionsTool returns the collector versions tool
-func getCollectorVersionsTool(schemaManager *collectorschema.SchemaManager) Tool {
+func getCollectorVersionsTool(schemaManager *schemagen.SchemaManager) Tool {
 	tool := mcp.NewTool("opentelemetry-collector-get-versions",
 		mcp.WithDescription("Get all supported OpenTelemetry collector versions by this tool"),
 		mcp.WithDestructiveHintAnnotation(false),
@@ -56,7 +57,7 @@ func getCollectorVersionsTool(schemaManager *collectorschema.SchemaManager) Tool
 }
 
 // getCollectorComponentsTool returns the collector components tool
-func getCollectorComponentsTool(schemaManager *collectorschema.SchemaManager, latestCollectorVersion string) Tool {
+func getCollectorComponentsTool(schemaManager *schemagen.SchemaManager, latestCollectorVersion string) Tool {
 	tool := mcp.NewTool("opentelemetry-collector-components",
 		mcp.WithDescription("Get all OpenTelemetry collector components"),
 		mcp.WithDestructiveHintAnnotation(false),
@@ -77,7 +78,7 @@ func getCollectorComponentsTool(schemaManager *collectorschema.SchemaManager, la
 		}
 		version := request.GetString("version", latestCollectorVersion)
 
-		components, err := schemaManager.GetComponentNames(collectorschema.ComponentType(componentKind), version)
+		components, err := schemaManager.GetComponentNames(schemagen.ComponentType(componentKind), version)
 		if err != nil {
 			return mcp.NewToolResultError(fmt.Sprintf("failed to get components for %s: %v", componentKind, err)), nil
 		}
@@ -88,7 +89,7 @@ func getCollectorComponentsTool(schemaManager *collectorschema.SchemaManager, la
 }
 
 // getCollectorReadmeTool returns the collector readme tool
-func getCollectorReadmeTool(schemaManager *collectorschema.SchemaManager, latestCollectorVersion string) Tool {
+func getCollectorReadmeTool(schemaManager *schemagen.SchemaManager, latestCollectorVersion string) Tool {
 	tool := mcp.NewTool("opentelemetry-collector-readme",
 		mcp.WithDescription("Explain OpenTelemetry collector processor, receiver, exporter, extension functionality and use-cases"),
 		mcp.WithDestructiveHintAnnotation(false),
@@ -117,7 +118,7 @@ func getCollectorReadmeTool(schemaManager *collectorschema.SchemaManager, latest
 		}
 		version := request.GetString("version", latestCollectorVersion)
 
-		readme, err := schemaManager.GetComponentReadme(collectorschema.ComponentType(componentKind), componentName, version)
+		readme, err := schemaManager.GetComponentReadme(schemagen.ComponentType(componentKind), componentName, version)
 		if err != nil {
 			return mcp.NewToolResultError(fmt.Sprintf("failed to get readme for %s %s: %v", componentKind, componentName, err)), nil
 		}
@@ -128,7 +129,7 @@ func getCollectorReadmeTool(schemaManager *collectorschema.SchemaManager, latest
 }
 
 // getCollectorChangelogTool returns the collector changelog tool
-func getCollectorChangelogTool(schemaManager *collectorschema.SchemaManager, latestCollectorVersion string) Tool {
+func getCollectorChangelogTool(schemaManager *schemagen.SchemaManager, latestCollectorVersion string) Tool {
 	tool := mcp.NewTool("opentelemetry-collector-changelog",
 		mcp.WithDescription("Returns OpenTelemetry collector changelog"),
 		mcp.WithDestructiveHintAnnotation(false),
@@ -152,7 +153,7 @@ func getCollectorChangelogTool(schemaManager *collectorschema.SchemaManager, lat
 }
 
 // getCollectorSchemaGetTool returns the collector schema get tool
-func getCollectorSchemaGetTool(schemaManager *collectorschema.SchemaManager, latestCollectorVersion string) Tool {
+func getCollectorSchemaGetTool(schemaManager *schemagen.SchemaManager, latestCollectorVersion string) Tool {
 	tool := mcp.NewTool("opentelemetry-collector-component-schema",
 		mcp.WithDescription("Explain OpenTelemetry collector receiver, exporter, processor, connector and extension configuration schema"),
 		mcp.WithDestructiveHintAnnotation(false),
@@ -181,7 +182,7 @@ func getCollectorSchemaGetTool(schemaManager *collectorschema.SchemaManager, lat
 		}
 		version := request.GetString("version", latestCollectorVersion)
 
-		schemaJSON, err := schemaManager.GetComponentSchemaJSON(collectorschema.ComponentType(componentKind), componentName, version)
+		schemaJSON, err := schemaManager.GetComponentSchemaJSON(schemagen.ComponentType(componentKind), componentName, version)
 		if err != nil {
 			return mcp.NewToolResultError(fmt.Sprintf("failed to get schema for %s/%s@%s: %v", componentKind, componentName, version, err)), nil
 		}
@@ -192,7 +193,7 @@ func getCollectorSchemaGetTool(schemaManager *collectorschema.SchemaManager, lat
 }
 
 // getCollectorSchemaValidationTool returns the collector schema validation tool
-func getCollectorSchemaValidationTool(schemaManager *collectorschema.SchemaManager, latestCollectorVersion string) Tool {
+func getCollectorSchemaValidationTool(schemaManager *schemagen.SchemaManager, latestCollectorVersion string) Tool {
 	tool := mcp.NewTool("opentelemetry-collector-component-schema-validation",
 		mcp.WithDescription("Validate OpenTelemetry collector processor, receiver, exporter, extension configuration JSON"),
 		mcp.WithDestructiveHintAnnotation(false),
@@ -229,7 +230,7 @@ func getCollectorSchemaValidationTool(schemaManager *collectorschema.SchemaManag
 		}
 		version := request.GetString("version", latestCollectorVersion)
 
-		validationResult, err := schemaManager.ValidateComponentJSON(collectorschema.ComponentType(componentKind), componentName, version, []byte(config))
+		validationResult, err := schemaManager.ValidateComponentJSON(schemagen.ComponentType(componentKind), componentName, version, []byte(config))
 		if err != nil {
 			return mcp.NewToolResultError(fmt.Sprintf("failed to validate json for %s/%s@%s: %v", componentKind, componentName, version, err)), nil
 		}
@@ -241,11 +242,11 @@ func getCollectorSchemaValidationTool(schemaManager *collectorschema.SchemaManag
 
 type DeprecatedComponentFields struct {
 	ComponentName    string                            `json:"componentName"`
-	DeprecatedFields []collectorschema.DeprecatedField `json:"deprecatedFields"`
+	DeprecatedFields []schemagen.DeprecatedField `json:"deprecatedFields"`
 }
 
 // getCollectorComponentDeprecatedTool returns the collector schema validation tool
-func getCollectorComponentDeprecatedTool(schemaManager *collectorschema.SchemaManager, latestCollectorVersion string) Tool {
+func getCollectorComponentDeprecatedTool(schemaManager *schemagen.SchemaManager, latestCollectorVersion string) Tool {
 	tool := mcp.NewTool("opentelemetry-collector-component-deprecated-fields",
 		mcp.WithDescription("Return deprecated OpenTelemetry collector receiver, exporter, processor, connector and extension configuration fields"),
 		mcp.WithDestructiveHintAnnotation(false),
@@ -277,7 +278,7 @@ func getCollectorComponentDeprecatedTool(schemaManager *collectorschema.SchemaMa
 
 		var deprecations []DeprecatedComponentFields
 		for _, componentName := range componentNames {
-			deprecatedFields, err := schemaManager.GetDeprecatedFields(collectorschema.ComponentType(componentKind), componentName, version)
+			deprecatedFields, err := schemaManager.GetDeprecatedFields(schemagen.ComponentType(componentKind), componentName, version)
 			if err != nil {
 				return mcp.NewToolResultError(fmt.Sprintf("failed to validate json for %s/%s@%s: %v", componentKind, componentName, version, err)), nil
 			}
@@ -296,11 +297,11 @@ func getCollectorComponentDeprecatedTool(schemaManager *collectorschema.SchemaMa
 }
 
 type DocumentationSearchResult struct {
-	Results []collectorschema.DocumentSearchResult `json:"results"`
+	Results []schemagen.DocumentSearchResult `json:"results"`
 }
 
 // getCollectorDocumentationRAG returns the query from the RAG
-func getCollectorDocumentationRAG(schemaManager *collectorschema.SchemaManager, latestCollectorVersion string) Tool {
+func getCollectorDocumentationRAG(schemaManager *schemagen.SchemaManager, latestCollectorVersion string) Tool {
 	tool := mcp.NewTool("opentelemetry-collector-rag",
 		mcp.WithDescription("Answer questions about OpenTelemetry collector"),
 		mcp.WithDestructiveHintAnnotation(false),

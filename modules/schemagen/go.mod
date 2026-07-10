@@ -3,8 +3,10 @@ module github.com/pavolloffay/opentelemetry-mcp-server/modules/schemagen
 go 1.25.0
 
 require (
+	github.com/philippgille/chromem-go v0.7.0
 	github.com/santhosh-tekuri/jsonschema/v6 v6.0.2
 	github.com/stretchr/testify v1.11.1
+	github.com/xeipuuv/gojsonschema v1.2.0
 	go.opentelemetry.io/collector/component v1.45.0
 	go.opentelemetry.io/collector/config/configopaque v1.45.0
 	go.opentelemetry.io/collector/config/configoptional v1.45.0
@@ -52,6 +54,8 @@ require (
 	github.com/spf13/pflag v1.0.9 // indirect
 	github.com/tklauser/go-sysconf v0.3.15 // indirect
 	github.com/tklauser/numcpus v0.10.0 // indirect
+	github.com/xeipuuv/gojsonpointer v0.0.0-20180127040702-4e3ac2762d5f // indirect
+	github.com/xeipuuv/gojsonreference v0.0.0-20180127040603-bd5ef7bd5415 // indirect
 	github.com/yusufpapurcu/wmi v1.2.4 // indirect
 	go.opentelemetry.io/auto/sdk v1.1.0 // indirect
 	go.opentelemetry.io/collector/client v1.45.0 // indirect
